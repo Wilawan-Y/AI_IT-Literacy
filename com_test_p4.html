@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>คอมพิวเตอร์ ป.4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --secondary: #06B6D4;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --radius: 16px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .timer-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #FEF3C7;
+      color: #B45309;
+      padding: 0.4rem 0.8rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .main-layout {
+      display: flex;
+      flex: 1;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .content-area {
+      flex: 1;
+      padding: 2rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* แถบเนื้อหาด้านขวามือ (Side Sheet) */
+    .sidebar {
+      position: fixed;
+      top: 65px;
+      right: -100%;
+      width: 100%;
+      max-width: 440px;
+      height: calc(100vh - 65px);
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      box-shadow: -10px 0 25px rgba(0,0,0,0.08);
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar.open {
+      right: 0;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #F1F5F9;
+    }
+
+    .sidebar-content {
+      padding: 1.25rem;
+      overflow-y: auto;
+      flex: 1;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .sidebar-content h4 {
+      color: var(--primary);
+      margin: 1.2rem 0 0.4rem 0;
+      font-size: 1rem;
+    }
+
+    .sidebar-content p {
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    /* การ์ดคอนเทนเนอร์ */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-group {
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.85rem 1.2rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+    }
+
+    /* ปุ่มควบคุม */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-check {
+      background: #0D9488;
+      color: white;
+    }
+    .btn-check:hover {
+      background: #0F766E;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--border);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background: #F1F5F9;
+    }
+
+    /* แถบติดตามข้อสอบ */
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .question-category {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: #EEF2FF;
+      color: var(--primary);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .question-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    /* ตัวเลือกข้อสอบ */
+    .options-grid {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .option-card {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.2s;
+      background: var(--surface);
+    }
+
+    .option-card:hover:not(.locked) {
+      border-color: var(--secondary);
+      background: #F0FDFA;
+    }
+
+    .option-card.chosen {
+      border-color: var(--primary);
+      background: #EEF2FF;
+    }
+
+    .option-card.result-correct {
+      border-color: var(--success);
+      background: #ECFDF5;
+    }
+
+    .option-card.result-wrong {
+      border-color: var(--danger);
+      background: #FEF2F2;
+    }
+
+    .option-indicator {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .option-card.chosen .option-indicator {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .option-card.result-correct .option-indicator {
+      background: var(--success);
+      color: white;
+      border-color: var(--success);
+    }
+
+    .option-card.result-wrong .option-indicator {
+      background: var(--danger);
+      color: white;
+      border-color: var(--danger);
+    }
+
+    /* กล่องข้อความแจ้งเตือน */
+    .hint-box {
+      display: none;
+      background: #FFFBEB;
+      border-left: 4px solid var(--warning);
+      padding: 1rem 1.25rem;
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 1.5rem;
+      color: #92400E;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .hint-box.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .correct-box {
+      display: none;
+      background: #ECFDF5;
+      border-left: 4px solid var(--success);
+      padding: 1rem 1.25rem;
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 1.5rem;
+      color: #065F46;
+      font-size: 0.95rem;
+    }
+
+    .correct-box.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* สรุปคะแนน */
+    .result-score-circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: #EEF2FF;
+      color: var(--primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 1.5rem auto;
+      border: 4px solid var(--primary);
+    }
+
+    .result-score-circle .percentage {
+      font-size: 2.25rem;
+      font-weight: 700;
+    }
+
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+
+    .stats-table th, .stats-table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    @media (max-width: 768px) {
+      .card { padding: 1.5rem; }
+      .sidebar { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <span>💻</span>คอมพิวเตอร์ ป.4
+    </div>
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+      <div id="timerContainer" class="timer-badge" style="display: none;">
+        <span>⏳</span> <span id="timerDisplay">40:00</span>
+      </div>
+      <button id="toggleLessonBtn" class="btn btn-outline" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">
+        📖 ดูเนื้อหา
+      </button>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <div class="content-area">
+      
+      <!-- หน้าแรก: รับชื่อนักเรียน -->
+      <div id="welcomeScreen" class="screen active card">
+        <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--primary);">
+          🎯 ยินดีต้อนรับสู่แบบทดสอบวัดผลสัมฤทธิ์
+        </h2>
+        <p style="color: var(--text-muted);">
+          แบบทดสอบกลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี (คอมพิวเตอร์) ระดับชั้นประถมศึกษาปีที่ 4
+        </p>
+
+        <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;">
+          <h4 style="margin-bottom: 0.5rem;">📋 กติกาและข้อกำหนด:</h4>
+          <ul style="margin-left: 1.25rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+            <li>ข้อสอบทั้งหมด  <strong>35 ข้อ</strong></li>
+            <li>มีเวลาจำกัดในการทำแบบทดสอบทั้งหมด <strong>40 นาที</strong></li>
+            <li>นักเรียนสามารถคลิกเลือกคำตอบและเปลี่ยนใจได้ เมื่อมั่นใจแล้วให้กดปุ่ม <strong>"🔍 ตรวจคำตอบ"</strong></li>
+
+            <li>สามารถคลิกปุ่ม <strong>"📖 ดูเนื้อหา"</strong> เพื่อทบทวนบทเรียนได้ตลอดเวลา</li>
+          </ul>
+        </div>
+
+        <div class="form-group">
+          <label for="studentName" style="font-weight: 500; display: block; margin-bottom: 0.5rem;">
+            👤 ชื่อ-นามสกุล ของนักเรียน:
+          </label>
+          <input type="text" id="studentName" placeholder="เช่น ด.ญ.มานี รักเรียน" autocomplete="off">
+        </div>
+
+        <button class="btn btn-primary" id="startBtn" style="width: 100%;">
+          🚀 เริ่มทำแบบทดสอบ
+        </button>
+      </div>
+
+      <!-- หน้าทำแบบทดสอบ -->
+      <div id="quizScreen" class="screen card">
+        <div class="quiz-meta">
+          <div>
+            <span id="displayStudentName" style="font-weight: 600; color: var(--text-muted); font-size: 0.9rem;"></span>
+            <div id="questionTracker" style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">
+              คำถามข้อที่ 1 / 35
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-bar-container">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+
+        <div id="categoryBadge" class="question-category">หมวดหมู่</div>
+        <div id="questionText" class="question-text">ข้อความคำถาม</div>
+
+        <!-- รายการตัวเลือกคำตอบ -->
+        <div id="optionsContainer" class="options-grid"></div>
+
+        <!-- กล่องผลลัพธ์ตอบถูก -->
+        <div id="correctBox" class="correct-box">
+          🎉 <strong>ยอดเยี่ยมมาก!</strong> คำตอบของคุณถูกต้อง
+        </div>
+
+        <!-- กล่อง Hint เมื่อตอบผิด -->
+        <div id="hintBox" class="hint-box">
+          <strong>💡 คำแนะนำ (Hint):</strong> <span id="hintText"></span>
+        </div>
+
+        <!-- ปุ่มควบคุม: ตรวจคำตอบ / ข้อถัดไป -->
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+          <button id="checkBtn" class="btn btn-check">
+            🔍 ตรวจคำตอบ
+          </button>
+          <button id="nextBtn" class="btn btn-primary" style="display: none;">
+            ข้อถัดไป ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- หน้าสรุปผลลัพธ์ -->
+      <div id="resultScreen" class="screen card" style="text-align: center;">
+        <span style="font-size: 3rem;">🏆</span>
+        <h2 style="color: var(--primary); margin-top: 0.5rem;">รายงานผลการทดสอบ</h2>
+        <p style="color: var(--text-muted);">ยินดีด้วย! คุณทำแบบทดสอบครบถ้วนแล้ว</p>
+        
+        <p style="font-size: 1.2rem; font-weight: 600; margin-top: 1rem;">
+          นักเรียน: <span id="resultStudentName" style="color: var(--primary);"></span>
+        </p>
+
+        <div class="result-score-circle">
+          <span class="percentage" id="scorePercent">0%</span>
+          <span style="font-size: 0.85rem; font-weight: 500;" id="scoreFraction">0 / 35 ข้อ</span>
+        </div>
+
+        <div style="max-width: 500px; margin: 0 auto; text-align: left;">
+          <table class="stats-table">
+            <tr>
+              <td>เวลาที่ใช้ไปทั้งหมด</td>
+              <td style="text-align: right; font-weight: 600;" id="timeUsed">0 นาที</td>
+            </tr>
+            <tr>
+              <td>ระดับผลการประเมิน</td>
+              <td style="text-align: right; font-weight: 600;" id="evaluationStatus">-</td>
+            </tr>
+          </table>
+        </div>
+
+        <button id="restartBtn" class="btn btn-primary" style="margin-top: 1.5rem;">
+          🔄 ทำแบบทดสอบใหม่อีกครั้ง (สุ่มข้อสอบใหม่)
+        </button>
+      </div>
+
+    </div>
+
+    <!-- เฟรมด้านขวา: หน้าต่างเนื้อหาประกอบการเรียนรู้ (เปิด-ปิดได้) -->
+    <aside id="lessonSidebar" class="sidebar">
+      <div class="sidebar-header">
+        <h3 style="font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+          📚 สรุปเนื้อหาบทเรียน ป.4
+        </h3>
+        <button id="closeLessonBtn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      </div>
+      <div class="sidebar-content">
+        <h4>1. การสร้างเอกสารด้วย MS Word</h4>
+        <p>การแทรกตาราง (Table) ประกอบด้วย แนวนอน (แถว/Row) และ แนวตั้ง (คอลัมน์/Column) การสร้างการ์ดอวยพรใช้ Text Box และ Shapes การทำการ์ตูนช่องใช้กล่องข้อความคำพูด และตาราง ในการออกแบบโปสเตอร์ควรใช้คำสั่งการวางข้อความ ( Wrap Text) เพื่อให้ขยับภาพได้อย่างอิสระ</p>
+        
+        <h4>2. การใช้อินเทอร์เน็ตอย่างปลอดภัย</h4>
+        <p>การปกป้องข้อมูลส่วนบุคคล (รหัสผ่าน ที่อยู่ เลขบัตรประชาชน) ไม่บอกคนแปลกหน้า สังเกตเว็บไซต์ปลอดภัยด้วยสัญลักษณ์รูปแม่กุญแจและ https:// ระวังการหลอกลวงแบบ Phishing และการคัดลอกผลงานผู้อื่น (ลิขสิทธิ์)</p>
+        
+        <h4>3. การคิดเป็นขั้นตอน & ตรรกะ (Logical Thinking)</h4>
+        <p>การแก้ปัญหาอย่างเป็นลำดับขั้นตอน (Algorithm) เช่น การจัดกระเป๋าตามตารางสอน การต้มไข่ การหารูปแบบ (Pattern) ที่ซ้ำ และการหาสาเหตุของปัญหา (Debugging) โดยไม่อาศัยการเดาสุ่ม</p>
+        
+        <h4>4. การเขียนโปรแกรมแบบบล็อกผ่านเกม</h4>
+        <p>การฝึกเขียนโปรแกรมด้วยบล็อกคำสั่ง  มีโครงสร้างสำคัญคือ ลำดับ (Sequence) การทำซ้ำ (Loop/Repeat) เพื่อลดคำสั่งที่ซ้ำซ้อน และการใช้เงื่อนไข ถ้า...แล้ว (If-Then)</p>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // ==============================================================
+    // คลังข้อสอบ 50 ข้อ ป.4 ตามสัดส่วนหลักสูตร
+    // 1. MS Word (20 ข้อ)
+    // 2. ความปลอดภัยอินเทอร์เน็ต (15 ข้อ)
+    // 3. การคิดเป็นขั้นตอน & ตรรกะ (10 ข้อ)
+    // 4. บล็อกโปรแกรมผ่านเกม (5 ข้อ)
+    // ==============================================================
+    const questionBank = [
+      // --- หมวด 1: MS Word (20 ข้อ) ---
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "หากต้องการแทรกตารางเพื่อทำตารางสอนประจำสัปดาห์ในโปรแกรม MS Word ต้องไปที่แท็บคำสั่งใด?",
+        options: ["แท็บ Insert (แทรก)", "แท็บ Home (หน้าแรก)", "แท็บ View (มุมมอง)", "แท็บ Review (รีวิว)"],
+        answer: 0,
+        hint: "การเพิ่มสิ่งใหม่ๆ เข้ามาในหน้ากระดาษ เช่น ตาราง หรือรูปภาพ ต้องใช้คำสั่งการแทรก"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "ในตารางของ MS Word ช่องใน 'แนวนอน' และ 'แนวตั้ง' มีชื่อเรียกว่าอะไรตามลำดับ?",
+        options: ["แถว (Row) และ คอลัมน์ (Column)", "คอลัมน์ (Column) และ แถว (Row)", "เซลล์ (Cell) และ เส้นขอบ (Border)", "กล่องข้อความ (Text Box) และ รูปร่าง (Shape)"],
+        answer: 0,
+        hint: "แนวนอนมักเรียกว่าแถว ส่วนแนวตั้งเสมือนเสาบ้านเรียกว่าคอลัมน์"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "หากต้องการรวมช่องตาราง 2 ช่องที่อยู่ติดกันให้กลายเป็นช่องเดียวกัน ต้องใช้คำสั่งใด?",
+        options: ["Split Cells (แยกเซลล์)", "Merge Cells (ผสานเซลล์)", "Delete Cells (ลบเซลล์)", "Insert Cells (แทรกเซลล์)"],
+        answer: 1,
+        hint: "คำว่า 'Merge' มีความหมายว่าการรวมเข้าด้วยกัน"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "ในการทำการ์ดอวยพรวันเกิด หากต้องการพิมพ์ข้อความแล้วเลื่อนไปวางตำแหน่งใดก็ได้บนกระดาษอย่างอิสระ ควรใช้เครื่องมือใด?",
+        options: ["Text Box (กล่องข้อความ)", "Bullet (สัญลักษณ์แสดงหัวข้อย่อย)", "Page Number (หมายเลขหน้า)", "Header (หัวกระดาษ)"],
+        answer: 0,
+        hint: "เครื่องมือนี้มีลักษณะเป็นกล่องสี่เหลี่ยมที่พิมพ์ข้อความข้างในและเคลื่อนย้ายได้อิสระ"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "หากต้องการทำการ์ตูนช่อง (Comic Strip) และต้องการใส่ 'บอลลูนคำพูด' ของตัวละคร ควรเลือกเครื่องมือใดในแท็บ Insert?",
+        options: ["Shapes -> Callouts (คำบรรยายภาพ/กล่องคำพูด)", "Table -> Quick Tables", "Chart -> Pie Chart", "SmartArt -> Hierarchy"],
+        answer: 0,
+        hint: "มองหารูปร่างประเภทคำบรรยายภาพที่มีหางชี้ไปยังปากของตัวละคร"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "เมื่อแทรกรูปภาพเข้ามาในเอกสารแล้วพบว่ารูปขยับเลื่อนไม่ได้ ควรปรับคุณสมบัติใดของภาพเป็นอันดับแรก?",
+        options: ["Wrap Text (การตัดข้อความ/การตัดล้อม)", "Crop (การครอบตัดภาพ)", "Color Tone (โทนสี)", "Rotate (การหมุนภาพ)"],
+        answer: 0,
+        hint: "คำสั่ง Wrap Text ช่วยกำหนดว่าให้รูปภาพวางลอยอยู่ข้างหน้าหรือสัมพันธ์กับข้อความอย่างไร"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "หากต้องการเปลี่ยนหน้ากระดาษเพื่อทำแผ่นพับหรือการ์ดแบบ 'แนวนอน' ต้องเข้าไปตั้งค่าที่เมนูใด?",
+        options: ["Layout -> Orientation -> Landscape (แนวนอน)", "Layout -> Orientation -> Portrait (แนวตั้ง)", "Insert -> Page Break", "Home -> Center"],
+        answer: 0,
+        hint: "คำว่า Orientation คือการวางแนว และ Landscape หมายถึง แนวนอน"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "การตัดส่วนขอบของรูปภาพที่ไม่ต้องการทิ้งออกไป เรียกว่าคำสั่งใด?",
+        options: ["Crop (การครอบตัด)", "Copy (คัดลอก)", "Paste (วาง)", "Cut (ตัดเนื้อหา)"],
+        answer: 0,
+        hint: "คำสั่งนี้มีสัญลักษณ์เป็นมุมฉากทับกัน ใช้ย่อขอบภาพโดยตัดชิ้นส่วนรอบข้างออก"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "ในการออกแบบโปสเตอร์ หากต้องการใส่เส้นขอบสวยงามรอบทั้งหน้ากระดาษ ต้องเลือกคำสั่งใด?",
+        options: ["Page Borders (เส้นขอบหน้ากระดาษ)", "Shapes Fill (การเติมสีรูปร่าง)", "Font Color (สีฟอนต์)", "Watermark (ลายน้ำ)"],
+        answer: 0,
+        hint: "คำสั่งเส้นขอบทั้งหน้ารวมคำว่า Page และ Border เข้าด้วยกัน"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "คำสั่งใดใช้เปลี่ยนสีพื้นหลังของทั้งหน้าเอกสารให้มีสีสันสดใสสำหรับทำโปสเตอร์?",
+        options: ["Page Color (สีของหน้า)", "Text Highlight Color (สีเน้นข้อความ)", "Font Color (สีแบบอักษร)", "Shading (การแรเงาข้อความ)"],
+        answer: 0,
+        hint: "คำว่า Page Color หมายถึงการเทสีลงบนหน้ากระดาษทั้งแผ่น"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "หากต้องการพิมพ์ข้อความชื่อหัวข้อโปสเตอร์ด้วยตัวอักษรศิลป์สำเร็จรูปที่มีมิติและเงาสวยงาม ควรเลือกคำสั่งใด?",
+        options: ["WordArt (อักษรศิลป์)", "Drop Cap (ตัวอักษรขึ้นต้นขนาดใหญ่)", "Equation (สมการ)", "Symbol (สัญลักษณ์พิเศษ)"],
+        answer: 0,
+        hint: "เครื่องมือตกแต่งตัวอักษรที่มีชื่อโปรแกรมผสมกับคำว่า Art"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "ในการทำการ์ตูน 4 ช่อง วิธีการแบ่งหน้ากระดาษที่สะดวกรวดเร็วและเป็นระเบียบที่สุดคือข้อใด?",
+        options: ["แทรกตารางขนาด 2 แถว 2 คอลัมน์", "ใช้แป้น Spacebar เคาะเว้นวรรคให้เป็นช่อง", "วาดเส้นตรงทีละเส้นด้วยมือเปล่า", "พิมพ์ตัวอักษรจุดไข่ปลาเรียงกัน"],
+        answer: 0,
+        hint: "การใช้ตาราง 2x2 จะแบ่งหน้ากระดาษออกเป็น 4 ช่องที่เท่ากันอย่างแม่นยำ"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "ปุ่มคีย์ลัดบนแป้นพิมพ์ที่ใช้ในการ 'บันทึกงาน' (Save) ใน MS Word คือปุ่มใด?",
+        options: ["Ctrl + S", "Ctrl + C", "Ctrl + V", "Ctrl + Z"],
+        answer: 0,
+        hint: "ตัวอักษรแรกของคำว่า Save คือตัว S"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "หากต้องการยกเลิกคำสั่งที่เพิ่งทำผิดพลาดไปเมื่อสักครู่ให้กลับคืนมา ต้องกดปุ่มคีย์ลัดใด?",
+        options: ["Ctrl + Z (Undo)", "Ctrl + A (Select All)", "Ctrl + P (Print)", "Ctrl + X (Cut)"],
+        answer: 0,
+        hint: "คำสั่งเลิกทำ (Undo) ใช้ปุ่ม Ctrl ร่วมกับตัวอักษรตัวสุดท้ายของภาษาอังกฤษ"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "หากต้องการเติมสีพื้นหลังให้กับรูปร่าง (Shape) ที่วาดขึ้นมา ต้องเลือกคำสั่งใดที่แถบเครื่องมือ Format?",
+        options: ["Shape Fill (เติมสีรูปร่าง)", "Shape Outline (เส้นขอบรูปร่าง)", "Shape Effects (ลักษณะพิเศษรูปร่าง)", "Edit Shape (แก้ไขรูปร่าง)"],
+        answer: 0,
+        hint: "คำว่า Fill หมายถึงการเทหรือเติมสีลงไปข้างในพื้นที่ว่าง"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "หากต้องการให้รูปภาพการ์ตูนซ้อนทับอยู่ 'ด้านหน้า' ข้อความ ต้องปรับ Wrap Text เป็นแบบใด?",
+        options: ["In Front of Text (ข้างหน้าข้อความ)", "Behind Text (ข้างหลังข้อความ)", "Square (จัตุรัส)", "In Line with Text (แนวเดียวกับข้อความ)"],
+        answer: 0,
+        hint: "In Front of แปลว่า ด้านหน้า"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "การเปลี่ยนขนาดตัวหนังสือของหัวข้อโปสเตอร์ให้มีขนาดใหญ่ขึ้น สามารถปรับได้ที่เมนูใด?",
+        options: ["Font Size (ขนาดแบบอักษร)", "Font Style (ลักษณะแบบอักษร)", "Line Spacing (ระยะห่างบรรทัด)", "Change Case (การเปลี่ยนตัวพิมพ์)"],
+        answer: 0,
+        hint: "คำว่า Size แปลว่า ขนาด"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "หากต้องการจัดข้อความบนการ์ดอวยพรให้อยู่ 'กึ่งกลางหน้ากระดาษ' พอดี ต้องเลือกไอคอนใดในแท็บ Home?",
+        options: ["Center (จัดแนวกึ่งกลาง)", "Align Left (จัดชิดซ้าย)", "Align Right (จัดชิดขวา)", "Justify (กระจายแบบเต็ม)"],
+        answer: 0,
+        hint: "Center แปลว่า จุดศูนย์กลางหรือกึ่งกลาง"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "หากต้องการใส่ภาพตัดปะหรือไอคอนสัญลักษณ์ต่างๆ ลงในโปสเตอร์ ต้องเลือกคำสั่งใดในแท็บ Insert?",
+        options: ["Icons หรือ Pictures", "Footer", "Bookmark", "Signature Line"],
+        answer: 0,
+        hint: "เครื่องมือที่ใช้แทรกรูปภาพหรือรูปสัญลักษณ์โดยตรง"
+      },
+      {
+        category: "1. การสร้างเอกสาร MS Word",
+        question: "การกำหนดขนาดกระดาษมาตรฐานที่นิยมใช้ทำรายงานและโปสเตอร์ขนาดทั่วไปคือขนาดใด?",
+        options: ["A4", "A1", "B5", "Envelope"],
+        answer: 0,
+        hint: "เป็นขนาดกระดาษพิมพ์งานมาตรฐานที่ใช้กันมากที่สุด"
+      },
+
+      // --- หมวด 2: ความปลอดภัยอินเทอร์เน็ต (15 ข้อ) ---
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "ข้อมูลในข้อใดเป็น 'ข้อมูลส่วนบุคคล' ที่ไม่ควรบอกคนแปลกหน้าบนอินเทอร์เน็ตเด็ดขาด?",
+        options: ["รหัสผ่านบัญชี และเลขบัตรประชาชน", "ชื่อการ์ตูนที่ชอบดู", "ชื่อวิชาที่ชอบเรียน", "สีเสื้อที่ชอบสวมใส่"],
+        answer: 0,
+        hint: "เป็นข้อมูลลับเฉพาะที่ใช้ยืนยันตัวตนและเข้าถึงบัญชีของเราได้"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "รหัสผ่าน (Password) ข้อใดมีความปลอดภัยและคาดเดาได้ยากที่สุดสำหรับเด็ก ป.4?",
+        options: ["M#9p@Kid24", "12345678", "password", "0812345678"],
+        answer: 0,
+        hint: "รหัสผ่านที่ปลอดภัยต้องประกอบด้วยตัวพิมพ์ใหญ่ พิมพ์เล็ก ตัวเลข และสัญลักษณ์ผสมกัน"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "เว็บไซต์ที่มีความปลอดภัยในการรับส่งข้อมูล จะมีสัญลักษณ์และข้อความใดปรากฏอยู่ที่แถบที่อยู่เว็บ (URL)?",
+        options: ["สัญลักษณ์แม่กุญแจ และขึ้นต้นด้วย https://", "สัญลักษณ์กากบาทสีแดง และขึ้นต้นด้วย http://", "สัญลักษณ์วงกลมสีเหลือง", "สัญลักษณ์รูปดาว"],
+        answer: 0,
+        hint: "ตัวอักษร 's' ใน https ย่อมาจาก Secure ที่แปลว่า ปลอดภัย พร้อมรูปแม่กุญแจล็อก"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "เมื่อมีคนแปลกหน้าในเกมออนไลน์ทักแชตมาชวนไปพบกันข้างนอก นักเรียนควรปฏิบัติตนอย่างไร?",
+        options: ["ปฏิเสธทันที และรีบแจ้งคุณครูหรือผู้ปกครองให้ทราบ", "แอบไปพบคนเดียวเงียบๆ", "ชวนเพื่อนสนิทไปด้วยกันโดยไม่บอกพ่อแม่", "ส่งรูปบ้านและแผนที่ไปให้เขาดู"],
+        answer: 0,
+        hint: "ความปลอดภัยในชีวิตจริงสำคัญที่สุด ผู้ปกครองและครูสามารถช่วยเหลือเราได้"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "ข้อความหรือหน้าต่างเด้งขึ้นมาเตือนว่า 'คุณเป็นผู้โชคดีได้รับไอโฟนฟรี ให้คลิกกรอกข้อมูลส่วนตัว' จัดเป็นกลลวงประเภทใด?",
+        options: ["Phishing (การหลอกลวงตกเบ็ดข้อมูล)", "Antivirus (โปรแกรมกำจัดไวรัส)", "Search Engine (เครื่องมือค้นหา)", "E-learning (บทเรียนออนไลน์)"],
+        answer: 0,
+        hint: "เป็นการหลอกล่อเพื่อหวังขโมยข้อมูลสำคัญ คล้ายการหย่อนเบ็ดตกปลา"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "การกระทำใดบนโลกออนไลน์ถือว่าเป็นการกลั่นแกล้งบนโลกไซเบอร์ (Cyberbullying)?",
+        options: ["ตัดต่อภาพเพื่อนให้อับอายแล้วนำไปโพสต์ลงโซเชียลมีเดีย", "กดไลก์ผลงานวาดภาพของเพื่อน", "ส่งข้อความอวยพรวันเกิดให้เพื่อนในแชต", "แชร์คลิปการสอนพับกระดาษ"],
+        answer: 0,
+        hint: "การกระทำที่สร้างความเดือดร้อน เสียใจ และทำให้อีกฝ่ายอับอาย"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "ก่อนนำรูปภาพจากอินเทอร์เน็ตมาใช้ทำงานส่งครู ข้อใดเป็นการปฏิบัติที่ถูกต้องและมีมารยาททางดิจิทัล?",
+        options: ["ให้เครดิตระบุแหล่งที่มาของภาพอย่างถูกต้อง", "ลบลายน้ำของเจ้าของภาพทิ้งแล้วใส่ชื่อตัวเอง", "บอกทุกคนว่าตนเองเป็นผู้วาดภาพนั้นขึ้นมาเอง", "นำไปใช้โดยไม่ต้องสนใจที่มา"],
+        answer: 0,
+        hint: "การอ้างอิงแหล่งที่มาเป็นการเคารพลิขสิทธิ์และผลงานของผู้อื่น"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "เมื่อใช้งานเครื่องคอมพิวเตอร์ที่ห้องเรียนเสร็จแล้ว สิ่งสำคัญที่สุดที่ต้องทำก่อนลุกออกจากเครื่องคืออะไร?",
+        options: ["ออกจากระบบ (Log out) จากบัญชีต่างๆ ทุกครั้ง", "ปิดหน้าจอคอมพิวเตอร์โดยไม่กดปิดโปรแกรม", "เปิดหน้าต่างเกมค้างไว้ให้เพื่อนเล่นต่อ", "ดึงปลั๊กไฟออกทันที"],
+        answer: 0,
+        hint: "การ Log out ป้องกันไม่ให้ผู้อื่นเข้าถึงบัญชีส่วนตัวของเราได้"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "หากพบเห็นคลิปวิดีโอหรือเนื้อหาที่ไม่เหมาะสมบนอินเทอร์เน็ต นักเรียนควรทำอย่างไรเป็นอันดับแรก?",
+        options: ["แจ้งคุณครูหรือผู้ปกครองทันที และกดรายงาน (Report) เนื้อหา", "แชร์ส่งต่อให้เพื่อนๆ ทุกคนดู", "กดบันทึกคลิปเก็บไว้ในเครื่อง", "เขียนคอมเมนต์ต่อว่าด้วยถ้อยคำรุนแรง"],
+        answer: 0,
+        hint: "ไม่ควรแชร์ต่อ และให้ผู้ใหญ่ช่วยจัดการหรือกดรายงานความไม่เหมาะสมตามระบบ"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "การตั้งรหัสผ่านด้วย 'วันเดือนปีเกิด' หรือ 'เบอร์โทรศัพท์' ของตนเอง มีข้อเสียอย่างไร?",
+        options: ["ผู้อื่นที่รู้จักเราสามารถคาดเดาได้ง่ายมาก", "ทำให้คอมพิวเตอร์ทำงานช้าลง", "เปลืองพื้นที่หน่วยความจำของเครื่อง", "จำยากเกินไป"],
+        answer: 0,
+        hint: "ข้อมูลที่คนใกล้ชิดรู้ ย่อมนำมาเดาเพื่อเข้าสู่ระบบของเราได้ง่าย"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "คำว่า 'รอยเท้าดิจิทัล' (Digital Footprint) มีความหมายตรงกับข้อใด?",
+        options: ["ร่องรอยประวัติกิจกรรม ข้อมูล และข้อความที่เราโพสต์ทิ้งไว้บนโลกออนไลน์", "รอยเปื้อนฝุ่นบนแป้นพิมพ์คอมพิวเตอร์", "การเดินออกกำลังกายขณะเล่นมือถือ", "ประวัติการซ่อมแซมเครื่องคอมพิวเตอร์"],
+        answer: 0,
+        hint: "คิดถึงรอยเท้าที่เราเหยียบทิ้งไว้ ทุกสิ่งที่เราโพสต์บนเน็ตจะถูกบันทึกไว้เสมอ"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "หากมีไฟล์ส่งมาจากอีเมลที่ไม่รู้จักระบุว่า 'ดาวน์โหลดเกมฟรี คลิกที่นี่' เราควรปฏิบัติอย่างไร?",
+        options: ["อย่าคลิกหรือดาวน์โหลด เพราะอาจมีไวรัสคอมพิวเตอร์แฝงมา", "รีบดาวน์โหลดทันทีเพราะอยากเล่นเกม", "ส่งต่ออีเมลไปให้เพื่อนทุกคนดาวน์โหลดด้วย", "ตอบอีเมลขอบคุณเขากลับไป"],
+        answer: 0,
+        hint: "ไฟล์จากคนที่ไม่รู้จักมักเป็นพาหะนำมัลแวร์หรือไวรัสมาสู่เครื่องคอมพิวเตอร์"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "การใช้เวลากับหน้าจอคอมพิวเตอร์หรือแท็บเล็ตติดต่อกันนานเกินไปโดยไม่พักสายตา ส่งผลเสียต่อสุขภาพอย่างไร?",
+        options: ["ปวดตา กล้ามเนื้อเมื่อยล้า และสายตาสั้นลง", "ทำให้สมองคิดเลขเร็วขึ้นผิดปกติ", "ช่วยให้ความจำดีเลิศ", "ทำให้ร่างกายเจริญเติบโตรวดเร็วขึ้น"],
+        answer: 0,
+        hint: "แสงจากหน้าจอและความเมื่อยล้าส่งผลเสียโดยตรงต่อดวงตาและกล้ามเนื้อ"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "การแอบถ่ายรูปเพื่อนตอนเผลอแล้วนำไปโพสต์ล้อเลียนในเฟซบุ๊ก ผิดหลักข้อใด?",
+        options: ["ละเมิดสิทธิความเป็นส่วนตัวของผู้อื่น และสร้างความเสียหาย", "เป็นเรื่องตลกขบขันที่ทุกคนยอมรับได้", "ช่วยทำให้เพื่อนมีชื่อเสียงโด่งดัง", "เป็นการฝึกทักษะการถ่ายภาพที่ดี"],
+        answer: 0,
+        hint: "ทุกคนมีสิทธิในรูปภาพและความเป็นส่วนตัวของตนเองที่ผู้อื่นต้องเคารพ"
+      },
+      {
+        category: "2. การใช้อินเทอร์เน็ตอย่างปลอดภัย",
+        question: "หากนักเรียนต้องการค้นหาภาพทำการ์ตูนใน Google ที่ปลอดภัยและไม่ติดลิขสิทธิ์ ควรตั้งค่าตัวกรองประเภทสิทธิ์การใช้งานแบบใด?",
+        options: ["Creative Commons licenses (สัญญาอนุญาตครีเอทีฟคอมมอนส์)", "Commercial licenses (ใบอนุญาตเชิงพาณิชย์)", "All (ทั้งหมดโดยไม่กรอง)", "Copyright Reserved (สงวนลิขสิทธิ์)"],
+        answer: 0,
+        hint: "สัญญาอนุญาตประเภท Creative Commons มักเปิดให้นำไปใช้เพื่อการศึกษาได้โดยไม่เสียค่าใช้จ่าย"
+      },
+
+      // --- หมวด 3: การคิดเป็นขั้นตอน & ตรรกะ (10 ข้อ) ---
+      {
+        category: "3. การคิดเป็นขั้นตอน & ตรรกะ",
+        question: "ข้อใดเรียงลำดับขั้นตอน (Algorithm) ในการล้างจานชามหลังรับประทานอาหารได้ถูกต้องที่สุด?",
+        options: [
+          "กวาดเศษอาหารทิ้ง -> ล้างน้ำยาล้างจาน -> ล้างน้ำสะอาด -> คว่ำให้แห้ง",
+          "คว่ำให้แห้ง -> ล้างน้ำยาล้างจาน -> กวาดเศษอาหารทิ้ง -> ล้างน้ำสะอาด",
+          "ล้างน้ำสะอาด -> คว่ำให้แห้ง -> กวาดเศษอาหารทิ้ง -> ล้างน้ำยาล้างจาน",
+          "ล้างน้ำยาล้างจาน -> กวาดเศษอาหารทิ้ง -> คว่ำให้แห้ง -> ล้างน้ำสะอาด"
+        ],
+        answer: 0,
+        hint: "ต้องนำเศษอาหารออกก่อนฟอกสบู่ แล้วจึงล้างน้ำเปล่าและผึ่งให้แห้ง"
+      },
+      {
+        category: "3. การคิดเป็นขั้นตอน & ตรรกะ",
+        question: "พิจารณาแบบรูปชุดตัวเลขต่อไปนี้: 5, 10, 15, 20, [ ? ] ตัวเลขในช่องว่างคือจำนวนใด?",
+        options: ["25", "22", "30", "24"],
+        answer: 0,
+        hint: "ตัวเลขแต่ละจำนวนมีค่าเพิ่มขึ้นทีละ 5 อย่างสม่ำเสมอ"
+      },
+      {
+        category: "3. การคิดเป็นขั้นตอน & ตรรกะ",
+        question: "หากต้องการต้มไข่ไก่ให้เป็น 'ไข่ยางมะตูม' ขั้นตอนใดเป็นปัจจัยสำคัญที่สุดที่ส่งผลต่อผลลัพธ์?",
+        options: ["การจับเวลาในการต้มน้ำอย่างแม่นยำ (เช่น 6-7 นาที)", "สีของหม้อที่ใช้ต้มไข่", "การใช้ทัพพีคนน้ำตลอดเวลา", "การเปิดไฟสว่างในห้องครัว"],
+        answer: 0,
+        hint: "ความสุกของไข่ขึ้นอยู่กับระยะเวลาและความร้อนที่ไข่ได้รับโดยตรง"
+      },
+      {
+        category: "3. การคิดเป็นขั้นตอน & ตรรกะ",
+        question: "เด็กชายกานต์พบปัญหา 'ปากกาเขียนไม่ติด' ขั้นตอนการแก้ปัญหาอย่างมีเหตุผลข้อใดควรทำเป็นอันดับแรก?",
+        options: ["เปิดดูไส้ปากกาว่ามีน้ำหมึกเหลืออยู่หรือไม่", "โยนปากกาทิ้งลงถังขยะทันที", "ซื้อกระเป๋าดินสอใบใหม่", "ฉีกกระดาษสมุดทิ้ง"],
+        answer: 0,
+        hint: "เริ่มต้นตรวจสอบสาเหตุที่เกิดขึ้นตรงจุดที่ปากกาก่อนเสมอ"
+      },
+      {
+        category: "3. การคิดเป็นขั้นตอน & ตรรกะ",
+        question: "การจัดกระเป๋านักเรียนตาม 'ตารางสอนประจำวัน' ช่วยแก้ปัญหาใดได้อย่างมีประสิทธิภาพที่สุด?",
+        options: ["กระเป๋าหนักเกินไป และลืมสมุดหนังสือที่จะใช้เรียน", "ทำให้มาโรงเรียนสาย", "ทำให้หิวข้าวเร็วขึ้น", "ทำให้ชุดนักเรียนเปื้อน"],
+        answer: 0,
+        hint: "การจัดตามตารางช่วยคัดเฉพาะวิชาที่ต้องเรียน ทำให้ไม่ต้องแบกเล่มที่ไม่จำเป็นและไม่ลืมของ"
+      },
+      {
+        category: "3. การคิดเป็นขั้นตอน & ตรรกะ",
+        question: "พิจารณาเงื่อนไข: 'ถ้าฝนตก ต้องพกร่ม แต่ถ้าแดดออก ต้องสวมหมวก' หากวันนี้ท้องฟ้าแจ่มใสมีแดดจัด นักเรียนควรทำสิ่งใด?",
+        options: ["สวมหมวก", "พกร่มกันฝน", "สวมเสื้อกันฝน", "นอนอยู่บ้าน"],
+        answer: 0,
+        hint: "ดูเงื่อนไขที่ระบุไว้หลังคำว่า 'ถ้าแดดออก'"
+      },
+      {
+        category: "3. การคิดเป็นขั้นตอน & ตรรกะ",
+        question: "การหาข้อผิดพลาดในขั้นตอนการทำงานแล้วลงมือแก้ไขให้ถูกต้อง ตรงกับคำศัพท์ภาษาอังกฤษในข้อใด?",
+        options: ["Debugging (การแก้จุดผิดพลาด)", "Coding (การเขียนคำสั่ง)", "Drawing (การวาดภาพ)", "Typing (การพิมพ์งาน)"],
+        answer: 0,
+        hint: "คำว่า Bug หมายถึงแมลงหรือจุดผิดพลาด ส่วน Debugging คือการกำจัดจุดผิดพลาดนั้น"
+      },
+      {
+        category: "3. การคิดเป็นขั้นตอน & ตรรกะ",
+        question: "พิจารณาแบบรูปสัญลักษณ์: 🍎, 🍌, 🍎, 🍌, 🍎, [ ? ] ผลไม้ถัดไปคือข้อใด?",
+        options: ["🍌 (กล้วย)", "🍎 (แอปเปิ้ล)", "🍇 (องุ่น)", "🍊 (ส้ม)"],
+        answer: 0,
+        hint: "รูปแบบสลับกันระหว่าง แอปเปิ้ล และ กล้วย"
+      },
+      {
+        category: "3. การคิดเป็นขั้นตอน & ตรรกะ",
+        question: "ข้อใดเป็นตัวอย่างของ 'การคิดแก้ปัญหาแบบมีตรรกะ' (Logical Thinking)?",
+        options: ["ตรวจสอบดูว่าเสียบปลั๊กพัดลมแน่นหรือไม่เมื่อพัดลมไม่หมุน", "เดาสุ่มโยนเหรียญหัวก้อยเพื่อตัดสินใจทำการบ้าน", "ร้องไห้เสียงดังเมื่อคอมพิวเตอร์เปิดไม่ติด", "เชื่อคำทำนายดวงชะตาในการเลือกคำตอบข้อสอบ"],
+        answer: 0,
+        hint: "ตรรกะคือการคิดโดยใช้เหตุและผล ตรวจสอบสาเหตุความเป็นไปได้จริง"
+      },
+      {
+        category: "3. การคิดเป็นขั้นตอน & ตรรกะ",
+        question: "หากต้องการพับจรวดกระดาษให้บินได้ไกลตามคู่มือ หากเรา 'ข้ามขั้นตอนที่ 2 ไปทำขั้นตอนที่ 4 ทันที' จะเกิดผลอย่างไร?",
+        options: ["จรวดอาจเสียรูปทรง พับไม่สำเร็จ หรือบินไม่ได้ตามต้องการ", "จรวดจะบินได้เร็วขึ้นเป็น 2 เท่า", "ไม่มีผลกระทบใดๆ", "กระดาษจะเปลี่ยนสีกลายเป็นสีทอง"],
+        answer: 0,
+        hint: "ขั้นตอนวิธี (Algorithm) ต้องทำเรียงลำดับ การข้ามขั้นตอนจะทำให้ผลลัพธ์เสียหาย"
+      },
+
+      // --- หมวด 4: บล็อกโปรแกรมผ่านเกม (5 ข้อ) ---
+      {
+        category: "4. การเขียนโปรแกรมแบบบล็อกผ่านเกม",
+        question: "ในเกมฝึกเขียนโค้ด (เช่น Code.org หรือ Scratch) หากต้องการสั่งให้ตัวละครเดินไปข้างหน้า 4 ก้าวติดต่อกัน ควรใช้คำสั่งใดเพื่อให้โค้ดสั้นและกะทัดรัดที่สุด?",
+        options: ["ใช้บล็อก 'วนซ้ำ (Repeat)' 4 ครั้ง ครอบบล็อกเดินไปข้างหน้า", "ต่อบล็อก 'เดินไปข้างหน้า' เรียงกัน 4 อันยาวๆ", "ใช้บล็อก 'กระโดด' 4 ครั้ง", "ใช้บล็อก 'จบการทำงาน'"],
+        answer: 0,
+        hint: "การทำซ้ำ (Loop/Repeat) ช่วยลดจำนวนบล็อกคำสั่งที่ซ้ำๆ กันได้"
+      },
+      {
+        category: "5. การเขียนโปรแกรมบล็อก",
+        question: "การต่อบล็อกคำสั่งจากบนลงล่างให้ทำงานตามลำดับทีละคำสั่ง ตรงกับโครงสร้างใดของการเขียนโปรแกรม?",
+        options: ["Sequence (โครงสร้างแบบลำดับ)", "Selection (โครงสร้างแบบมีเงื่อนไข)", "Iteration (โครงสร้างแบบวนซ้ำ)", "Parallel (โครงสร้างแบบคู่ขนาน)"],
+        answer: 0,
+        hint: "การทำ 1 แล้วไป 2 แล้วไป 3 ตามลำดับบรรทัด คือ Sequence"
+      },
+      {
+        category: "4. การเขียนโปรแกรมแบบบล็อกผ่านเกม",
+        question: "หากตัวละครในเกมเดินไปชนสิ่งกีดขวางแล้วไม่สามารถไปถึงเส้นชัยได้ ผู้เขียนโปรแกรมควรทำสิ่งใด?",
+        options: ["ตรวจเช็กลำดับบล็อกคำสั่งและทิศทางการเลี้ยวเพื่อแก้ไข (Debug)", "กดปิดหน้าจอเกมทิ้งแล้วเลิกเล่น", "ทุบคีย์บอร์ดเพราะคิดว่าเครื่องพัง", "เปลี่ยนไปเล่นเกมอื่นทันที"],
+        answer: 0,
+        hint: "ข้อผิดพลาดเกิดจากลำดับคำสั่งที่เราสั่ง ต้องตรวจสอบทีละบล็อกเพื่อแก้ไข"
+      },
+      {
+        category: "4. การเขียนโปรแกรมแบบบล็อกผ่านเกม",
+        question: "บล็อกคำสั่ง 'ถ้า...แล้ว (If...then)' นำมาใช้ในเกมฝึกโค้ดดิ้งเมื่อใด?",
+        options: ["เมื่อต้องการให้ตัวละครตรวจสอบเงื่อนไขและตัดสินใจเลือกทำ", "เมื่อต้องการปิดโปรแกรม", "เมื่อต้องการพิมพ์ข้อความลงในเอกสาร", "เมื่อต้องการเพิ่มระดับเสียงเพลง"],
+        answer: 0,
+        hint: "คำว่า 'ถ้า' ใช้สำหรับการตัดสินใจตามสถานการณ์ เช่น ถ้าชนเหรียญ ให้ได้คะแนน"
+      },
+      {
+        category: "4. การเขียนโปรแกรมแบบบล็อกผ่านเกม",
+        question: "ประโยชน์โดยตรงของการฝึกต่อบล็อกคำสั่งผ่านเว็บไซต์เกมเขียนโค้ดคือข้อใด?",
+        options: ["ฝึกทักษะการคิดอย่างเป็นลำดับขั้นตอนและแก้ปัญหาอย่างเป็นระบบ", "ทำให้เล่นเกมคอมพิวเตอร์เก่งจนไม่ต้องอ่านหนังสือ", "ช่วยให้ดาวน์โหลดเกมเถื่อนมาเล่นได้ฟรี", "ทำให้คอมพิวเตอร์ใช้งานได้โดยไม่ต้องต่อไฟฟ้า"],
+        answer: 0,
+        hint: "บล็อกคำสั่งช่วยฝึกสมองให้คิดเป็นเหตุเป็นผลและเป็นขั้นตอนตามลำดับวิธี"
+      }
+    ];
+
+    // ==============================================================
+    // ตัวแปรและสถานะการทำงานของระบบ
+    // ==============================================================
+    let studentName = "";
+    let quizSet = [];
+    let currentIndex = 0;
+    let score = 0;
+    let timerSeconds = 40 * 60; // 40 นาที
+    let timerInterval = null;
+    let selectedOptionIndex = null;
+    let isChecked = false;
+
+    // อ้างอิง DOM Elements
+    const welcomeScreen = document.getElementById("welcomeScreen");
+    const quizScreen = document.getElementById("quizScreen");
+    const resultScreen = document.getElementById("resultScreen");
+    const lessonSidebar = document.getElementById("lessonSidebar");
+    const toggleLessonBtn = document.getElementById("toggleLessonBtn");
+    const closeLessonBtn = document.getElementById("closeLessonBtn");
+    
+    const startBtn = document.getElementById("startBtn");
+    const checkBtn = document.getElementById("checkBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    
+    const studentNameInput = document.getElementById("studentName");
+    const displayStudentName = document.getElementById("displayStudentName");
+    const resultStudentName = document.getElementById("resultStudentName");
+    
+    const timerContainer = document.getElementById("timerContainer");
+    const timerDisplay = document.getElementById("timerDisplay");
+    const questionTracker = document.getElementById("questionTracker");
+    const progressFill = document.getElementById("progressFill");
+    const categoryBadge = document.getElementById("categoryBadge");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    
+    const hintBox = document.getElementById("hintBox");
+    const hintText = document.getElementById("hintText");
+    const correctBox = document.getElementById("correctBox");
+
+    // ฟังก์ชันสลับ Array แบบสุ่ม (Fisher-Yates Shuffle)
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // เปิด-ปิด แถบสรุปเนื้อหาด้านข้าง
+    toggleLessonBtn.addEventListener("click", () => {
+      lessonSidebar.classList.toggle("open");
+    });
+    closeLessonBtn.addEventListener("click", () => {
+      lessonSidebar.classList.remove("open");
+    });
+
+    // เริ่มต้นทำแบบทดสอบ
+    startBtn.addEventListener("click", () => {
+      const name = studentNameInput.value.trim();
+      if (!name) {
+        alert("กรุณากรอกชื่อ-นามสกุล หรือเลขที่ของนักเรียนก่อนเริ่มทำแบบทดสอบครับ/ค่ะ");
+        studentNameInput.focus();
+        return;
+      }
+      studentName = name;
+      displayStudentName.innerText = `ผู้สอบ: ${studentName}`;
+      resultStudentName.innerText = studentName;
+
+      initQuiz();
+    });
+
+    function initQuiz() {
+      // สุ่มคำถาม 35 ข้อจากคลัง 50 ข้อ
+      const shuffledQuestions = shuffleArray(questionBank);
+      quizSet = shuffledQuestions.slice(0, 35).map(q => {
+        // สลับตำแหน่งตัวเลือก ก-ข-ค-ง และคำนวณตำแหน่งคำตอบที่ถูกต้องใหม่
+        const originalOptions = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.answer }));
+        const shuffledOptions = shuffleArray(originalOptions);
+        const newCorrectIndex = shuffledOptions.findIndex(o => o.isCorrect);
+
+        return {
+          category: q.category,
+          question: q.question,
+          options: shuffledOptions.map(o => o.text),
+          answer: newCorrectIndex,
+          hint: q.hint
+        };
+      });
+
+      currentIndex = 0;
+      score = 0;
+      timerSeconds = 40 * 60; // 40 นาที
+
+      welcomeScreen.classList.remove("active");
+      resultScreen.classList.remove("active");
+      quizScreen.classList.add("active");
+      timerContainer.style.display = "flex";
+
+      startTimer();
+      renderQuestion();
+    }
+
+    // ระบบนับเวลาถอยหลัง 40 นาที
+    function startTimer() {
+      clearInterval(timerInterval);
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        timerSeconds--;
+        updateTimerDisplay();
+        if (timerSeconds <= 0) {
+          clearInterval(timerInterval);
+          alert("หมดเวลา 40 นาทีในการทำแบบทดสอบแล้วครับ ระบบจะสรุปคะแนนทันที");
+          finishQuiz();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timerSeconds / 60);
+      const seconds = timerSeconds % 60;
+      timerDisplay.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      if (timerSeconds <= 300) {
+        timerDisplay.style.color = "var(--danger)";
+      } else {
+        timerDisplay.style.color = "#B45309";
+      }
+    }
+
+    // แสดงคำถามและตัวเลือก
+    function renderQuestion() {
+      selectedOptionIndex = null;
+      isChecked = false;
+      const q = quizSet[currentIndex];
+
+      questionTracker.innerText = `คำถามข้อที่ ${currentIndex + 1} / ${quizSet.length}`;
+      progressFill.style.width = `${((currentIndex) / quizSet.length) * 100}%`;
+      categoryBadge.innerText = q.category;
+      questionText.innerText = q.question;
+
+      // รีเซ็ตการแสดงผล
+      hintBox.classList.remove("show");
+      correctBox.classList.remove("show");
+      checkBtn.style.display = "inline-flex";
+      nextBtn.style.display = "none";
+      optionsContainer.innerHTML = "";
+
+      const alphabet = ['ก', 'ข', 'ค', 'ง'];
+
+      q.options.forEach((optText, idx) => {
+        const optionCard = document.createElement("div");
+        optionCard.className = "option-card";
+        optionCard.innerHTML = `
+          <div class="option-indicator">${alphabet[idx]}</div>
+          <div style="flex: 1; font-size: 1rem;">${optText}</div>
+        `;
+
+        // คลิกเพื่อเลือกตัวเลือกชั่วคราว (ยังไม่ตรวจคำตอบ เปลี่ยนใจได้)
+        optionCard.addEventListener("click", () => {
+          if (isChecked) return;
+
+          selectedOptionIndex = idx;
+          const allCards = optionsContainer.querySelectorAll(".option-card");
+          allCards.forEach(card => card.classList.remove("chosen"));
+          optionCard.classList.add("chosen");
+        });
+
+        optionsContainer.appendChild(optionCard);
+      });
+    }
+
+    // กดปุ่ม "ตรวจคำตอบ"
+    checkBtn.addEventListener("click", () => {
+      if (selectedOptionIndex === null) {
+        alert("กรุณาคลิกเลือกตัวเลือกคำตอบที่ต้องการก่อนกดตรวจคำตอบครับ");
+        return;
+      }
+
+      isChecked = true;
+      const q = quizSet[currentIndex];
+      const allCards = optionsContainer.querySelectorAll(".option-card");
+      
+      // ล็อกตัวเลือกทั้งหมดไม่ให้เปลี่ยนได้อีก
+      allCards.forEach(card => card.classList.add("locked"));
+
+      const chosenCard = allCards[selectedOptionIndex];
+
+      if (selectedOptionIndex === q.answer) {
+        // ตอบถูกต้อง
+        chosenCard.classList.remove("chosen");
+        chosenCard.classList.add("result-correct");
+        correctBox.classList.add("show");
+        score++;
+      } else {
+        // ตอบผิด -> แสดง Hint แต่ไม่เฉลยข้อที่ถูกต้อง
+        chosenCard.classList.remove("chosen");
+        chosenCard.classList.add("result-wrong");
+        hintText.innerText = q.hint;
+        hintBox.classList.add("show");
+      }
+
+      // สลับปุ่มตรวจเป็นปุ่มข้อถัดไป
+      checkBtn.style.display = "none";
+      nextBtn.style.display = "inline-flex";
+    });
+
+    // กดปุ่ม "ข้อถัดไป"
+    nextBtn.addEventListener("click", () => {
+      currentIndex++;
+      if (currentIndex < quizSet.length) {
+        renderQuestion();
+      } else {
+        finishQuiz();
+      }
+    });
+
+    // สรุปผลการทดสอบ
+    function finishQuiz() {
+      clearInterval(timerInterval);
+      quizScreen.classList.remove("active");
+      resultScreen.classList.add("active");
+      timerContainer.style.display = "none";
+      lessonSidebar.classList.remove("open");
+
+      const totalQuestions = quizSet.length;
+      const percentage = Math.round((score / totalQuestions) * 100);
+
+      document.getElementById("scorePercent").innerText = `${percentage}%`;
+      document.getElementById("scoreFraction").innerText = `${score} / ${totalQuestions} ข้อ`;
+
+      // คำนวณเวลาที่ใช้ไปจริง
+      const timeSpentSeconds = (40 * 60) - timerSeconds;
+      const spentMin = Math.floor(timeSpentSeconds / 60);
+      const spentSec = timeSpentSeconds % 60;
+      document.getElementById("timeUsed").innerText = `${spentMin} นาที ${spentSec} วินาที`;
+
+      // ประเมินผลระดับผลการเรียน
+      let evalText = "";
+      if (percentage >= 80) evalText = "🌟 ดีเยี่ยม (ผ่านเกณฑ์ระดับยอดเยี่ยม)";
+      else if (percentage >= 60) evalText = "👍 ผ่านเกณฑ์ (อยู่ในระดับดี)";
+      else if (percentage >= 50) evalText = "👌 พอใช้ (ควรศึกษาทบทวนเพิ่มเติม)";
+      else evalText = "⚠️ ควรปรับปรุง (ทบทวนบทเรียนและฝึกทำซ้ำ)";
+      
+      document.getElementById("evaluationStatus").innerText = evalText;
+    }
+
+    // เริ่มต้นใหม่ (กดปุ่มทำใหม่อีกครั้ง)
+    restartBtn.addEventListener("click", () => {
+      studentNameInput.value = "";
+      resultScreen.classList.remove("active");
+      welcomeScreen.classList.add("active");
+    });
+  </script>
+</body>
+</html>
