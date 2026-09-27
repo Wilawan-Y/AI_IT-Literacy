@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>computer ป.5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --secondary: #06B6D4;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --radius: 16px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .timer-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #FEF3C7;
+      color: #B45309;
+      padding: 0.4rem 0.8rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .main-layout {
+      display: flex;
+      flex: 1;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .content-area {
+      flex: 1;
+      padding: 2rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+      transition: margin-right 0.3s ease;
+    }
+
+    /* Side Sheet for Reference Lessons */
+    .sidebar {
+      position: fixed;
+      top: 65px;
+      right: -100%;
+      width: 100%;
+      max-width: 420px;
+      height: calc(100vh - 65px);
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      box-shadow: -10px 0 25px rgba(0,0,0,0.05);
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar.open {
+      right: 0;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #F1F5F9;
+    }
+
+    .sidebar-content {
+      padding: 1.25rem;
+      overflow-y: auto;
+      flex: 1;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .sidebar-content h4 {
+      color: var(--primary);
+      margin: 1rem 0 0.5rem 0;
+    }
+
+    .sidebar-content ul {
+      margin-left: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Screen Wrappers */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Input & Buttons */
+    .form-group {
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.85rem 1.2rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--border);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background: #F1F5F9;
+    }
+
+    /* Quiz Header & Tracker */
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .question-category {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: #EEF2FF;
+      color: var(--primary);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .question-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    /* Options */
+    .options-grid {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .option-card {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.2s;
+      background: var(--surface);
+    }
+
+    .option-card:hover:not(.locked) {
+      border-color: var(--secondary);
+      background: #F0FDFA;
+    }
+
+    .option-card.selected {
+      border-color: var(--primary);
+      background: #EEF2FF;
+    }
+
+    .option-card.selected-wrong {
+      border-color: var(--danger);
+      background: #FEF2F2;
+    }
+
+    .option-indicator {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .option-card.selected .option-indicator {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .option-card.selected-wrong .option-indicator {
+      background: var(--danger);
+      color: white;
+      border-color: var(--danger);
+    }
+
+    /* Hint Box */
+    .hint-box {
+      display: none;
+      background: #FFFBEB;
+      border-left: 4px solid var(--warning);
+      padding: 1rem 1.25rem;
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 1.5rem;
+      color: #92400E;
+      font-size: 0.95rem;
+    }
+
+    .hint-box.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* Result Screen */
+    .result-score-circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: #EEF2FF;
+      color: var(--primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 1.5rem auto;
+      border: 4px solid var(--primary);
+    }
+
+    .result-score-circle .percentage {
+      font-size: 2.25rem;
+      font-weight: 700;
+    }
+
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+
+    .stats-table th, .stats-table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    @media (max-width: 768px) {
+      .card { padding: 1.5rem; }
+      .sidebar { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <span>💻</span> คอมพิวตอร์เพิ่มเติม ป.5
+    </div>
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+      <div id="timerContainer" class="timer-badge" style="display: none;">
+        <span>⏳</span> <span id="timerDisplay">40:00</span>
+      </div>
+      <button id="toggleLessonBtn" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+        📖 ดูเนื้อหา
+      </button>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <div class="content-area">
+      
+      <!-- หน้าแรก: รับชื่อนักเรียน -->
+      <div id="welcomeScreen" class="screen active card">
+        <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--primary);">
+          🎯 ยินดีต้อนรับสู่แบบทดสอบวัดผลสัมฤทธิ์
+        </h2>
+        <p style="color: var(--text-muted);">
+          แบบทดสอบนี้จัดทำขึ้นสำหรับระดับชั้นประถมศึกษาปีที่ 5 เพื่อประเมินทักษะการเรียนรู้ด้านเทคโนโลยีและวิทยาการคำนวณ
+        </p>
+
+        <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;">
+          <h4 style="margin-bottom: 0.5rem;">📋 กติกาและข้อกำหนด:</h4>
+          <ul style="margin-left: 1.25rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+            <li>ข้อสอบทั้งหมด<strong> 35 ข้อ</strong></li>
+            <li>มีเวลาจำกัดทั้งหมด <strong>40 นาที</strong></li>
+            <li>สามารถคลิกดูสรุปเนื้อหาประกอบได้ที่มุมบนขวา</li>
+          </ul>
+        </div>
+
+        <div class="form-group">
+          <label for="studentName" style="font-weight: 500; display: block; margin-bottom: 0.5rem;">
+            👤 ชื่อ-นามสกุล:
+          </label>
+          <input type="text" id="studentName" placeholder="เช่น ด.ช.สมชาย สายลุย เลขที่ 12" autocomplete="off">
+        </div>
+
+        <button class="btn btn-primary" id="startBtn" style="width: 100%;">
+          🚀 เริ่มทำแบบทดสอบ
+        </button>
+      </div>
+
+      <!-- หน้าทำแบบทดสอบ -->
+      <div id="quizScreen" class="screen card">
+        <div class="quiz-meta">
+          <div>
+            <span id="displayStudentName" style="font-weight: 600; color: var(--text-muted); font-size: 0.9rem;"></span>
+            <div id="questionTracker" style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">
+              คำถามข้อที่ 1 / 35
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-bar-container">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+
+        <div id="categoryBadge" class="question-category">หมวดหมู่</div>
+        <div id="questionText" class="question-text">ข้อความคำถามจะปรากฏที่นี่</div>
+
+        <div id="optionsContainer" class="options-grid"></div>
+
+        <!-- กล่อง Hint -->
+        <div id="hintBox" class="hint-box">
+          <strong>💡 คำแนะนำ (Hint):</strong> <span id="hintText"></span>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+          <button id="nextBtn" class="btn btn-primary" style="display: none;">
+            ข้อถัดไป ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- หน้าสรุปผลลัพธ์ -->
+      <div id="resultScreen" class="screen card" style="text-align: center;">
+        <span style="font-size: 3rem;">🏆</span>
+        <h2 style="color: var(--primary); margin-top: 0.5rem;">รายงานผลการทดสอบ</h2>
+        <p style="color: var(--text-muted);">ยินดีด้วย! คุณทำแบบทดสอบเสร็จสิ้นแล้ว</p>
+        
+        <p style="font-size: 1.2rem; font-weight: 600; margin-top: 1rem;">
+          นักเรียน: <span id="resultStudentName" style="color: var(--primary);"></span>
+        </p>
+
+        <div class="result-score-circle">
+          <span class="percentage" id="scorePercent">0%</span>
+          <span style="font-size: 0.85rem; font-weight: 500;" id="scoreFraction">0 / 35 ข้อ</span>
+        </div>
+
+        <div style="max-width: 500px; margin: 0 auto; text-align: left;">
+          <table class="stats-table">
+            <tr>
+              <td>เวลาที่ใช้ไปทั้งหมด</td>
+              <td style="text-align: right; font-weight: 600;" id="timeUsed">0 นาที</td>
+            </tr>
+            <tr>
+              <td>สถานะการประเมิน</td>
+              <td style="text-align: right; font-weight: 600;" id="evaluationStatus">-</td>
+            </tr>
+          </table>
+        </div>
+
+        <button id="restartBtn" class="btn btn-primary" style="margin-top: 1rem;">
+          🔄 ทำแบบทดสอบใหม่อีกครั้ง
+        </button>
+      </div>
+
+    </div>
+
+    <!-- เฟรมด้านขวา: หน้าต่างเนื้อหาประกอบการเรียนรู้ (เปิด-ปิดได้) -->
+    <aside id="lessonSidebar" class="sidebar">
+      <div class="sidebar-header">
+        <h3 style="font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+          📚 สรุปเนื้อหาบทเรียน ป.5
+        </h3>
+        <button id="closeLessonBtn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      </div>
+      <div class="sidebar-content">
+        <h4>1. การใช้ Google Maps & การเดินทาง</h4>
+        <p>Google Maps ช่วยค้นหาเส้นทาง คำนวณระยะทาง (กม./เมตร) และประเมินเวลาเดินทาง โดยสีของเส้นทางบอกสภาพจราจรได้ (แดง = ติดขัด, ส้ม = ชะลอตัว, น้ำเงิน = คล่องตัว)</p>
+        
+        <h4>2. การใช้ Microsoft PowerPoint</h4>
+        <p>โปรแกรมนำเสนอข้อมูล สามารถแทรก Link เพื่อเชื่อมไปยังสไลด์อื่นหรือเว็บภายนอกได้, ใช้ Animations กำหนดการเคลื่อนไหวของวัตถุ และปรับขนาดสไลด์ที่แท็บ Design เป็น A4 หรือขนาดที่ต้องการเพื่อออกแบบโปสเตอร์</p>
+        
+        <h4>3. ความปลอดภัยบนอินเทอร์เน็ตและการค้นหา</h4>
+        <p>ไม่บอกรหัสผ่านหรือข้อมูลส่วนตัวแก่คนแปลกหน้า, สังเกตเว็บไซต์ปลอดภัยด้วยสัญลักษณ์กุญแจและ https://, ตรวจสอบความน่าเชื่อถือจากแหล่งที่มา (.ac.th, .or.th, .go.th) และใช้คำสำคัญ (Keywords) ที่เจาะจงเพื่อผลลัพธ์ที่ถูกต้อง</p>
+        
+        <h4>4. การคิดเชิงตรรกะ (Logical Thinking)</h4>
+        <p>การแก้ปัญหาอย่างเป็นลำดับขั้นตอน (Algorithm) สามารถแสดงได้ด้วยข้อความ บล็อกคำสั่ง หรือผังงาน (Flowchart) ช่วยให้หาสาเหตุของข้อผิดพลาด (Debug) ได้อย่างมีประสิทธิภาพ</p>
+        
+        <h4>5. การเขียนโปรแกรมแบบบล็อก (Block Coding)</h4>
+        <p>การฝึกต่อบล็อกคำสั่ง เช่น ใน Code.org, Math Playground ช่วยให้เข้าใจโครงสร้างโปรแกรม ทั้งลำดับขั้นตอน (Sequence), การวนซ้ำ (Loop), และการตรวจสอบเงื่อนไข (Condition If-Else)</p>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // ==========================================
+    // คลังข้อสอบ 50 ข้อ 
+    // ==========================================
+    const questionBank = [
+      // --- หมวด 1: Google Maps (5 ข้อ) ---
+      {
+        category: "1. Google Maps & การเดินทาง",
+        question: "หากต้องการทราบระยะทางที่สั้นที่สุดในการเดินเท้าจากโรงเรียนไปยังสวนสาธารณะ ควรเลือกไอคอนรูปแบบการเดินทางใดใน Google Maps?",
+        options: ["ไอคอนรูปรถยนต์ส่วนตัว", "ไอคอนรูปคนกำลังเดิน", "ไอคอนรูปรถประจำทาง", "ไอคอนรูปจักรยาน"],
+        answer: 1,
+        hint: "ให้สังเกตพาหนะที่ตรงกับการเดินทางรูปแบบที่ต้องการ"
+      },
+      {
+        category: "1. Google Maps & การเดินทาง",
+        question: "เส้นทางใน Google Maps แสดงเป็น 'แถบสีแดงเข้ม' บนถนน มีความหมายว่าอย่างไร?",
+        options: ["ถนนกำลังปิดปรับปรุงทางอย่างถาวร", "สภาพการจราจรติดขัดมาก รถเคลื่อนตัวได้ช้า", "เป็นถนนที่เกิดอุบัติเหตุห้ามรถยนต์ผ่าน", "เป็นเส้นทางลัดพิเศษที่ขับได้ด้วยความเร็วสูง"],
+        answer: 1,
+        hint: "สีแดงมักเป็นสัญญาณสากลที่บ่งบอกถึงความหนาแน่นหรือความล่าช้าของการเดินทาง"
+      },
+      {
+        category: "1. Google Maps & การเดินทาง",
+        question: "หากในแผนที่ระบุว่า ระยะทาง 12 กิโลเมตร ใช้เวลาเดินทางด้วยรถยนต์ 15 นาที แต่เดินเท้าใช้เวลา 2 ชั่วโมง 30 นาที เป็นเพราะเหตุใด?",
+        options: ["การเดินเท้าต้องเดินทางอ้อมภูเขาเท่านั้น", "ความเร็วเฉลี่ยของยานพาหนะแต่ละประเภทต่างกันอย่างสิ้นเชิง", "ระบบคำนวณเวลารถยนต์เฉพาะช่วงกลางคืน", "Google Maps ไม่รองรับการวัดระยะทางของคนเดิน"],
+        answer: 1,
+        hint: "ความเร็วของเครื่องยนต์และฝีก้าวของมนุษย์สร้างระยะทางต่อชั่วโมงได้ไม่เท่ากัน"
+      },
+      {
+        category: "1. Google Maps & การเดินทาง",
+        question: "หมุดสีแดง (Pin) ที่ปักลงบนตำแหน่งต่างๆ ใน Google Maps มีหน้าที่หลักคืออะไร?",
+        options: ["แสดงสถานที่เกิดอุบัติเหตุ", "ระบุตำแหน่งปลายทางหรือพิกัดสถานที่ที่ค้นหา", "ใช้บอกว่าพื้นที่นั้นมีสัญญาณอินเทอร์เน็ต", "บอกจุดจอดรถฟรี"],
+        answer: 1,
+        hint: "คิดถึงเวลาเราต้องการมาร์กจุดว่าเราจะเดินทางไปที่ใด"
+      },
+      {
+        category: "1. Google Maps & การเดินทาง",
+        question: "หากต้องการตรวจสอบว่าหน้าร้านขายเครื่องเขียนมีลักษณะป้ายชื่อร้านอย่างไร ควรใช้ฟีเจอร์ใดของ Google Maps?",
+        options: ["Satellite View (มุมมองดาวเทียม)", "Street View (มุมมองภาพถนนเสมือนจริง 360 องศา)", "Terrain View (มุมมองความสูงต่ำของภูมิประเทศ)", "Traffic View (มุมมองการจราจร)"],
+        answer: 1,
+        hint: "เป็นมุมมองภาพถ่ายจริงระดับสายตาเสมือนเรายืนอยู่บนทางเท้า"
+      },
+
+      // --- หมวด 2: PowerPoint ---
+      {
+        category: "2. PowerPoint & การนำเสนอ",
+        question: "หากต้องการให้ข้อความหรือรูปภาพเคลื่อนไหวบินเข้ามาขณะอยู่ในหน้าสไลด์ ต้องใช้คำสั่งในแท็บใด?",
+        options: ["Transitions (การเปลี่ยนหน้า)", "Animations (ภาพเคลื่อนไหว)", "Slide Show (การนำเสนอสไลด์)", "Review (รีวิว)"],
+        answer: 1,
+        hint: "Transitions ใช้เปลี่ยนทั้งแผ่นสไลด์ ส่วนการเคลื่อนไหวของชิ้นส่วนข้างในใช้คำว่า Animation"
+      },
+      {
+        category: "2. PowerPoint & การนำเสนอ",
+        question: "การแทรกการเชื่อมโยง 'Hyperlink' ในหน้าสไลด์มีประโยชน์โดยตรงอย่างไร?",
+        options: ["ทำให้สไลด์บันทึกไฟล์อัตโนมัติลงแฟลชไดรฟ์", "เชื่อมโยงเปิดไปยังหน้าสไลด์อื่นหรือเว็บไซต์ภายนอกได้ทันที", "เปลี่ยนฟอนต์ข้อความทั้งหมดให้สวยงามขึ้น", "ช่วยลดขนาดของไฟล์งานนำเสนอ"],
+        answer: 1,
+        hint: "คำว่า Link หมายถึงจุดเชื่อมต่อเพื่อไปยังเป้าหมายเมื่อคลิก"
+      },
+      {
+        category: "2. PowerPoint & การนำเสนอ",
+        question: "หากต้องการนำโปรแกรม PowerPoint มาใช้ออกแบบโปสเตอร์ขนาดกระดาษ A4 แนวตั้ง ต้องตั้งค่าที่เมนูใด?",
+        options: ["แท็บ Insert -> เลือก Size A4", "แท็บ Design -> Slide Size แล้วกำหนดขนาดเป็น A4 และเลือกแนวตั้ง", "แท็บ View -> เลือกระดับความคมชัดของภาพโปสเตอร์", "แท็บ Home -> ปรับขนาดกล่องข้อความให้ยาวขึ้น"],
+        answer: 1,
+        hint: "การเปลี่ยนหน้าตาและมิติของหน้ากระดาษต้องตั้งค่าที่การออกแบบ (Design)"
+      },
+      {
+        category: "2. PowerPoint & การนำเสนอ",
+        question: "ข้อใดเป็นการออกแบบสไลด์นำเสนอโปสเตอร์ที่มีประสิทธิภาพและอ่านง่ายที่สุด?",
+        options: ["พิมพ์ข้อความเนื้อหาอัดแน่นทุกบรรทัดด้วยฟอนต์ขนาดเล็ก", "ใช้สีพื้นหลังและสีตัวอักษรเป็นโทนสีสว่างเหมือนกัน", "เลือกใช้สีตัวอักษรตัดกับสีพื้นหลังอย่างชัดเจน และเน้นเฉพาะประเด็นสำคัญ", "ใส่ภาพเคลื่อนไหวมากกว่า 10 แบบในหน้าเดียวเพื่อให้ตื่นเต้น"],
+        answer: 2,
+        hint: "ความคมชัดของการอ่านขึ้นอยู่กับความต่างของสี (Contrast) และความกระชับ"
+      },
+      {
+        category: "2. PowerPoint & การนำเสนอ",
+        question: "หากต้องการให้ปุ่มรูปทรงสี่เหลี่ยม ทำหน้าที่เป็นปุ่ม 'ย้อนกลับไปหน้าแรก' ต้องตั้งค่าที่คำสั่งใด?",
+        options: ["แท็บ Design -> Reset", "แท็บ Insert -> Action หรือ Link กำหนดไปยัง First Slide", "แท็บ Animations -> เลือก Exit", "แท็บ Format -> Shape Fill"],
+        answer: 1,
+        hint: "การคลิกแล้วเกิดการกระทำต้องใช้ Action หรือ การเชื่อมโยง Link"
+      },
+      {
+        category: "2. PowerPoint & การนำเสนอ",
+        question: "การจัดลำดับการเคลื่อนไหวของวัตถุหลายชิ้นในหน้าสไลด์ให้แสดงตามลำดับก่อน-หลัง สามารถจัดการได้ที่หน้าต่างใด?",
+        options: ["Animation Pane (บานหน้าต่างภาพเคลื่อนไหว)", "Slide Sorter (ตัวเรียงลำดับภาพนิ่ง)", "Selection Tool (แถบเลือกเครื่องมือ)", "Color Tone Tool (การปรับโทนสี)"],
+        answer: 0,
+        hint: "หน้าต่างควบคุมรายการเคลื่อนไหว มีคำว่า Animation และ Pane"
+      },
+      {
+        category: "2. PowerPoint & การนำเสนอ",
+        question: "หากต้องการให้รูปภาพอยู่ด้านหลังกล่องข้อความ ควรคลิกขวาที่รูปภาพแล้วเลือกคำสั่งใด?",
+        options: ["Bring to Front", "Send to Back", "Group Objects", "Align Center"],
+        answer: 1,
+        hint: "คำว่า Back แปลว่า ด้านหลัง"
+      },
+      {
+        category: "2. PowerPoint & การนำเสนอ",
+        question: "Transitions ใน PowerPoint แตกต่างจาก Animations อย่างไร?",
+        options: ["Transitions ใช้กับวิดีโอเท่านั้น Animations ใช้กับเสียง", "Transitions คือการเคลื่อนไหวตอนเปลี่ยนแผ่นสไลด์ ส่วน Animations คือการเคลื่อนไหวของวัตถุในสไลด์", "Transitions ใช้กับสไลด์ภาษาอังกฤษ Animations ใช้กับภาษาไทย", "ไม่มีความแตกต่างกัน เป็นฟังก์ชันเดียวกัน"],
+        answer: 1,
+        hint: "พิจารณาขอบเขตระหว่าง 'ทั้งหน้าแผ่นสไลด์' กับ 'ข้อความ/รูปภาพในหน้านั้น'"
+      },
+
+      // --- หมวด 3: ความปลอดภัยอินเทอร์เน็ต & ค้นหาข้อมูล (15 ข้อ) ---
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "เมื่อมีหน้าต่างเด้งขึ้นมาแจ้งเตือนว่า 'คุณเป็นผู้โชคดีได้รับแท็บเล็ตฟรี ให้กรอกชื่อและรหัสบัตรประชาชน' ควรทำอย่างไร?",
+        options: ["รีบกรอกข้อมูลทันทีก่อนหมดเวลา", "ปิดหน้าต่างนั้นทิ้งทันที เพราะอาจเป็นกลลวง Phishing", "ส่งต่อลิงก์ให้เพื่อนๆ ช่วยกันกรอก", "กรอกเฉพาะเบอร์โทรศัพท์อย่างเดียว"],
+        answer: 1,
+        hint: "ของรางวัลฟรีที่ไม่มีที่มามักเป็นอุบายหลอกลวงเอาข้อมูลสำคัญ"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "รหัสผ่าน (Password) ข้อใดมีความปลอดภัยและคาดเดาได้ยากที่สุด?",
+        options: ["12345678", "somchai2024", "P@ss5_K#9m", "password111"],
+        answer: 2,
+        hint: "รหัสผ่านที่รัดกุมต้องผสมตัวพิมพ์เล็ก พิมพ์ใหญ่ ตัวเลข และอักขระพิเศษ"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "สัญลักษณ์รูป 'แม่กุญแจล็อก' หน้า URL ของเว็บไซต์ และขึ้นต้นด้วย https:// หมายถึงอะไร?",
+        options: ["เว็บไซต์นี้ห้ามไม่ให้เด็กเข้าชม", "เว็บไซต์มีการเข้ารหัสความปลอดภัยในการส่งผ่านข้อมูล", "เว็บไซต์นี้ต้องเสียเงินค่าเข้าชม", "คอมพิวเตอร์กำลังติดไวรัส"],
+        answer: 1,
+        hint: "ตัวอักษร 's' ท้าย http ย่อมาจาก Secure ที่แปลว่า ปลอดภัย"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "หากต้องการค้นหาข้อมูลเกี่ยวกับ 'ดาวอังคาร' โดยไม่ต้องการให้ผลการค้นหาแสดงเรื่อง 'ภาพยนตร์' ควรใช้คำค้นหาอย่างไร?",
+        options: ["ดาวอังคาร และ ภาพยนตร์", "ดาวอังคาร -ภาพยนตร์", "ดาวอังคาร +ภาพยนตร์", "ดาวอังคาร หรือ ภาพยนตร์"],
+        answer: 1,
+        hint: "เครื่องหมายลบ (-) หน้าคำที่ไม่ต้องการ ช่วยตัดผลการค้นหานั้นออกได้"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "เว็บไซต์ของหน่วยงานราชการในประเทศไทยจะมีโดเมนเนมลงท้ายด้วยข้อใดที่มีความน่าเชื่อถือสูง?",
+        options: [".co.th", ".go.th", ".net", ".free.web"],
+        answer: 1,
+        hint: "go ย่อมาจาก Government ซึ่งหมายถึง หน่วยงานรัฐบาล"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "ข้อใดเป็นผลกระทบของการโพสต์ว่าร้ายหรือแกล้งเพื่อนบนสื่อสังคมออนไลน์ (Cyberbullying)?",
+        options: ["ทำให้มียอดผู้ติดตามเพิ่มขึ้นอย่างมีคุณภาพ", "สร้างความเสียหายต่อจิตใจผู้อื่น และผิด พ.ร.บ. คอมพิวเตอร์", "ช่วยให้คอมพิวเตอร์ประมวลผลเร็วขึ้น", "ทำให้เพื่อนเข้าใจเจตนาดีของเรา"],
+        answer: 1,
+        hint: "การระรานทางไซเบอร์ก่อให้เกิดความทุกข์ใจและมีบทลงโทษทางกฎหมาย"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "หากต้องการค้นหาไฟล์เอกสารข้อสอบที่เป็นนามสกุล PDF ใน Google ควรพิมพ์คำค้นหาอย่างไร?",
+        options: ["ข้อสอบ ป.5 filetype:pdf", "ข้อสอบ ป.5 find:document", "ข้อสอบ ป.5 download=true", "ข้อสอบ ป.5 open:pdf"],
+        answer: 0,
+        hint: "คำสั่งระบุชนิดของไฟล์ใน Google ขึ้นต้นด้วย filetype:"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "การกระทำใดถือเป็นการละเมิดลิขสิทธิ์และทรัพย์สินทางปัญญา?",
+        options: ["นำรูปภาพจากเว็บอื่นมาใช้งานโดยอ้างอิงแหล่งที่มาถูกต้อง", "คัดลอกบทความของผู้อื่นมาใส่ชื่อตนเองแล้วส่งครู", "แชร์ลิงก์ข่าวจากสำนักข่าวที่มีความน่าเชื่อถือ", "วาดภาพขึ้นมาใหม่ด้วยตนเอง"],
+        answer: 1,
+        hint: "การแอบอ้างผลงานคนอื่นมาเป็นของตนเองเป็นการละเมิดลิขสิทธิ์"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "ข้อมูลส่วนบุคคลใดที่ 'ไม่ควร' โพสต์ลงในพื้นที่สาธารณะของอินเทอร์เน็ตมากที่สุด?",
+        options: ["อาหารจานโปรดที่ชอบรับประทาน", "เลขบัตรประชาชน และรหัสผ่านบัญชีธนาคาร", "สีของเสื้อผ้าที่สวมใส่ไปเที่ยว", "ชื่อตัวละครการ์ตูนที่ชื่นชอบ"],
+        answer: 1,
+        hint: "ข้อมูลที่สามารถนำไปสวมรอยทำธุรกรรมทางการเงินหรือระบุตัวตนทางกฎหมายได้"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "เมื่อได้รับข่าวสารที่มีข้อความว่า 'ดื่มน้ำมะนาวผสมเกลือรักษาโรคร้ายหายทันที ให้แชร์ต่อ 10 คน' นักเรียนควรปฏิบัติอย่างไรเป็นอันดับแรก?",
+        options: ["รีบแชร์ลงกลุ่มครอบครัวทันที", "ตรวจสอบข้อเท็จจริงจากหน่วยงานทางการแพทย์หรือเว็บไซต์ที่น่าเชื่อถือ", "ซื้อน้ำมะนาวมาดื่มทันที", "โทรสั่งญาติทุกคนให้ทำตาม"],
+        answer: 1,
+        hint: "การเช็กก่อนแชร์ ช่วยป้องกันการตกเป็นเหยื่อข่าวปลอม (Fake News)"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "โดเมนเนมระดับบนสุดข้อใดมักเป็นเว็บไซต์ของสถาบันการศึกษาในประเทศไทย?",
+        options: [".or.th", ".ac.th", ".com", ".in.th"],
+        answer: 1,
+        hint: "ac ย่อมาจาก Academic ที่เกี่ยวข้องกับการศึกษาและโรงเรียน"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "ข้อใดคือการตั้งชื่อ Keyword ในการค้นหาข้อมูล 'ประวัติวัดพระแก้ว' ที่ตรงประเด็นที่สุด?",
+        options: ["อยากรู้จังเลยว่าวัดสวยๆ ในไทยมีประวัติยังไงบ้าง", "ประวัติ วัดพระแก้ว กรุงเทพมหานคร", "วัด", "ช่วยบอกประวัติวัดหน่อยนะ Google"],
+        answer: 1,
+        hint: "การค้นหาที่มีประสิทธิภาพควรใช้คำเฉพาะเจาะจง ตัดคำฟุ่มเฟือยออก"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "โปรแกรมประเภทใดที่แอบแฝงเข้ามาทำลายข้อมูลหรือขโมยรหัสผ่านในเครื่องคอมพิวเตอร์?",
+        options: ["Web Browser", "Malware / ไวรัสคอมพิวเตอร์", "Operating System", "Office Software"],
+        answer: 1,
+        hint: "เป็นโปรแกรมไม่พึงประสงค์ที่มุ่งร้ายต่อระบบคอมพิวเตอร์"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "หากมีคนแปลกหน้าทักแชตมาชวนออกไปพบข้างนอกโดยสัญญาว่าจะให้เงิน นักเรียนควรทำอย่างไร?",
+        options: ["แอบออกไปพบคนเดียวเพื่อรับเงิน", "ปฏิเสธทันที และบอกผู้ปกครองหรือครูให้รับทราบ", "ชวนเพื่อนสนิทไปด้วยกันสองคน", "ส่งที่อยู่บ้านไปให้เขามารับ"],
+        answer: 1,
+        hint: "ความปลอดภัยในชีวิตจริงสำคัญที่สุด ผู้ใหญ่ที่ไว้ใจได้ช่วยปกป้องเราได้"
+      },
+      {
+        category: "3. ความปลอดภัย & การสืบค้น",
+        question: "การใช้เครื่องหมายคำพูด \" \" ในการสืบค้นข้อมูลใน Google มีประโยชน์อย่างไร?",
+        options: ["เพื่อค้นหาเฉพาะข้อความที่เป็นประโยคคำถาม", "เพื่อค้นหากลุ่มคำแบบตรงตัวตามลำดับที่พิมพ์ทุกคำ", "เพื่อค้นหาภาพเคลื่อนไหวเท่านั้น", "เพื่อแปลภาษาข้อความนั้นเป็นภาษาอังกฤษ"],
+        answer: 1,
+        hint: "เครื่องหมายคำพูดช่วยล็อกให้ค้นหาคำติดกันแบบเจาะจงเป๊ะๆ"
+      },
+
+      // --- หมวด 4: การคิดเชิงตรรกะ & การแก้ปัญหา ---
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "การแก้ปัญหาโดยแบ่งปัญหาใหญ่ออกเป็นปัญหาย่อยๆ ตรงกับแนวคิดข้อใดในการคิดเชิงคำนวณ?",
+        options: ["Decomposition (การแยกย่อยปัญหา)", "Pattern Recognition (การจดจำรูปแบบ)", "Abstraction (การคิดเชิงนามธรรม)", "Algorithm (ขั้นตอนวิธี)"],
+        answer: 0,
+        hint: "การ Decompose หมายถึง การแยกส่วนประกอบย่อยๆ ออกมาพิจารณาทีละส่วน"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "หากต้องการเขียนลำดับขั้นตอน (Algorithm) ในการต้มบะหมี่กึ่งสำเร็จรูป ข้อใดเป็นลำดับที่ถูกต้องที่สุด?",
+        options: [
+          "กินบะหมี่ -> เทน้ำร้อน -> แกะซองใส่ชาม",
+          "ต้มน้ำให้เดือด -> ใส่เส้นและเครื่องปรุง -> รอ 3 นาที -> รับประทาน",
+          "รอ 3 นาที -> รับประทาน -> ต้มน้ำ -> ใส่เครื่องปรุง",
+          "ใส่เครื่องปรุง -> รับประทาน -> ต้มน้ำให้เดือด"
+        ],
+        answer: 1,
+        hint: "น้ำต้องเดือดก่อน จึงจะทำให้เส้นสุกได้ตามลำดับเหตุและผล"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "พิจารณาเงื่อนไข: 'ถ้าฝนตก ให้อยู่บ้านอ่านหนังสือ แต่ถ้าฝนไม่ตก ให้ไปเตะฟุตบอล' วันนี้ท้องฟ้าแจ่มใสแดดจ้า ข้อใดถูกต้อง?",
+        options: ["นอนอ่านหนังสืออยู่บ้าน", "ไปเตะฟุตบอล", "กางร่มเดินไปอ่านหนังสือที่สนามฟุตบอล", "ไม่สามารถตัดสินใจได้"],
+        answer: 1,
+        hint: "แดดจ้าแปลว่าฝนไม่ตก ให้ทำตามเงื่อนไขที่ระบุไว้หลังคำว่า 'ถ้าฝนไม่ตก'"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "การสังเกตว่าสัญญาณไฟจราจรเปลี่ยนสีสลับกันเป็นรูปแบบ แดง -> เขียว -> เหลือง อย่างสม่ำเสมอ ตรงกับทักษะใด?",
+        options: ["Pattern Recognition (การหารูปแบบ)", "Hardware Repair (การซ่อมอุปกรณ์)", "Data Encryption (การเข้ารหัส)", "Web Development"],
+        answer: 0,
+        hint: "การมองเห็นความซ้ำเดิมหรือความคล้ายคลึงกันที่เกิดขึ้นเป็นประจำ"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "ในการแก้ไขข้อผิดพลาดของการทำงาน (Debugging) สิ่งสำคัญที่ผู้แก้ปัญหาต้องทำเป็นอันดับแรกคืออะไร?",
+        options: ["ลบโปรแกรมทั้งหมดทิ้งแล้วเริ่มใหม่", "ระบุตำแหน่งและสาเหตุของจุดที่ผลลัพธ์ไม่ตรงกับความเป็นจริง", "เปลี่ยนเครื่องคอมพิวเตอร์ใหม่", "ปิดเครื่องทันที"],
+        answer: 1,
+        hint: "ต้องรู้ก่อนว่าบั๊ก (Bug) เกิดขึ้นที่บรรทัดหรือขั้นตอนใดจึงจะแก้ได้ตรงจุด"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "มีแมว หนู และชีส อยู่บนตาราง ถ้าต้องการพาแมวไปกินชีสโดย 'ห้ามเดินผ่านช่องที่มีหนู' ข้อใดสะท้อนการคิดเชิงตรรกะ?",
+        options: ["เดินสุ่มไปเรื่อยๆ จนกว่าจะเจอ", "วางแผนลากเส้นทางล่วงหน้าที่หลีกเลี่ยงพิกัดของหนูทีละช่อง", "สั่งให้แมวกระโดดข้ามตารางออกไปข้างนอก", "วางชีสไว้ทุกช่องในตาราง"],
+        answer: 1,
+        hint: "การคิดเชิงระบบต้องมีการกำหนดเงื่อนไขและวางแผนขั้นตอนล่วงหน้า"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "คำว่า 'Abstraction' (การคิดเชิงนามธรรม) ในวิทยาการคำนวณหมายถึงอะไร?",
+        options: ["การวาดภาพศิลปะที่ดูไม่ออก", "การคัดเลือกเฉพาะข้อมูลที่สำคัญและตัดรายละเอียดที่ไม่จำเป็นออกไป", "การท่องจำเนื้อหาทั้งหมดโดยไม่ตกหล่น", "การพิมพ์รายงานด้วยคอมพิวเตอร์"],
+        answer: 1,
+        hint: "เน้นเฉพาะหัวใจสำคัญของปัญหา เช่น แผนที่รถไฟฟ้าที่ตัดตึกรามบ้านช่องออก"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "กำหนดชุดตัวเลข: 2, 4, 8, 16, ... ตัวเลขถัดไปคือข้อใด และใช้เหตุผลแบบใด?",
+        options: ["18 (บวกเพิ่มขึ้นทีละ 2)", "20 (บวกเพิ่มขึ้นทีละ 4)", "32 (คูณด้วย 2 จากตัวเลขก่อนหน้า)", "24 (บวกเพิ่มขึ้นทีละ 8)"],
+        answer: 2,
+        hint: "สังเกตความสัมพันธ์: 2x2=4, 4x2=8, 8x2=16 ดังนั้นตัวต่อไปคือ 16x2"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "เด็กชายกานต์ต้องการจัดกระเป๋านักเรียนตามตารางสอนในแต่ละวัน การแก้ปัญหาอย่างเป็นระบบจากเหตุการณ์นี้ส่งผลให้เกิดอะไร?",
+        options: ["ลดน้ำหนักกระเป๋าและป้องกันการลืมของ", "การทำงานตามอารมณ์ความรู้สึก", "การเสียเวลาโดยไม่จำเป็น", "การพึ่งพาผู้อื่นในการจัดของ"],
+        answer: 0,
+        hint: "การเตรียมพร้อมตามตารางที่มีระเบียบทำให้ผลลัพธ์ถูกต้องและมีประสิทธิภาพ"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "ถ้าต้องการส่งของขวัญให้เพื่อน 3 ชิ้น โดยมีน้ำหนักต่างกัน และต้องการหากล่องที่รับน้ำหนักได้พอดี ควรใช้วิธีใด?",
+        options: ["ชั่งน้ำหนักของแต่ละชิ้น แล้วนำมารวมกันเทียบกับสเปกกล่อง", "เดาด้วยสายตาแล้วยัดใส่กล่อง", "ซื้อกล่องใบที่ใหญ่ที่สุดเสมอแม้ของจะเล็กมาก", "ส่งไปทีละชิ้นโดยไม่ใส่กล่อง"],
+        answer: 0,
+        hint: "การใช้ข้อมูลตัวเลขและการคำนวณช่วยให้การตัดสินใจแม่นยำที่สุด"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "ข้อใด 'ไม่ใช่' ลักษณะของการแก้ปัญหาด้วยเหตุผลเชิงตรรกะ?",
+        options: ["มีการพิจารณาเงื่อนไขที่เกี่ยวข้องอย่างรอบด้าน", "ใช้ความรู้สึกส่วนตัวตัดสินโดยไม่มีข้อมูลสนับสนุน", "สามารถอธิบายขั้นตอนให้ผู้อื่นปฏิบัติตามได้", "ผลลัพธ์มีความแน่นอนเมื่อทำตามขั้นตอนเดิม"],
+        answer: 1,
+        hint: "ตรรกะต้องอิงข้อเท็จจริงและเหตุผล ไม่ใช้อารมณ์หรือการเดาสุ่ม"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "พิจารณา: 'รถยนต์สตาร์ทไม่ติด' ขั้นตอนแรกในการแก้ปัญหาอย่างเป็นระบบควรทำอย่างไร?",
+        options: ["ซื้อรถยนต์คันใหม่ทันที", "ตรวจสอบหาสาเหตุพื้นฐาน เช่น ระดับน้ำมัน หรือแบตเตอรี่", "ถอดชิ้นส่วนเครื่องยนต์ออกทั้งหมด", "เข็นรถทิ้งลงข้างทาง"],
+        answer: 1,
+        hint: "เริ่มจากตรวจสอบจุดที่เป็นไปได้ง่ายที่สุดก่อนเสมอ"
+      },
+      {
+        category: "4. การคิดเชิงตรรกะ & แก้ปัญหา",
+        question: "การจัดหมวดหมู่สัตว์เป็น 'สัตว์ปีก' 'สัตว์น้ำ' และ 'สัตว์เลี้ยงลูกด้วยนม' อาศัยหลักคิดข้อใด?",
+        options: ["การเปรียบเทียบลักษณะร่วมและความแตกต่าง (Pattern Recognition)", "การเขียนโปรแกรมวนลูป", "การค้นหาข้อมูลทางอินเทอร์เน็ต", "การสร้างแบบจำลองคอมพิวเตอร์"],
+        answer: 0,
+        hint: "ดูลักษณะเฉพาะที่เหมือนกันของกลุ่ม เพื่อจัดพวกให้อยู่ด้วยกัน"
+      },
+
+      // --- หมวด 5: Block Coding & เว็บเกมการเรียนรู้ (5 ข้อ) ---
+      {
+        category: "5. การเขียนโปรแกรมบล็อก",
+        question: "ในเกมบล็อกคำสั่ง (เช่น Code.org) หากต้องการให้ตัวละครเดินไปข้างหน้า 4 ช่องติดต่อกัน ควรใช้บล็อกใดเพื่อเขียนโค้ดให้สั้นที่สุด?",
+        options: ["ใช้บล็อก 'เดินไปข้างหน้า' เรียงต่อกัน 4 ตัว", "ใช้บล็อก 'วนซ้ำ (Repeat / Loop)' 4 ครั้ง ครอบบล็อกเดินไปข้างหน้า", "ใช้บล็อก 'ถ้า...แล้ว (If-Then)'", "ใช้บล็อก 'หยุดการทำงาน'"],
+        answer: 1,
+        hint: "คำสั่ง Loop ช่วยลดการต่อบล็อกซ้ำๆ ได้เป็นอย่างดี"
+      },
+      {
+        category: "5. การเขียนโปรแกรมบล็อก",
+        question: "ในเว็บไซต์ฝึกโค้ดดิ้ง เช่น Math Playground หรือ Kidlo Coding หากตัวละครเดินชนสิ่งกีดขวางแล้วไม่ผ่านด่าน แสดงว่าเกิดอะไรขึ้น?",
+        options: ["เว็บไซต์มีไวรัส", "มีข้อผิดพลาดในลำดับคำสั่ง (Bug) ต้องตรวจสอบและแก้ไขลำดับใหม่", "แป้นพิมพ์คอมพิวเตอร์พัง", "ต้องจ่ายเงินซื้อด่านใหม่"],
+        answer: 1,
+        hint: "เมื่อผลลัพธ์ไม่เป็นไปตามเป้าหมาย โปรแกรมเมอร์ต้องทำ Debugging ลำดับบล็อก"
+      },
+      {
+        category: "5. การเขียนโปรแกรมบล็อก",
+        question: "บล็อกคำสั่ง 'ถ้ามีทางเลี้ยวซ้าย ให้เลี้ยวซ้าย' (If Path to the Left, Turn Left) จัดเป็นคำสั่งประเภทใด?",
+        options: ["คำสั่งการตรวจสอบเงื่อนไข (Condition)", "คำสั่งการคำนวณทางคณิตศาสตร์", "คำสั่งการเล่นไฟล์เสียง", "คำสั่งการจบโปรแกรมถาวร"],
+        answer: 0,
+        hint: "ขึ้นต้นด้วยคำว่า 'ถ้า (If)' เป็นการเช็กสถานการณ์ก่อนตัดสินใจทำ"
+      },
+      {
+        category: "5. การเขียนโปรแกรมบล็อก",
+        question: "การต่อบล็อกคำสั่งจากบนลงล่างให้ทำงานตามลำดับทีละคำสั่ง ตรงกับโครงสร้างใดของการเขียนโปรแกรม?",
+        options: ["Sequence (โครงสร้างแบบลำดับ)", "Selection (โครงสร้างแบบมีเงื่อนไข)", "Iteration (โครงสร้างแบบวนซ้ำ)", "Parallel (โครงสร้างแบบคู่ขนาน)"],
+        answer: 0,
+        hint: "การทำ 1 แล้วไป 2 แล้วไป 3 ตามลำดับบรรทัด คือ Sequence"
+      },
+      {
+        category: "5. การเขียนโปรแกรมบล็อก",
+        question: "ประโยชน์สำคัญที่สุดของการเรียนรู้ผ่านเกมเขียนโปรแกรมแบบบล็อก (Block-based Coding) คือข้อใด?",
+        options: ["ทำให้เล่นเกมเก่งจนไม่ต้องไปโรงเรียน", "ฝึกทรรศนะการคิดเชิงคำนวณและแก้ปัญหาอย่างเป็นระบบโดยไม่ต้องกังวลเรื่องการพิมพ์ไวยากรณ์ผิด", "ใช้ดาวน์โหลดเกมเถื่อนได้ง่ายขึ้น", "ช่วยเพิ่มความเร็วอินเทอร์เน็ตของบ้าน"],
+        answer: 1,
+        hint: "บล็อกภาพช่วยให้เด็กๆ โฟกัสกับกระบวนการคิดและตรรกะได้โดยตรง"
+      }
+    ];
+
+    // ==========================================
+    // ตัวแปรควบคุมระบบ
+    // ==========================================
+    let studentName = "";
+    let quizSet = [];
+    let currentIndex = 0;
+    let score = 0;
+    let timerSeconds = 40 * 60; // 40 นาที
+    let timerInterval = null;
+    let isAnswerSubmitted = false;
+
+    // อ้างอิง DOM Elements
+    const welcomeScreen = document.getElementById("welcomeScreen");
+    const quizScreen = document.getElementById("quizScreen");
+    const resultScreen = document.getElementById("resultScreen");
+    const lessonSidebar = document.getElementById("lessonSidebar");
+    const toggleLessonBtn = document.getElementById("toggleLessonBtn");
+    const closeLessonBtn = document.getElementById("closeLessonBtn");
+    
+    const startBtn = document.getElementById("startBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    
+    const studentNameInput = document.getElementById("studentName");
+    const displayStudentName = document.getElementById("displayStudentName");
+    const resultStudentName = document.getElementById("resultStudentName");
+    
+    const timerContainer = document.getElementById("timerContainer");
+    const timerDisplay = document.getElementById("timerDisplay");
+    const questionTracker = document.getElementById("questionTracker");
+    const progressFill = document.getElementById("progressFill");
+    const categoryBadge = document.getElementById("categoryBadge");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const hintBox = document.getElementById("hintBox");
+    const hintText = document.getElementById("hintText");
+
+    // ฟังก์ชันสลับตำแหน่ง Array (Fisher-Yates Shuffle)
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // เปิด-ปิดแท็บเนื้อหาด้านข้าง
+    toggleLessonBtn.addEventListener("click", () => {
+      lessonSidebar.classList.toggle("open");
+    });
+    closeLessonBtn.addEventListener("click", () => {
+      lessonSidebar.classList.remove("open");
+    });
+
+    // เริ่มทำข้อสอบ
+    startBtn.addEventListener("click", () => {
+      const name = studentNameInput.value.trim();
+      if (!name) {
+        alert("กรุณากรอกชื่อ-นามสกุลก่อนเริ่มทำแบบทดสอบครับ");
+        studentNameInput.focus();
+        return;
+      }
+      studentName = name;
+      displayStudentName.innerText = `ผู้สอบ: ${studentName}`;
+      resultStudentName.innerText = studentName;
+
+      initQuiz();
+    });
+
+    function initQuiz() {
+      // สุ่มคำถาม 35 ข้อจาก 50 ข้อ
+      const shuffledQuestions = shuffleArray(questionBank);
+      quizSet = shuffledQuestions.slice(0, 35).map(q => {
+        // สร้างอาเรย์ตัวเลือกที่ถูกสุ่มพร้อมเก็บดัชนีคำตอบที่ถูกต้องใหม่
+        const originalOptions = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.answer }));
+        const shuffledOptions = shuffleArray(originalOptions);
+        const newCorrectIndex = shuffledOptions.findIndex(o => o.isCorrect);
+
+        return {
+          category: q.category,
+          question: q.question,
+          options: shuffledOptions.map(o => o.text),
+          answer: newCorrectIndex,
+          hint: q.hint
+        };
+      });
+
+      currentIndex = 0;
+      score = 0;
+      timerSeconds = 40 * 60;
+      isAnswerSubmitted = false;
+
+      welcomeScreen.classList.remove("active");
+      resultScreen.classList.remove("active");
+      quizScreen.classList.add("active");
+      timerContainer.style.display = "flex";
+
+      startTimer();
+      renderQuestion();
+    }
+
+    // ระบบจับเวลา 40 นาที
+    function startTimer() {
+      clearInterval(timerInterval);
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        timerSeconds--;
+        updateTimerDisplay();
+        if (timerSeconds <= 0) {
+          clearInterval(timerInterval);
+          alert("หมดเวลาทำแบบทดสอบแล้วครับ ระบบจะทำการสรุปผลคะแนนทันที");
+          finishQuiz();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timerSeconds / 60);
+      const seconds = timerSeconds % 60;
+      timerDisplay.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      if (timerSeconds <= 300) { // เหลือน้อยกว่า 5 นาที
+        timerDisplay.style.color = "var(--danger)";
+      } else {
+        timerDisplay.style.color = "#B45309";
+      }
+    }
+
+    // แสดงคำถามและตัวเลือก
+    function renderQuestion() {
+      isAnswerSubmitted = false;
+      const q = quizSet[currentIndex];
+
+      questionTracker.innerText = `คำถามข้อที่ ${currentIndex + 1} / ${quizSet.length}`;
+      progressFill.style.width = `${((currentIndex) / quizSet.length) * 100}%`;
+      categoryBadge.innerText = q.category;
+      questionText.innerText = q.question;
+
+      hintBox.classList.remove("show");
+      nextBtn.style.display = "none";
+      optionsContainer.innerHTML = "";
+
+      const alphabet = ['ก', 'ข', 'ค', 'ง'];
+
+      q.options.forEach((optText, idx) => {
+        const optionCard = document.createElement("div");
+        optionCard.className = "option-card";
+        optionCard.innerHTML = `
+          <div class="option-indicator">${alphabet[idx]}</div>
+          <div style="flex: 1; font-size: 1rem;">${optText}</div>
+        `;
+
+        optionCard.addEventListener("click", () => handleSelectOption(idx, optionCard));
+        optionsContainer.appendChild(optionCard);
+      });
+    }
+
+    // ตรวจสอบเมื่อคลิกเลือกตัวเลือก
+    function handleSelectOption(selectedIndex, cardElement) {
+      if (isAnswerSubmitted) return; // ล็อกไม่ให้เปลี่ยนคำตอบ
+      isAnswerSubmitted = true;
+
+      const q = quizSet[currentIndex];
+      const allCards = optionsContainer.querySelectorAll(".option-card");
+      allCards.forEach(card => card.classList.add("locked"));
+
+      if (selectedIndex === q.answer) {
+        // ตอบถูก
+        cardElement.classList.add("selected");
+        score++;
+      } else {
+        // ตอบผิด -> แจ้ง Hint เท่านั้น ห้ามเฉลยคำตอบที่ถูก
+        cardElement.classList.add("selected-wrong");
+        hintText.innerText = q.hint;
+        hintBox.classList.add("show");
+      }
+
+      // แสดงปุ่มเพื่อไปข้อถัดไป
+      nextBtn.style.display = "inline-flex";
+    }
+
+    // ไปข้อถัดไป
+    nextBtn.addEventListener("click", () => {
+      currentIndex++;
+      if (currentIndex < quizSet.length) {
+        renderQuestion();
+      } else {
+        finishQuiz();
+      }
+    });
+
+    // สิ้นสุดการทำข้อสอบและแสดงผลคะแนน
+    function finishQuiz() {
+      clearInterval(timerInterval);
+      quizScreen.classList.remove("active");
+      resultScreen.classList.add("active");
+      timerContainer.style.display = "none";
+      lessonSidebar.classList.remove("open");
+
+      const totalQuestions = quizSet.length;
+      const percentage = Math.round((score / totalQuestions) * 100);
+
+      document.getElementById("scorePercent").innerText = `${percentage}%`;
+      document.getElementById("scoreFraction").innerText = `${score} / ${totalQuestions} ข้อ`;
+
+      // คำนวณเวลาที่ใช้
+      const timeSpentSeconds = (40 * 60) - timerSeconds;
+      const spentMin = Math.floor(timeSpentSeconds / 60);
+      const spentSec = timeSpentSeconds % 60;
+      document.getElementById("timeUsed").innerText = `${spentMin} นาที ${spentSec} วินาที`;
+
+      // ประเมินผล
+      let evalText = "";
+      if (percentage >= 80) evalText = "🌟 ดีเยี่ยม (ผ่านเกณฑ์ระดับยอดเยี่ยม)";
+      else if (percentage >= 60) evalText = "👍 ผ่านเกณฑ์ (อยู่ในระดับดี)";
+      else if (percentage >= 50) evalText = "👌 พอใช้ (ควรทบทวนเพิ่มเติม)";
+      else evalText = "⚠️ ควรปรับปรุง (ทบทวนบทเรียนและฝึกทำซ้ำ)";
+      
+      document.getElementById("evaluationStatus").innerText = evalText;
+    }
+
+    // เริ่มต้นใหม่
+    restartBtn.addEventListener("click", () => {
+      studentNameInput.value = "";
+      resultScreen.classList.remove("active");
+      welcomeScreen.classList.add("active");
+    });
+  </script>
+</body>
+</html>
