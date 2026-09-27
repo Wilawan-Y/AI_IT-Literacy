@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>คอมพิวเตอร์ ม.3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #7c3aed;
+      --surface: #ffffff;
+      --bg-base: #f8fafc;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --border: #e2e8f0;
+      --success: #059669;
+      --error: #dc2626;
+      --warning: #d97706;
+      --radius-lg: 1.25rem;
+      --radius-md: 0.75rem;
+      --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+      --font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-family);
+    }
+
+    body {
+      background-color: var(--bg-base);
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 24px 24px;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 880px;
+      padding: 2.25rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.75rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-check {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-check:hover:not(:disabled) {
+      background: #0369a1;
+      transform: translateY(-2px);
+    }
+
+    .btn-submit {
+      background: var(--success);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      background: #047857;
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .info-panel {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .info-panel ul {
+      list-style: none;
+      margin-top: 0.5rem;
+    }
+
+    .info-panel li {
+      margin-bottom: 0.45rem;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.95rem 1.25rem;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border);
+      font-size: 1.05rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary);
+    }
+
+    .meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .badge-user {
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .badge-category {
+      background: #ede9fe;
+      color: #5b21b6;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .progress-track {
+      width: 100%;
+      background: #e2e8f0;
+      height: 8px;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .question-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-top: 1.25rem;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 1.1rem 1.25rem;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border);
+      background: #ffffff;
+      font-size: 1rem;
+      line-height: 1.5;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: all 0.2s ease;
+      color: var(--text-main);
+    }
+
+    .option-btn:hover:not(.locked) {
+      border-color: #93c5fd;
+      background: #f8fafc;
+      transform: translateX(4px);
+    }
+
+    .option-btn.selected {
+      border-color: var(--primary);
+      background: #eff6ff;
+      color: #1e40af;
+    }
+
+    .option-btn.locked {
+      cursor: default;
+    }
+
+    .option-btn.correct-highlight {
+      border-color: var(--success);
+      background: #ecfdf5;
+      color: #065f46;
+      font-weight: 500;
+    }
+
+    .option-btn.incorrect-highlight {
+      border-color: var(--error);
+      background: #fef2f2;
+      color: #991b1b;
+      font-weight: 500;
+    }
+
+    .option-label {
+      width: 32px;
+      height: 32px;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      font-weight: 700;
+      color: #475569;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .option-btn.selected .option-label {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .alert-hint {
+      margin-top: 1.25rem;
+      padding: 1rem 1.25rem;
+      background: #fffbeb;
+      border-left: 5px solid var(--warning);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .alert-hint .hint-icon {
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+    .alert-hint-content {
+      font-size: 0.95rem;
+      color: #92400e;
+      line-height: 1.5;
+    }
+
+    .alert-success {
+      margin-top: 1.25rem;
+      padding: 1rem 1.25rem;
+      background: #ecfdf5;
+      border-left: 5px solid var(--success);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      animation: fadeIn 0.3s ease;
+      color: #065f46;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .actions-panel {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .score-banner {
+      border-radius: var(--radius-lg);
+      padding: 2.25rem;
+      color: #ffffff;
+      text-align: center;
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow-card);
+    }
+
+    .score-banner.passed {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    }
+
+    .score-banner.failed {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    }
+
+    .score-display-big {
+      font-size: 4rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Side Drawer สำหรับเปิดอ่านเนื้อหา */
+    .drawer-trigger {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 100;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.85rem 1.35rem;
+      border-radius: 9999px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      border: 1px solid #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
+    }
+
+    .drawer-trigger:hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -460px;
+      width: 100%;
+      max-width: 440px;
+      height: 100vh;
+      background: #ffffff;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+      z-index: 150;
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer.open {
+      right: 0;
+    }
+
+    .drawer-header {
+      padding: 1.25rem;
+      background: #0f172a;
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .drawer-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+
+    .drawer-body h4 {
+      margin: 1.5rem 0 0.5rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .drawer-body h4:first-child {
+      margin-top: 0;
+    }
+
+    .drawer-body ul {
+      padding-left: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(2px);
+      z-index: 120;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      .app-container {
+        padding: 1.5rem;
+      }
+      .question-title {
+        font-size: 1.1rem;
+      }
+      .score-display-big {
+        font-size: 3rem;
+      }
+      .drawer {
+        max-width: 85%;
+      }
+      .actions-panel {
+        flex-direction: column-reverse;
+      }
+      .actions-panel button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ปุ่มเปิด-ปิด Side Drawer เนื้อหาบทเรียน -->
+  <button class="drawer-trigger" id="toggleDrawerBtn" aria-label="เปิดบทเรียน">
+    📖 <span>เปิดสรุปเนื้อหาบทเรียน</span>
+  </button>
+
+  <!-- Side Drawer สรุปบทเรียน -->
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="drawer" id="lessonDrawer">
+    <div class="drawer-header">
+      <h3 style="font-size: 1.1rem; font-weight: 600;">📚 คลังความรู้ ม.3</h3>
+      <button id="closeDrawerBtn" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">&times;</button>
+    </div>
+    <div class="drawer-body">
+      <h4>📍 1. Google My Maps</h4>
+      <p>เครื่องมือสร้างแผนที่แบบเฉพาะบุคคล (Custom Map) มีความสามารถหลักดังนี้:</p>
+      <ul>
+        <li><strong>Layers:</strong> จัดหมวดหมู่สถานที่แยกชั้นข้อมูล (สูงสุด 10 เลเยอร์) เพื่อเปิด-ปิดการแสดงผลได้อิสระ</li>
+        <li><strong>Placemark & Styling:</strong> ปักหมุด เปลี่ยนสี/ไอคอน ใส่ภาพ และคำอธิบายเฉพาะจุด</li>
+        <li><strong>Import / Export:</strong> รองรับการนำเข้าพิกัดจากไฟล์ตาราง (CSV, XLSX) และส่งออกพิกัดทางภูมิศาสตร์เป็น <strong>KML หรือ KMZ</strong></li>
+        <li><strong>Measurement:</strong> มีเครื่องมือวัดระยะทางและคำนวณพื้นที่แบบโพลีกอน</li>
+      </ul>
+
+      <h4>📝 2. Google Forms</h4>
+      <p>การสร้างแบบสำรวจและแบบทดสอบประเมินผล:</p>
+      <ul>
+        <li><strong>Multiple Choice vs Checkboxes:</strong> หลายตัวเลือกเลือกได้คำตอบเดียว ส่วนช่องทำเครื่องหมายเลือกได้มากกว่าหนึ่งคำตอบ</li>
+        <li><strong>Quiz Settings:</strong> เปิดโหมด 'ทำเป็นแบบทดสอบ' เพื่อกำหนดเฉลยและเกณฑ์คะแนน</li>
+        <li><strong>Flow Control:</strong> ใช้คำสั่ง 'ไปยังส่วนที่ระบุตามคำตอบ' (Go to section based on answer) เพื่อสร้างเงื่อนไขข้อคำถามแบบแตกแขนง</li>
+        <li><strong>Data Analysis:</strong> เชื่อมต่อฐานข้อมูลคำตอบแบบ Real-time เข้าสู่ <strong>Google Sheets</strong></li>
+      </ul>
+
+      <h4>📖 3. การสร้าง Storybook ด้วย Gemini AI</h4>
+      <p>การประยุกต์ใช้ Generative AI สำหรับงานนิทาน:</p>
+      <ul>
+        <li><strong>Context & Constraints:</strong> ระบุกลุ่มอายุผู้อ่าน โทนเรื่อง (Tone of voice) และแก่นเรื่อง (Theme) เพื่อให้ AI เลือกใช้ระดับภาษาและโครงสร้างประโยคที่ตรงวัย</li>
+        <li><strong>Consistent Character:</strong> ควบคุมลักษณะตัวละครด้วยการระบุ Character (เพศ ทรงผม สีผิว เสื้อผ้า จุดเด่น) ซ้ำในทุก Image Prompt</li>
+        <li><strong>Image Prompting:</strong> แยกบทบรรยายสำหรับผู้อ่าน ออกจากคำสั่ง Prompt ทางเทคนิค (มุมกล้อง, แสง, สไตล์ภาพ เช่น Watercolor, Isometric 3D) สำหรับเครื่องมือวาดภาพ</li>
+        <li><strong>Human Oversight:</strong> ต้องตรวจสอบความถูกต้องเชิงตรรกะ ลำดับเหตุการณ์ และอคติทางวัฒนธรรมเสมอ</li>
+      </ul>
+
+      <h4>🎮 4. การสร้าง Interactive Game ด้วย Claude</h4>
+      <p>การพัฒนาสื่อการเรียนรู้เชิงโต้ตอบผ่าน Claude:</p>
+      <ul>
+        <li><strong>Claude Artifacts:</strong> พื้นที่ทำงานแยกเฉพาะที่สามารถ Compile และ Render โค้ด HTML, CSS, JavaScript (Single-file) ให้ทดสอบเล่นเกมได้ทันทีบนเบราว์เซอร์ จึงเหมาะกับการพัฒนาเกมตอบคำถาม, แฟลชการ์ด หรือมินิเกมการศึกษา</li>
+        <li><strong>Game Loop & Logic:</strong> สั่งการให้เขียน State Management เช่น ตัวแปรคะแนน (Score), เวลาถอยหลัง (Timer), และเงื่อนไขการชนะ/แพ้ (Win/Loss condition)</li>
+        <li><strong>Iterative Debugging:</strong> ปรับปรุงเกมด้วยการส่งข้อความ Error หรือพฤติกรรมของบั๊กที่เกิดขึ้นจริงกลับไปให้ Claude วิเคราะห์แก้เฉพาะจุด</li>
+      </ul>
+
+      <h4>💼 5. การสร้าง E-Portfolio ด้วย Canva</h4>
+      <p>การจัดทำแฟ้มสะสมผลงานดิจิทัลอย่างมืออาชีพ:</p>
+      <ul>
+        <li><strong>Structure:</strong> เรียงลำดับจาก หน้าปก, ประวัติส่วนตัว (Profile), ผลงานเด่น (Highlights), กิจกรรม (Activities), และเกียรติบัตร (Certificates)</li>
+        <li><strong>Interactivity:</strong> ฝัง Hyperlink ไปยังหลักฐานผลงานจริงบนคลาวด์ เช่น ไฟล์วิดีโอ หรือลิงก์โครงงานภายนอก</li>
+        <li><strong>Publish as Website:</strong> เผยแพร่ผลงานเป็นหน้าเว็บ Responsive ผ่านฟังก์ชันของ Canva ทำให้เปิดดูได้ทุกอุปกรณ์โดยไม่ต้องดาวน์โหลดไฟล์ขนาดใหญ่</li>
+        <li><strong>Public link:</strong>แชร์เพื่อเปิดแบบนำเสนอออนไลน์</li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- หน้าจอหลัก -->
+  <main class="app-container">
+    
+    <!-- 1. หน้าแรก: ฟอร์มระบุชื่อผู้เรียน -->
+    <section id="startScreen">
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <span style="font-size: 3rem; display: block; margin-bottom: 0.5rem;">🚀</span>
+        <h1 class="text-gradient" style="font-size: 2.1rem; margin-bottom: 0.5rem;">คอมพิวเตอร์ ม.3</h1>
+        <p style="color: var(--text-muted); font-size: 1.05rem;">
+		แอพลิเคชั่นอย่างง่าย, ปัญญาประดิษฐ์ และการสร้างสรรค์สื่อดิจิทัล
+        </p>
+      </div>
+
+      <div class="info-panel">
+        <strong style="color: var(--text-main); font-size: 1rem;">📋 ข้อมูลและเงื่อนไขการทดสอบ</strong>
+        <ul>
+          <li>📝 จำนวนข้อสอบ: <strong>30 ข้อ</strong></li>
+          <li>⏱️ เวลาในการทำแบบทดสอบ: <strong>40 นาที</strong></li>
+          <li>🎯 เกณฑ์การผ่านการประเมิน: <strong>80% ขึ้นไป (24 ข้อขึ้นไป)</strong></li>
+          <li>🔍 ต้องกดปุ่ม <strong>"ตรวจคำตอบ"</strong> ในแต่ละข้อก่อน จึงจะปลดล็อกปุ่มไปข้อถัดไป</li>
+          <li>📖 คลิกปุ่ม <strong>"ดูเนื้อหาบทเรียน"</strong> ที่มุมล่างขวาเพื่อเปิดดูเนื้อหาทบทวนได้ตลอดเวลา</li>
+        </ul>
+      </div>
+
+      <div class="form-group">
+        <label for="studentNameInput">👤 ชื่อ-นามสกุล ของผู้ทดสอบ <span style="color: var(--error)">*</span></label>
+        <input type="text" id="studentNameInput" placeholder="พิมพ์ชื่อ-นามสกุล" autocomplete="off">
+      </div>
+
+      <button class="btn btn-primary" id="startQuizBtn" style="width: 100%;" disabled>
+        เข้าสู่แบบทดสอบ 🚀
+      </button>
+    </section>
+
+    <!-- 2. หน้าข้อสอบ -->
+    <section id="quizScreen" class="hidden">
+      <div class="meta-bar">
+        <div class="badge-user" id="displayStudentName">👤 ผู้สอบ: -</div>
+        <div class="badge-category" id="categoryBadge">หมวดหมู่</div>
+        <span style="font-weight: 700; color: var(--text-muted);" id="questionCounter">ข้อ 1/30</span>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+
+      <div class="question-container">
+        <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+          <span id="questionIcon" style="font-size: 1.8rem; line-height: 1.2;">📌</span>
+          <h2 class="question-title" id="questionText">กำลังโหลดคำถาม...</h2>
+        </div>
+
+        <div class="options-list" id="optionsContainer">
+          <!-- ตัวเลือก A, B, C, D ถูกเรนเดอร์ผ่าน JS -->
+        </div>
+
+        <!-- แจ้งเตือนเมื่อตอบถูกต้อง -->
+        <div id="correctAlert" class="alert-success hidden">
+          <span>🎉</span>
+          <span>ถูกต้องสมบูรณ์! คุณเลือกคำตอบที่สอดคล้องกับหลักการอย่างแท้จริง</span>
+        </div>
+
+        <!-- กล่องคำแนะนำเมื่อตอบผิด -->
+        <div id="hintBox" class="alert-hint hidden">
+          <span class="hint-icon">💡</span>
+          <div class="alert-hint-content">
+            <strong style="display: block; margin-bottom: 0.2rem;">ข้อสังเกตและแนวคิด (Hint):</strong>
+            <p id="hintText">-</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions-panel">
+        <button class="btn btn-check" id="checkAnswerBtn" disabled>
+          🔍 ตรวจคำตอบ
+        </button>
+        <button class="btn btn-primary hidden" id="nextBtn">
+          ข้อถัดไป ➡️
+        </button>
+        <button class="btn btn-submit hidden" id="submitBtn">
+          ส่งแบบทดสอบและประมวลผล ✅
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. หน้าสรุปผลคะแนน -->
+    <section id="resultScreen" class="hidden">
+      <div style="text-align: center; margin-bottom: 1.25rem;">
+        <h2 class="text-gradient" style="font-size: 2.2rem; margin-bottom: 0.5rem;">สรุปผลการประเมิน</h2>
+        <p style="color: var(--text-muted); font-size: 1.05rem;">
+          ผลการทดสอบวัดความรู้ด้านเทคโนโลยีดิจิทัล ระดับชั้นมัธยมศึกษาปีที่ 3 (เกณฑ์ผ่าน 80%)
+        </p>
+      </div>
+
+      <div style="background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 1rem; text-align: center; margin-bottom: 1.5rem;">
+        <span style="color: var(--text-muted); font-weight: 500;">ผู้เข้ารับการประเมิน: </span>
+        <strong id="resultStudentName" style="color: var(--text-main); font-size: 1.2rem;">-</strong>
+      </div>
+
+      <div class="score-banner" id="resultCardBg">
+        <div class="score-display-big" id="scoreValue">0/30</div>
+        <p style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.35rem;" id="percentValue">0%</p>
+        <p style="font-size: 1.1rem; opacity: 0.95;" id="feedbackGrade">-</p>
+        <div style="margin-top: 1rem; display: inline-block; padding: 0.45rem 1.4rem; background: rgba(255,255,255,0.25); border-radius: 9999px; font-weight: 600;" id="passStatusBadge">
+          -
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="restartBtn" style="width: 100%;">
+        🔄 เริ่มต้นทำแบบทดสอบใหม่ (สลับข้อและตัวเลือกใหม่)
+      </button>
+    </section>
+
+  </main>
+
+  <script>
+    // คลังข้อสอบทั้งหมด 30 ข้อ แสดงครบถ้วนตามหลักสูตร ม.3
+    const QUESTION_BANK = [
+      // หมวด 1: Google My Maps (ข้อ 1 - 5)
+      {
+        id: 1,
+        question: "การจัดเก็บและจำแนกสถานที่ท่องเที่ยวใน Google My Maps โดยแยกออกเป็น 'เลเยอร์ (Layer)' มีประโยชน์สำคัญที่สุดในข้อใด",
+        options: [
+          "ช่วยให้สามารถเปิด-ปิดการแสดงผลของกลุ่มข้อมูลแต่ละประเภทบนแผนที่ได้อย่างอิสระ",
+          "ช่วยลดอัตราการใช้งานแบนด์วิดท์อินเทอร์เน็ตของแผนที่ให้แสดงผลได้อย่างรวดเร็ว",
+          "ช่วยแปลงข้อมูลพิกัดทางภูมิศาสตร์ให้เป็นภาพถ่ายดาวเทียมความละเอียดสูงอัตโนมัติ",
+          "ช่วยป้องกันไม่ให้ผู้ใช้งานคนอื่นสามารถดูข้อมูลสถานที่ในเลเยอร์นั้นได้"
+        ],
+        correctAnswerText: "ช่วยให้สามารถเปิด-ปิดการแสดงผลของกลุ่มข้อมูลแต่ละประเภทบนแผนที่ได้อย่างอิสระ",
+        category: "Google My Maps",
+        icon: "📍",
+        hint: "การแยกเลเยอร์ทำหน้าที่เหมือนการซ้อนแผ่นใส เพื่อให้ผู้ดูเลือกดูเฉพาะกลุ่มข้อมูลที่สนใจ เช่น เลเยอร์ร้านอาหาร หรือเลเยอร์ที่พัก"
+      },
+      {
+        id: 2,
+        question: "หากนักเรียนจัดเตรียมข้อมูลพิกัดสถานที่จากภาคสนามในรูปแบบตาราง เพื่อนำเข้า (Import) ลงใน Google My Maps ควรบันทึกไฟล์นามสกุลใด",
+        options: [
+          "ไฟล์ตารางข้อมูลแบบ .CSV หรือ .XLSX",
+          "ไฟล์เอกสารข้อความแบบ .DOCX หรือ .PDF",
+          "ไฟล์ภาพกราฟิกเวกเตอร์แบบ .SVG หรือ .EPS",
+          "ไฟล์ฐานข้อมูลแบบ .SQL หรือ .JSON"
+        ],
+        correctAnswerText: "ไฟล์ตารางข้อมูลแบบ .CSV หรือ .XLSX",
+        category: "Google My Maps",
+        icon: "💾",
+        hint: "ระบบต้องการไฟล์ตารางที่จัดคอลัมน์ชื่อสถานที่ ละติจูด และลองจิจูดอย่างเป็นระเบียบ"
+      },
+      {
+        id: 3,
+        question: "เครื่องมือ Google My Maps มีจุดประสงค์หลักในการใช้งานตรงกับข้อใดมากที่สุด",
+        options: [
+          "การสร้างแผนที่เฉพาะบุคคลพร้อมปักหมุดและกำหนดเส้นทาง",
+          "การดูสภาพการจราจรแบบเรียลไทม์ผ่านกล้องวงจรปิดสาธารณะ",
+          "การถ่ายภาพพาโนรามา 360 องศาเพื่ออัปโหลดขึ้นเซิร์ฟเวอร์",
+          "การพยากรณ์การเกิดภัยพิบัติทางธรรมชาติจากดาวเทียม"
+        ],
+        correctAnswerText: "การสร้างแผนที่เฉพาะบุคคลพร้อมปักหมุดและกำหนดเส้นทาง",
+        category: "Google My Maps",
+        icon: "📍",
+        hint: "เน้นการสร้างแผนที่เฉพาะตัวที่ผู้ใช้สามารถเพิ่มจุดและเส้นทางเองได้"
+      },
+      {
+        id: 4,
+        question: "ข้อจำกัดด้านโครงสร้างของระบบ Google My Maps ข้อใดที่ผู้จัดทำแผนที่จำเป็นต้องวางแผนล่วงหน้า",
+        options: [
+          "จำกัดจำนวนเลเยอร์สูงสุดไม่เกิน 10 เลเยอร์ต่อหนึ่งแผนที่",
+          "ไม่สามารถกำหนดสีและสัญลักษณ์ไอคอนของจุดปักหมุดได้",
+          "ไม่สามารถคำนวณระยะทางหรือพื้นที่รูปปิด (Polygon) ได้",
+          "กำหนดให้แผนที่ทุกฉบับต้องเปิดเผยเป็นสาธารณะเท่านั้น"
+        ],
+        correctAnswerText: "จำกัดจำนวนเลเยอร์สูงสุดไม่เกิน 10 เลเยอร์ต่อหนึ่งแผนที่",
+        category: "Google My Maps",
+        icon: "📏",
+        hint: "การแบ่งกลุ่มข้อมูลจำเป็นต้องบริหารพื้นที่เลเยอร์ไม่ให้เกินโควตาที่ระบบอนุญาตต่อหนึ่ง Map"
+      },
+      {
+        id: 5,
+        question: "หากต้องการแชร์แผนที่ Google My Maps ให้เพื่อนร่วมกลุ่มทำงานแก้ไขจุดปักหมุดพร้อมกัน ต้องกำหนดสิทธิ์อย่างไร",
+        options: [
+          "เพิ่มอีเมลของเพื่อนร่วมกลุ่มและกำหนดสิทธิ์เป็น 'ผู้แก้ไข' (Editor)",
+          "คัดลอกลิงก์มุมมองแบบสาธารณะและส่งให้เพื่อนเปิดผ่านโหมดอ่านอย่างเดียว",
+          "ดาวน์โหลดโค้ด HTML แบบฝัง (Embed) แล้วส่งโค้ดให้เพื่อนทางอีเมล",
+          "แปลงไฟล์แผนที่เป็นภาพนิ่ง JPG แล้วแชร์โฟลเดอร์บน Google Drive"
+        ],
+        correctAnswerText: "เพิ่มอีเมลของเพื่อนร่วมกลุ่มและกำหนดสิทธิ์เป็น 'ผู้แก้ไข' (Editor)",
+        category: "Google My Maps",
+        icon: "🤝",
+        hint: "สิทธิ์ระดับ Editor เป็นสิทธิ์เดียวที่อนุญาตให้แก้ไข เพิ่มหมุด หรือปรับเส้นทางร่วมกันแบบ Real-time"
+      },
+
+      // หมวด 2: Google Forms (ข้อ 6 - 15)
+      {
+        id: 6,
+        question: "ความแตกต่างเชิงฟังก์ชันระหว่างคำถามแบบ 'หลายตัวเลือก' (Multiple Choice) และ 'ช่องทำเครื่องหมาย' (Checkboxes) ใน Google Forms คือข้อใด",
+        options: [
+          "หลายตัวเลือกกำหนดให้เลือกได้คำตอบเดียว ส่วนช่องทำเครื่องหมายเลือกได้มากกว่าหนึ่งคำตอบ",
+          "หลายตัวเลือกใช้สำหรับข้อสอบแบบจับคู่ ส่วนช่องทำเครื่องหมายใช้สำหรับข้อสอบแบบถูก-ผิด",
+          "หลายตัวเลือกสามารถตรวจคะแนนอัตโนมัติได้ แต่ช่องทำเครื่องหมายไม่สามารถตรวจให้คะแนนได้",
+          "หลายตัวเลือกแสดงผลเป็นรายการแนวตั้ง ส่วนช่องทำเครื่องหมายจะแสดงผลเป็นเมนูเลื่อนลง"
+        ],
+        correctAnswerText: "หลายตัวเลือกกำหนดให้เลือกได้คำตอบเดียว ส่วนช่องทำเครื่องหมายเลือกได้มากกว่าหนึ่งคำตอบ",
+        category: "Google Forms",
+        icon: "☑️",
+        hint: "สัญลักษณ์วงกลม (Radio) หมายถึงเลือกได้ 1 ตัวเลือก ส่วนสี่เหลี่ยม (Checkbox) รองรับคำตอบแบบพหุคูณ"
+      },
+      {
+        id: 7,
+        question: "หากต้องการตั้งค่าให้ข้อสอบ Google Forms สลับตำแหน่งของตัวเลือกในแต่ละข้อ เพื่อป้องกันการทุจริต ต้องเลือกคำสั่งใด",
+        options: [
+          "เลือกจุดไข่ปลา (⋮) มุมล่างขวาของข้อคำถาม แล้วคลิก 'สับเปลี่ยนลำดับของตัวเลือก'",
+          "เข้าไปที่แท็บการตั้งค่า แล้วเปิดใช้งาน 'สับเปลี่ยนลำดับของคำถาม' ในหน้าการนำเสนอ",
+          "กดปุ่มสร้างส่วนใหม่ (Add Section) ให้กับข้อคำถามทุกข้อเพื่อแยกหน้าแสดงผล",
+          "เปิดใช้งานตัวเลือก 'จำกัดสำหรับผู้ใช้ในองค์กรและตอบกลับได้ 1 ครั้ง'"
+        ],
+        correctAnswerText: "เลือกจุดไข่ปลา (⋮) มุมล่างขวาของข้อคำถาม แล้วคลิก 'สับเปลี่ยนลำดับของตัวเลือก'",
+        category: "Google Forms",
+        icon: "🔀",
+        hint: "การสลับตัวเลือกภายในข้อ (Shuffle option order) จะอยู่ที่เมนูย่อยของแต่ละข้อคำถาม ไม่ใช่การสลับลำดับข้อสอบทั้งชุด"
+      },
+      {
+        id: 8,
+        question: "ฟังก์ชัน 'การตรวจสอบการตอบกลับ' (Response Validation) ในคำถามแบบคำตอบสั้นๆ มีประโยชน์อย่างไร",
+        options: [
+          "ใช้กำหนดเงื่อนไขของข้อมูล เช่น บังคับให้กรอกเป็นตัวเลขเท่านั้น หรือกำหนดความยาวขั้นต่ำ",
+          "ใช้ตรวจสอบว่าผู้ตอบใช้เครื่องคอมพิวเตอร์หรือโทรศัพท์มือถือในการทำแบบทดสอบ",
+          "ใช้บันทึกประวัติการแก้ไขคำตอบและเวลาที่ผู้ตอบใช้ในการพิมพ์ข้อความ",
+          "ใช้ตรวจสอบความถูกต้องของไวยากรณ์ภาษาไทยและแก้ไขคำผิดให้อัตโนมัติ"
+        ],
+        correctAnswerText: "ใช้กำหนดเงื่อนไขของข้อมูล เช่น บังคับให้กรอกเป็นตัวเลขเท่านั้น หรือกำหนดความยาวขั้นต่ำ",
+        category: "Google Forms",
+        icon: "⚙️",
+        hint: "ช่วยควบคุมคุณภาพข้อมูลนำเข้า ป้องกันการกรอกข้อความผิดประเภท เช่น กรอกตัวอักษรลงในช่องเบอร์โทรศัพท์"
+      },
+      {
+        id: 9,
+        question: "เมื่อต้องการสร้างแบบสอบถามที่มีเงื่อนไข 'หากตอบว่าเคยเข้าร่วม ให้ไปตอบข้อ 5 แต่หากไม่เคย ให้ข้ามไปส่งฟอร์ม' ต้องใช้คำสั่งใด",
+        options: [
+          "สร้างส่วน (Section) แยก และตั้งค่าคำตอบเป็น 'ไปยังส่วนที่ระบุตามคำตอบ' (Go to section based on answer)",
+          "ใช้คำถามประเภทตารางกริดหลายตัวเลือก แล้วกำหนดเงื่อนไขผ่านสเกลเชิงเส้น",
+          "เปิดใช้งานตัวเลือก 'นำเข้าคำถาม' แล้วเชื่อมโยงลิงก์ผ่านระบบ Google Sheets",
+          "ตั้งค่าในเมนูการตั้งค่าแบบทดสอบโดยเลือก 'ปล่อยคะแนนทันทีหลังจากการส่งแต่ละครั้ง'"
+        ],
+        correctAnswerText: "สร้างส่วน (Section) แยก และตั้งค่าคำตอบเป็น 'ไปยังส่วนที่ระบุตามคำตอบ' (Go to section based on answer)",
+        category: "Google Forms",
+        icon: "↪️",
+        hint: "การทำ Branching Logic ใน Google Forms จำเป็นต้องแบ่งคำถามออกเป็นส่วนๆ (Sections) แล้วกำหนดทิศทางตามตัวเลือก"
+      },
+      {
+        id: 10,
+        question: "ข้อใดคือการตั้งค่าที่ช่วยจำกัดให้ทำข้อสอบได้เพียงครั้งเดียวโดยใช้อีเมลโรงเรียน",
+        options: [
+          "เลือกคำสั่ง 'จำกัดสำหรับผู้ใช้ในองค์กรและตอบได้ 1 ครั้ง'",
+          "ตั้งค่าให้ผู้ตอบทุกคนสามารถแก้ไขคำตอบหลังจากส่งได้",
+          "เปิดตัวเลือกให้ผู้ตอบเห็นกราฟสรุปคะแนนของทุกคน",
+          "เปิดเผยเฉลยคำตอบทันทีหลังจากนักเรียนคลิกเลือกตัวเลือก"
+        ],
+        correctAnswerText: "เลือกคำสั่ง 'จำกัดสำหรับผู้ใช้ในองค์กรและตอบได้ 1 ครั้ง'",
+        category: "Google Forms",
+        icon: "🔒",
+        hint: "ต้องลงชื่อเข้าใช้บัญชี Google ก่อนจึงจะทำข้อสอบได้เพียงครั้งเดียว"
+      },
+      {
+        id: 11,
+        question: "การผูกแบบสอบถาม Google Forms เข้ากับ 'Google Sheets' มีจุดเด่นด้านการจัดการข้อมูลอย่างไรเมื่อเทียบกับการดูในแท็บ Responses",
+        options: [
+          "ข้อมูลคำตอบจะถูกอัปเดตแบบเรียลไทม์เป็นแถวตาราง ทำให้สามารถเขียนสูตรคำนวณและวิเคราะห์สถิติต่อได้สะดวก",
+          "ช่วยเพิ่มระบบรักษาความปลอดภัยแบบเข้ารหัสสองชั้นเพื่อป้องกันข้อมูลรั่วไหล",
+          "ช่วยแปลงข้อมูลเชิงคุณภาพทั้งหมดให้กลายเป็นไฟล์ภาพอินโฟกราฟิกสำเร็จรูป",
+          "ช่วยบล็อกการส่งคำตอบของบุคคลภายนอกโดยไม่ต้องตั้งค่าในเมนูความปลอดภัย"
+        ],
+        correctAnswerText: "ข้อมูลคำตอบจะถูกอัปเดตแบบเรียลไทม์เป็นแถวตาราง ทำให้สามารถเขียนสูตรคำนวณและวิเคราะห์สถิติต่อได้สะดวก",
+        category: "Google Forms",
+        icon: "📊",
+        hint: "Google Sheets เป็นสเปรดชีตที่เปิดโอกาสให้นำ Raw data ไปใช้กับสูตรคำนวณขั้นสูง เช่น AVERAGE, COUNTIF หรือทำ Pivot Table"
+      },
+      {
+        id: 12,
+        question: "การส่งภาพถ่ายผลงานการทดลองวิทยาศาสตร์ผ่าน Google Forms ต้องใช้ข้อคำถามชนิดใด",
+        options: [
+          "คำถามแบบอัปโหลดไฟล์ (File Upload)",
+          "คำถามแบบตารางกริดหลายตัวเลือก",
+          "คำถามแบบวันที่และเวลาปัจจุบัน",
+          "คำถามแบบเลื่อนลงจากรายการที่กำหนด"
+        ],
+        correctAnswerText: "คำถามแบบอัปโหลดไฟล์ (File Upload)",
+        category: "Google Forms",
+        icon: "📤",
+        hint: "ระบบจะเก็บไฟล์รูปภาพส่งตรงเข้า Google Drive ของผู้สร้างแบบฟอร์ม"
+      },
+      {
+        id: 13,
+        question: "ประโยชน์ของฟังก์ชัน 'ความคิดเห็นสำหรับคำตอบ' (Answer Feedback) ใน Google Forms คือข้อใด",
+        options: [
+          "ช่วยระบุคำอธิบาย ลิงก์คลิปวิดีโอ หรือแหล่งเรียนรู้เพิ่มเติมให้ผู้เรียนทราบว่าทำไมข้อนั้นจึงถูกหรือผิด",
+          "ช่วยปรับลดหรือเพิ่มคะแนนให้แก่นักเรียนแบบอัตโนมัติตามระยะเวลาที่ใช้ในการตอบ",
+          "ช่วยแจ้งเตือนไปยังครูผู้สอนทันทีเมื่อมีนักเรียนตอบผิดในข้อคำถามที่เป็นเกณฑ์มาตรฐาน",
+          "ช่วยป้องกันไม่ให้นักเรียนสามารถจับภาพหน้าจอเฉลยข้อสอบไปเผยแพร่ต่อเพื่อนได้"
+        ],
+        correctAnswerText: "ช่วยระบุคำอธิบาย ลิงก์คลิปวิดีโอ หรือแหล่งเรียนรู้เพิ่มเติมให้ผู้เรียนทราบว่าทำไมข้อนั้นจึงถูกหรือผิด",
+        category: "Google Forms",
+        icon: "💡",
+        hint: "Feedback มีไว้เพื่อการประเมินเพื่อการเรียนรู้ (Formative) ช่วยให้นักเรียนเข้าใจเหตุผลของคำตอบที่ถูกต้อง"
+      },
+      {
+        id: 14,
+        question: "ข้อใดเป็นคำถามที่เหมาะสมที่สุดสำหรับการประเมินความพึงพอใจ 5 ระดับ (น้อยที่สุดถึงมากที่สุด) ใน Google Forms",
+        options: [
+          "คำถามแบบสเกลเชิงเส้น (Linear Scale)",
+          "คำถามแบบคำตอบสั้นๆ (Short Answer)",
+          "คำถามแบบเลื่อนลง (Dropdown)",
+          "คำถามแบบย่อหน้าบรรยาย (Paragraph)"
+        ],
+        correctAnswerText: "คำถามแบบสเกลเชิงเส้น (Linear Scale)",
+        category: "Google Forms",
+        icon: "⭐",
+        hint: "สเกลเชิงเส้นถูกออกแบบมาเพื่อวัดระดับความรู้สึก เจตคติ หรือสเกลแบบ Likert Scale (เช่น 1 ถึง 5)"
+      },
+      {
+        id: 15,
+        question: "การเปิดสวิตช์คำสั่ง 'จำเป็น' (Required) ใน Google Forms มีผลต่อกระบวนการทำข้อสอบอย่างไร",
+        options: [
+          "ผู้ตอบจะไม่สามารถกดส่งแบบฟอร์มได้หากยังไม่ได้ตอบข้อคำถามที่มีเครื่องหมายนี้",
+          "ระบบจะสุ่มหักคะแนนผู้ตอบหากใช้เวลาในการตอบข้อดังกล่าวนานเกินไป",
+          "ข้อคำถามนั้นจะถูกล็อกไม่ให้ผู้ตอบสามารถย้อนกลับมาแก้ไขคำตอบได้",
+          "ข้อคำถามนั้นจะแสดงผลเฉพาะผู้ที่ได้รับคะแนนเก็บสะสมเกินเกณฑ์เท่านั้น"
+        ],
+        correctAnswerText: "ผู้ตอบจะไม่สามารถกดส่งแบบฟอร์มได้หากยังไม่ได้ตอบข้อคำถามที่มีเครื่องหมายนี้",
+        category: "Google Forms",
+        icon: "⚠️",
+        hint: "คำสั่งจำเป็นจะแสดงเครื่องหมายดอกจันสีแดง (*) กำกับไว้เพื่อบังคับให้ต้องระบุข้อมูลก่อนส่ง"
+      },
+
+      // หมวด 3: Gemini AI Storybook (ข้อ 16 - 20)
+      {
+        id: 16,
+        question: "การเขียน Prompt ให้ Gemini ช่วยร่างบทนิทานสำหรับเด็กปฐมวัย (อายุ 3-5 ปี) ควรระบุข้อจำกัด (Constraints) ด้านภาษาอย่างไรจึงจะเหมาะสมที่สุด",
+        options: [
+          "ระบุให้ใช้ประโยคสั้น กระชับ คำศัพท์พื้นฐาน มีคำสัมผัสคล้องจอง และจำกัดความยาวต่อหน้าไม่เกิน 2-3 บรรทัด",
+          "ระบุให้ใช้คำศัพท์ภาษาอังกฤษระดับวิชาการควบคู่กับภาษาไทยเพื่อเสริมสร้างทักษะสองภาษาขั้นสูง",
+          "ระบุให้แต่งเป็นบทร้อยกรองประเภทคำฉันท์หรือลิลิตเพื่ออนุรักษ์วรรณศิลป์ไทยโบราณ",
+          "ระบุให้สอดแทรกศัพท์เทคนิคด้านวิทยาศาสตร์และตรรกศาสตร์เชิงลึกเพื่อพัฒนาเชาวน์ปัญญา"
+        ],
+        correctAnswerText: "ระบุให้ใช้ประโยคสั้น กระชับ คำศัพท์พื้นฐาน มีคำสัมผัสคล้องจอง และจำกัดความยาวต่อหน้าไม่เกิน 2-3 บรรทัด",
+        category: "Gemini AI",
+        icon: "👶",
+        hint: "เด็กปฐมวัยมีสมาธิและคลังคำศัพท์จำกัด ภาษาในนิทานจึงต้องเรียบง่าย ใช้โครงสร้างประโยคซ้ำๆ และเน้นเสียงสัมผัส"
+      },
+      {
+        id: 17,
+        question: "หากต้องการให้ Gemini ช่วยร่าง 'Image Prompt' เพื่อนำไปป้อนให้ AI วาดภาพประกอบนิทาน ควรกำหนดองค์ประกอบใดใน Prompt",
+        options: [
+          "ระบุสไตล์งานศิลปะ (เช่น สีน้ำ หรือภาพ 3D), มุมกล้อง, โทนแสง, รายละเอียดฉาก และรูปลักษณ์ตัวละครอย่างชัดเจน",
+          "ระบุเนื้อเรื่องย่อของทั้งเล่มลงไปในช่องสร้างภาพ เพื่อให้โปรแกรมวาดภาพเข้าใจเนื้อหาทั้งหมด",
+          "ระบุเฉพาะคำคุณศัพท์สั้นๆ เพียงคำเดียว เช่น 'น่ารัก' หรือ 'สวยงาม' เพื่อให้ AI วาดภาพทำงานได้อิสระ",
+          "คัดลอกข้อความบทบรรยายภาษาไทยของนิทานทั้งหน้าไปวางลงในช่องคำสั่งของ AI วาดภาพโดยตรง"
+        ],
+        correctAnswerText: "ระบุสไตล์งานศิลปะ (เช่น สีน้ำ หรือภาพ 3D), มุมกล้อง, โทนแสง, รายละเอียดฉาก และรูปลักษณ์ตัวละครอย่างชัดเจน",
+        category: "Gemini AI",
+        icon: "🎨",
+        hint: "AI วาดภาพไม่เข้าใจบทกวี แต่เข้าใจคีย์เวิร์ดเชิงทัศนศิลป์ เช่น Medium, Lighting, Camera Angle และ Subject Details"
+      },
+      {
+        id: 18,
+        question: "ปัญหาสำคัญในการใช้ AI เจนภาพประกอบนิทานคือ 'ตัวละครหน้าตาเปลี่ยนไปทุกหน้า' นักเรียนควรสั่งให้ Gemini ช่วยแก้ไขปัญหานี้อย่างไร",
+        options: [
+          "ให้สร้างจุดเด่นคงที่ของตัวละคร (หน้าตา,ทรงผม, สีเสื้อผ้า, เครื่องประดับ) เพื่อนำไปใส่ในทุก Prompt",
+          "ให้เปลี่ยนชื่อตัวละครในทุกๆ หน้า เพื่อให้ระบบ AI ทำการสุ่มหน้าตาตัวละครใหม่ให้เข้ากับฉาก",
+          "ให้เขียน Prompt บรรยายฉากอย่างเดียวโดยตัดคำบรรยายเกี่ยวกับตัวละครออกจากคำสั่งทั้งหมด",
+          "สั่งให้ Gemini ส่งออกภาพถ่ายจริงของคนมาใช้แทนภาพวาดการ์ตูนเพื่อป้องกันความคลาดเคลื่อน"
+        ],
+        correctAnswerText: "ให้สร้างจุดเด่นคงที่ของตัวละคร (หน้าตา,ทรงผม, สีเสื้อผ้า, เครื่องประดับ) เพื่อนำไปใส่ในทุก Prompt",
+        category: "Gemini AI",
+        icon: "🎭",
+        hint: "การคงความต่อเนื่อง (Consistency) ของตัวละคร ต้องใช้คำบรรยายรูปร่าง สี และเครื่องแต่งกายเดิมซ้ำเป็นสมออ้างอิงเสมอ"
+      },
+      {
+        id: 19,
+        question: "ข้อใดเป็นขั้นตอนการทำงานร่วมกันระหว่างมนุษย์และ Gemini (Human-in-the-loop) ในการสร้างหนังสือนิทานที่ถูกต้อง",
+        options: [
+          "ให้ AI ช่วยระดมความคิดและร่างโครงเรื่อง จากนั้นผู้เขียนนำมาเกลาภาษา ตรวจสอบความถูกต้อง และปรับให้เข้ากับบริบท",
+          "คัดลอกเนื้อหาทั้งหมดที่ AI แต่งขึ้นไปจัดพิมพ์เป็นเล่มทันทีโดยไม่ต้องแก้ไข เพื่อคงความเป็นต้นฉบับของ AI",
+          "จำกัดให้ AI มีหน้าที่แปลภาษาอังกฤษเป็นภาษาไทยเท่านั้น โดยห้ามใช้ AI ในการช่วยคิดพล็อตเรื่องหรือตัวละคร",
+          "ปล่อยให้ AI เป็นผู้ตัดสินใจเลือกลักษณะตัวละครและบทสรุปของนิทานแต่เพียงผู้เดียวโดยไม่มีการตรวจทาน"
+        ],
+        correctAnswerText: "ให้ AI ช่วยระดมความคิดและร่างโครงเรื่อง จากนั้นผู้เขียนนำมาเกลาภาษา ตรวจสอบความถูกต้อง และปรับให้เข้ากับบริบท",
+        category: "Gemini AI",
+        icon: "🤝",
+        hint: "AI ทำหน้าที่เป็น Co-creator หรือผู้ช่วยคิด แต่มนุษย์ต้องเป็นผู้ควบคุมทิศทาง บรรณาธิการ และตรวจสอบความเหมาะสม"
+      },
+      {
+        id: 20,
+        question: "ความเสี่ยงด้านจริยธรรมที่ผู้สร้างนิทานต้องระมัดระวังที่สุดเมื่อใช้ Gemini ช่วยแต่งเนื้อเรื่องคือข้อใด",
+        options: [
+          "อคติทางความคิดและการเหมารวม (Bias & Stereotypes) ที่อาจแฝงมาในบทบาทของตัวละคร",
+          "ความยาวของเนื้อหาที่เกินกว่าขีดจำกัดหน่วยความจำของโปรแกรมประมวลผลคำ",
+          "การที่ระบบ AI ปฏิเสธการแต่งนิทานที่มีสัตว์เป็นตัวละครเอกในการดำเนินเรื่อง",
+          "การที่ข้อความของ AI จะกลายเป็นไฟล์ที่ติดไวรัสคอมพิวเตอร์เมื่อบันทึกลงเครื่อง"
+        ],
+        correctAnswerText: "อคติทางความคิดและการเหมารวม (Bias & Stereotypes) ที่อาจแฝงมาในบทบาทของตัวละคร",
+        category: "Gemini AI",
+        icon: "⚖️",
+        hint: "โมเดล AI มักเรียนรู้จากข้อมูลในอดีต อาจมีอคติทางเพศ สีผิว หรือบทบาททางสังคมแฝงอยู่ จึงต้องคัดกรองอย่างถี่ถ้วน"
+      },
+
+      // หมวด 4: Claude Interactive Game (ข้อ 21 - 25)
+      {
+        id: 21,
+        question: "จุดเด่นของฟีเจอร์ 'Artifacts' ใน Claude ที่ช่วยในการสร้างสื่อการเรียนรู้เชิงโต้ตอบ (Interactive Game) คือข้อใด",
+        options: [
+          "มีหน้าต่างแสดงผลแยกที่สามารถทดสอบโค้ด HTML/JS แบบเว็บแอปพลิเคชันได้ทันทีบนหน้าจอ",
+          "ช่วยแปลงโค้ดเกมให้กลายเป็นแอปพลิเคชันบนสมาร์ตโฟนและอัปโหลดขึ้นสโตร์ให้อัตโนมัติ",
+          "ช่วยเร่งความเร็วของการ์ดจอ (GPU) ในคอมพิวเตอร์ให้สามารถประมวลผลภาพ 3D ได้สูงขึ้น",
+          "ช่วยจำกัดสิทธิ์ไม่ให้ผู้ใช้งานคนอื่นสามารถคัดลอกซอร์สโค้ดของเกมไปพัฒนาต่อได้"
+        ],
+        correctAnswerText: "มีหน้าต่างแสดงผลแยกที่สามารถทดสอบโค้ด HTML/JS แบบเว็บแอปพลิเคชันได้ทันทีบนหน้าจอ",
+        category: "Claude Interactive Game",
+        icon: "💻",
+        hint: "Artifacts ช่วยให้ผู้ใช้ไม่ต้องนำโค้ดไปเปิดในโปรแกรม Text Editor อื่น แต่สามารถกด Preview เล่นเกมในหน้าเว็บ Claude ได้เลย"
+      },
+      {
+        id: 22,
+        question: "หากต้องการสั่งให้ Claude สร้างเกมการศึกษา ควรระบุองค์ประกอบใดใน Prompt ให้ชัดเจน",
+        options: [
+          "กติกา คะแนน เงื่อนไขการชนะ และกลุ่มสาระการเรียนรู้",
+          "ประวัติส่วนตัวและหมายเลขบัตรประชาชนของผู้สั่งงาน",
+          "ราคาค่าบริการอินเทอร์เน็ตรายเดือนของผู้พัฒนา",
+          "ยี่ห้อของเมาส์และคีย์บอร์ดที่เชื่อมต่อกับคอมพิวเตอร์"
+        ],
+        correctAnswerText: "กติกา คะแนน เงื่อนไขการชนะ และกลุ่มสาระการเรียนรู้",
+        category: "Claude Interactive Game",
+        icon: "🎯",
+        hint: "เกมที่ดีต้องมีเป้าหมาย กฎเกณฑ์ที่ชัดเจน และเนื้อหาการเรียนรู้ที่สอดคล้อง"
+      },
+      {
+        id: 23,
+        question: "หากทดสอบเกมที่ Claude สร้างขึ้นแล้วพบว่า 'กดปุ่มตรวจคำตอบแล้วคะแนนไม่เพิ่ม' กระบวนการแก้ไข (Debugging) ร่วมกับ Claude ข้อใดถูกต้อง",
+        options: [
+          "คัดลอกข้อความผิดพลาดใน Developer Console หรืออธิบายพฤติกรรมของปุ่มส่งกลับไปให้ Claude แก้ไขเฉพาะฟังก์ชันนั้น",
+          "ลบแชตเดิมทิ้งทั้งหมดแล้วเริ่มต้นสั่งให้ Claude เขียนโค้ดของทั้งเกมใหม่อีกครั้งตั้งแต่ต้น",
+          "เปลี่ยนไปสั่งการด้วยภาษาอื่นเนื่องจาก Claude ไม่รองรับการแก้ปัญหาเชิงตรรกะของ JavaScript",
+          "ปิดเครื่องคอมพิวเตอร์และเปิดใหม่เพื่อล้างประวัติการทำงานของระบบ Artifacts"
+        ],
+        correctAnswerText: "คัดลอกข้อความผิดพลาดใน Developer Console หรืออธิบายพฤติกรรมของปุ่มส่งกลับไปให้ Claude แก้ไขเฉพาะฟังก์ชันนั้น",
+        category: "Claude Interactive Game",
+        icon: "🔧",
+        hint: "การส่ง Feedback เฉพาะจุดพร้อม Error message ช่วยให้ AI ระบุบรรทัดที่มีข้อผิดพลาดและ Refactor โค้ดได้ตรงจุด"
+      },
+      {
+        id: 24,
+        question: "การพัฒนาเกมการศึกษาบนเว็บด้วย Claude ให้มีประสิทธิภาพตามหลักการออกแบบสื่อ ควรคำนึงถึงสิ่งใดเป็นสำคัญ",
+        options: [
+          "การให้ผลย้อนกลับทันที (Instant Feedback) เมื่อผู้เรียนตอบคำถาม เพื่อส่งเสริมการเรียนรู้ที่ถูกต้อง",
+          "การตั้งเวลาถอยหลังให้เร็วที่สุด เช่น 3 วินาทีต่อข้อ เพื่อสร้างความกดดันให้ผู้เรียนตื่นตัวตลอดเวลา",
+          "การออกแบบให้มีเสียงเอฟเฟกต์ดังต่อเนื่องตลอดเวลาเพื่อดึงดูดความสนใจของผู้เรียนไม่ให้วอกแวก",
+          "การซ่อนผลคะแนนรวมไว้เพื่อไม่ให้ผู้เรียนทราบว่าตนเองทำคะแนนได้ในระดับใด"
+        ],
+        correctAnswerText: "การให้ผลย้อนกลับทันที (Instant Feedback) เมื่อผู้เรียนตอบคำถาม เพื่อส่งเสริมการเรียนรู้ที่ถูกต้อง",
+        category: "Claude Interactive Game",
+        icon: "🌟",
+        hint: "เกมเพื่อการศึกษาที่ดีต้องเน้นกระบวนการเรียนรู้ การมี Feedback พร้อมคำอธิบายทันทีจะช่วยปรับความเข้าใจที่ผิดพลาดได้ดีที่สุด"
+      },
+      {
+        id: 25,
+        question: "หากต้องการให้เกมที่ Claude สร้างสามารถแสดงผลได้สมบูรณ์ทั้งบนหน้าจอคอมพิวเตอร์และสมาร์ตโฟน ควรระบุคำสั่งใดใน Prompt",
+        options: [
+          "กำหนดให้เขียน CSS แบบ Responsive Design โดยใช้ Flexbox หรือ Grid และรองรับ Touch Event",
+          "กำหนดให้ล็อกขนาดหน้าจอของเกมไว้ที่ขนาดคงที่ 1920x1080 พิกเซลในทุกกรณี",
+          "สั่งให้แยกไฟล์เกมออกเป็น 2 เวอร์ชันโดยใช้ภาษา Assembly สำหรับโทรศัพท์มือถือ",
+          "กำหนดให้ผู้เล่นต้องเชื่อมต่อเมาส์และคีย์บอร์ดภายนอกเท่านั้นจึงจะสามารถควบคุมเกมได้"
+        ],
+        correctAnswerText: "กำหนดให้เขียน CSS แบบ Responsive Design โดยใช้ Flexbox หรือ Grid และรองรับ Touch Event",
+        category: "Claude Interactive Game",
+        icon: "📱",
+        hint: "การทำให้เว็บแอปพลิเคชันรองรับทุกหน้าจอ ต้องใช้ CSS Layout ที่ยืดหยุ่น และคำนึงถึงการแตะสัมผัสบนมือถือ"
+      },
+
+      // หมวด 5: Canva E-Portfolio (ข้อ 26 - 30)
+      {
+        id: 26,
+        question: "การจัดทำ E-Portfolio ด้วย Canva ในรูปแบบ 'เว็บไซต์' (Publish as Website) มีจุดเด่นเหนือกว่าการบันทึกเป็นไฟล์ PDF ทั่วไปอย่างไร",
+        options: [
+          "ผู้ประเมินสามารถคลิกลิงก์ เล่นวิดีโอผลงาน และเปิดดูผ่านเบราว์เซอร์ได้ทันทีโดยไม่ต้องดาวน์โหลดไฟล์ขนาดใหญ่",
+          "ไฟล์เว็บไซต์จะถูกเข้ารหัสลับทำให้ไม่สามารถมีใครคัดลอกข้อความผลงานไปใช้ต่อได้",
+          "สามารถพิมพ์ออกมาเป็นรูปเล่มกระดาษที่มีภาพเคลื่อนไหวได้เหมือนบนหน้าจอคอมพิวเตอร์",
+          "ระบบของ Canva จะทำการเพิ่มเกียรติบัตรและผลงานใหม่ๆ เข้าสู่พอร์ตโฟลิโอให้โดยอัตโนมัติ"
+        ],
+        correctAnswerText: "ผู้ประเมินสามารถคลิกลิงก์ เล่นวิดีโอผลงาน และเปิดดูผ่านเบราว์เซอร์ได้ทันทีโดยไม่ต้องดาวน์โหลดไฟล์ขนาดใหญ่",
+        category: "Canva E-Portfolio",
+        icon: "🌐",
+        hint: "E-Portfolio ในรูปแบบเว็บเป็น Interactive สะดวกต่อกรรมการ ไม่เปลืองพื้นที่หน่วยความจำ และเปิดชมได้ทุกที่"
+      },
+      {
+        id: 27,
+        question: "การจัดลำดับโครงสร้างเนื้อหาของแฟ้มสะสมผลงาน (Portfolio) ระดับ ม.3 เพื่อยื่นศึกษาต่อ ม.4 ข้อใดเรียงลำดับได้อย่างถูกต้องตามมาตรฐาน",
+        options: [
+          "หน้าปก > ประวัติส่วนตัว > ผลการเรียน > กิจกรรมผลงานเด่น > เกียรติบัตรรางวัลที่ได้รับ",
+          "หน้าปก > รวมภาพเกียรติบัตรทั้งหมด > ประวัติส่วนตัว > กิจกรรมนันทนาการ > สรุปผลการเรียน",
+          "ประวัติส่วนตัว > ความคิดเห็นของเพื่อนร่วมชั้น > หน้าปก > รวมผลงานภาพถ่าย > เกียรติบัตร",
+          "ผลงานเด่น > เกียรติบัตรรางวัลที่ได้รับ> หน้าปก > ผลการเรียนเฉลี่ย > ประวัติส่วนตัว"
+        ],
+        correctAnswerText: "หน้าปก > ประวัติส่วนตัว > ผลการเรียน > กิจกรรมผลงานเด่น > เกียรติบัตรรางวัลที่ได้รับ",
+        category: "Canva E-Portfolio",
+        icon: "📑",
+        hint: "ลำดับสากลเริ่มจาก แนะนำตนเอง นำเสนอผลงานชิ้นเอกที่ตรงเป้าหมาย เล่ากิจกรรมที่หล่อหลอมทักษะ และแนบหลักฐานรับรอง"
+      },
+      {
+        id: 28,
+        question: "หลักการนำภาพถ่ายกิจกรรมลงใน E-Portfolio บน Canva ข้อใดที่สะท้อนความเป็นมืออาชีพและน่าเชื่อถือที่สุด",
+        options: [
+          "คัดเลือกภาพขณะกำลังลงมือปฏิบัติจริง มีคำบรรยายระบุบทบาทหน้าที่ วันที่ และผลลัพธ์ของกิจกรรมนั้นอย่างชัดเจน",
+          "ใส่ภาพถ่ายให้ได้จำนวนมากที่สุดในหนึ่งหน้า โดยย่อขนาดภาพให้เล็กเพื่อบรรจุได้มากกว่า 20 รูป",
+          "ใช้สติกเกอร์การ์ตูนเคลื่อนไหวและอิโมจิตกแต่งทับบนภาพถ่ายเพื่อสร้างความน่ารักสดใส",
+          "นำภาพกิจกรรมของเพื่อนที่ได้รับรางวัลมาใส่ในพอร์ตโฟลิโอของตนเองเพื่อเพิ่มความโดดเด่น"
+        ],
+        correctAnswerText: "คัดเลือกภาพขณะกำลังลงมือปฏิบัติจริง มีคำบรรยายระบุบทบาทหน้าที่ วันที่ และผลลัพธ์ของกิจกรรมนั้นอย่างชัดเจน",
+        category: "Canva E-Portfolio",
+        icon: "📸",
+        hint: "ภาพ Action สะท้อนการลงมือทำจริง พร้อมแคปชันระบุว่า 'เราทำอะไร ได้ผลลัพธ์อย่างไร' มีน้ำหนักมากกว่าภาพยืนเรียงแถวหรือภาพตกแต่ง"
+      },
+      {
+        id: 29,
+        question: "การใช้เครื่องมือ 'กรอบรูปภาพ' (Frames) ใน Canva ในการจัดทำพอร์ตโฟลิโอมีประโยชน์หลักคือข้อใด",
+        options: [
+          "ช่วยควบคุมรูปทรง สัดส่วน และทิศทางของภาพถ่ายให้เป็นระเบียบเรียบร้อยในระนาบเดียวกัน",
+          "ช่วยเพิ่มความคมชัดและปรับเปลี่ยนสีเสื้อผ้าในรูปภาพให้กลายเป็นชุดนักเรียนอัตโนมัติ",
+          "ช่วยป้องกันไม่ให้ระบบ Canva บีบอัดขนาดไฟล์ภาพเมื่อส่งออกเป็นเอกสาร",
+          "ช่วยสแกนตรวจสอบว่าภาพถ่ายนั้นมีปัญหาการละเมิดลิขสิทธิ์หรือไม่"
+        ],
+        correctAnswerText: "ช่วยควบคุมรูปทรง สัดส่วน และทิศทางของภาพถ่ายให้เป็นระเบียบเรียบร้อยในระนาบเดียวกัน",
+        category: "Canva E-Portfolio",
+        icon: "🖼️",
+        hint: "Frames ช่วยตัดรูปเข้าสู่ทรงเรขาคณิต เช่น สี่เหลี่ยมมน หรือวงกลม ทำให้การจัดหน้าดูเป็นระเบียบ สะอาดตา (Visual Consistency)"
+      },
+      {
+        id: 30,
+        question: "ข้อควรระวังสำคัญที่สุดในการเผยแพร่ลิงก์ E-Portfolio ของนักเรียนสู่สาธารณะคือข้อใด",
+        options: [
+          "การเปิดเผยข้อมูลส่วนบุคคลที่ละเอียดอ่อน (เช่น เลขบัตรประจำตัวประชาชน, ที่อยู่บ้าน, ข้อมูลทางการเงิน)",
+          "การใช้โทนสีพื้นหลังที่ไม่ตรงกับสีประจำโรงเรียนที่ต้องการจะไปสอบเข้าศึกษาต่อ",
+          "การที่แฟ้มสะสมผลงานมีความยาวของเนื้อหาทั้งหมดไม่ถึง 100 หน้ากระดาษ",
+          "การใส่ภาพเกียรติบัตรที่ได้รับเกินกว่า 1 ปีขึ้นไปในภาคผนวกของผลงาน"
+        ],
+        correctAnswerText: "การเปิดเผยข้อมูลส่วนบุคคลที่ละเอียดอ่อน (เช่น เลขบัตรประจำตัวประชาชน, ที่อยู่บ้าน, ข้อมูลทางการเงิน)",
+        category: "Canva E-Portfolio",
+        icon: "🛡️",
+        hint: "ความปลอดภัยของข้อมูลส่วนบุคคล (Privacy) เป็นสิ่งสำคัญ ควรเซ็นเซอร์เลขประจำตัว 13 หลักและเบอร์โทรศัพท์ส่วนตัวก่อนแชร์ลิงก์เว็บสาธารณะ"
+      }
+    ];
+
+    // ตัวแปร State การทำงาน
+    let studentName = "";
+    let activeQuizList = [];
+    let currentIndex = 0;
+    let selectedOptionIndex = null;
+    let isCheckedCurrent = false;
+    let scoreCount = 0;
+
+    // DOM Elements
+    const startScreen = document.getElementById("startScreen");
+    const quizScreen = document.getElementById("quizScreen");
+    const resultScreen = document.getElementById("resultScreen");
+
+    const studentNameInput = document.getElementById("studentNameInput");
+    const startQuizBtn = document.getElementById("startQuizBtn");
+
+    const displayStudentName = document.getElementById("displayStudentName");
+    const categoryBadge = document.getElementById("categoryBadge");
+    const questionCounter = document.getElementById("questionCounter");
+    const progressBar = document.getElementById("progressBar");
+    const questionIcon = document.getElementById("questionIcon");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const hintBox = document.getElementById("hintBox");
+    const hintText = document.getElementById("hintText");
+    const correctAlert = document.getElementById("correctAlert");
+
+    const checkAnswerBtn = document.getElementById("checkAnswerBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const submitBtn = document.getElementById("submitBtn");
+
+    const resultStudentName = document.getElementById("resultStudentName");
+    const scoreValue = document.getElementById("scoreValue");
+    const percentValue = document.getElementById("percentValue");
+    const feedbackGrade = document.getElementById("feedbackGrade");
+    const passStatusBadge = document.getElementById("passStatusBadge");
+    const resultCardBg = document.getElementById("resultCardBg");
+    const restartBtn = document.getElementById("restartBtn");
+
+    // Drawer Elements
+    const toggleDrawerBtn = document.getElementById("toggleDrawerBtn");
+    const closeDrawerBtn = document.getElementById("closeDrawerBtn");
+    const lessonDrawer = document.getElementById("lessonDrawer");
+    const backdrop = document.getElementById("backdrop");
+
+    // Fisher-Yates Shuffle อัลกอริทึมสุ่มอาร์เรย์
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // จัดเตรียมข้อสอบครบทั้ง 30 ข้อ โดยสลับข้อ และสลับตัวเลือก A-D
+    function prepareQuizSet() {
+      const shuffledQuestions = shuffleArray(QUESTION_BANK); // สลับข้อทั้งหมด 30 ข้อ
+      return shuffledQuestions.map(q => {
+        const shuffledOptions = shuffleArray(q.options); // สลับชอยส์
+        return {
+          ...q,
+          options: shuffledOptions,
+          correctIndex: shuffledOptions.indexOf(q.correctAnswerText)
+        };
+      });
+    }
+
+    // ตรวจสอบการกรอกชื่อ
+    studentNameInput.addEventListener("input", (e) => {
+      startQuizBtn.disabled = e.target.value.trim().length === 0;
+    });
+
+    // เริ่มทำข้อสอบ
+    startQuizBtn.addEventListener("click", () => {
+      studentName = studentNameInput.value.trim();
+      activeQuizList = prepareQuizSet();
+      currentIndex = 0;
+      scoreCount = 0;
+
+      displayStudentName.textContent = `👤 ผู้สอบ: ${studentName}`;
+      startScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      quizScreen.classList.remove("hidden");
+
+      loadQuestion();
+    });
+
+    // โหลดคำถามปัจจุบัน
+    function loadQuestion() {
+      selectedOptionIndex = null;
+      isCheckedCurrent = false;
+
+      const q = activeQuizList[currentIndex];
+      const total = activeQuizList.length;
+
+      // ล้างสถานะกล่องแจ้งเตือน
+      hintBox.classList.add("hidden");
+      correctAlert.classList.add("hidden");
+
+      // รีเซ็ตปุ่ม
+      checkAnswerBtn.classList.remove("hidden");
+      checkAnswerBtn.disabled = true;
+      nextBtn.classList.add("hidden");
+      submitBtn.classList.add("hidden");
+
+      // อัปเดต Meta
+      questionCounter.textContent = `ข้อ ${currentIndex + 1}/${total}`;
+      categoryBadge.textContent = `หมวด: ${q.category}`;
+      questionIcon.textContent = q.icon;
+      questionText.textContent = `${currentIndex + 1}. ${q.question}`;
+
+      // แถบ Progress Bar
+      const progressPercent = ((currentIndex + 1) / total) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      // เรนเดอร์ตัวเลือก
+      optionsContainer.innerHTML = "";
+      const letters = ["A", "B", "C", "D"];
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerHTML = `
+          <div class="option-label">${letters[idx]}</div>
+          <span>${opt}</span>
+        `;
+
+        btn.addEventListener("click", () => {
+          if (isCheckedCurrent) return;
+
+          selectedOptionIndex = idx;
+          const allOptions = optionsContainer.querySelectorAll(".option-btn");
+          allOptions.forEach((b, i) => {
+            b.classList.toggle("selected", i === idx);
+          });
+
+          checkAnswerBtn.disabled = false;
+        });
+
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    // ตรวจคำตอบ (Anti-guess flow)
+    checkAnswerBtn.addEventListener("click", () => {
+      if (selectedOptionIndex === null || isCheckedCurrent) return;
+
+      isCheckedCurrent = true;
+      const q = activeQuizList[currentIndex];
+      const isCorrect = (selectedOptionIndex === q.correctIndex);
+      const isLast = (currentIndex === activeQuizList.length - 1);
+
+      // ล็อกปุ่มตัวเลือก
+      const allOptionBtns = optionsContainer.querySelectorAll(".option-btn");
+      allOptionBtns.forEach(btn => btn.classList.add("locked"));
+
+      // ไฮไลต์ตามผลลัพธ์
+      if (isCorrect) {
+        allOptionBtns[selectedOptionIndex].classList.add("correct-highlight");
+        correctAlert.classList.remove("hidden");
+        scoreCount++;
+      } else {
+        allOptionBtns[selectedOptionIndex].classList.add("incorrect-highlight");
+        // แสดงเฉพาะ Hint เพื่อชวนคิด ไม่แสดงเฉลย
+        hintText.textContent = q.hint;
+        hintBox.classList.remove("hidden");
+      }
+
+      checkAnswerBtn.classList.add("hidden");
+
+      if (isLast) {
+        submitBtn.classList.remove("hidden");
+      } else {
+        nextBtn.classList.remove("hidden");
+      }
+    });
+
+    // ข้อถัดไป
+    nextBtn.addEventListener("click", () => {
+      if (currentIndex < activeQuizList.length - 1) {
+        currentIndex++;
+        loadQuestion();
+      }
+    });
+
+    // ส่งข้อสอบและประมวลผล
+    submitBtn.addEventListener("click", () => {
+      const total = activeQuizList.length;
+      const percentage = (scoreCount / total) * 100;
+      const isPassed = percentage >= 80; // เกณฑ์ผ่าน 80% (24 ข้อขึ้นไป)
+
+      resultStudentName.textContent = studentName;
+      scoreValue.textContent = `${scoreCount}/${total}`;
+      percentValue.textContent = `คิดเป็นความถูกต้อง ${percentage.toFixed(1)}%`;
+
+      if (isPassed) {
+        resultCardBg.className = "score-banner passed";
+        passStatusBadge.textContent = "🎉 ผ่านเกณฑ์การประเมิน (80% ขึ้นไป)";
+      } else {
+        resultCardBg.className = "score-banner failed";
+        passStatusBadge.textContent = "📚 ยังไม่ผ่านเกณฑ์ (เกณฑ์ผ่าน 80% หรือ 24 ข้อขึ้นไป)";
+      }
+
+      if (percentage >= 90) {
+        feedbackGrade.textContent = "ระดับผลการเรียนรู้: ดีเยี่ยม มีความเข้าใจเชิงลึก 🌟";
+      } else if (percentage >= 80) {
+        feedbackGrade.textContent = "ระดับผลการเรียนรู้: ดี ผ่านตามเกณฑ์มาตรฐาน 👍";
+      } else if (percentage >= 60) {
+        feedbackGrade.textContent = "ระดับผลการเรียนรู้: พอใช้ ควรกลับไปทบทวนบทเรียนเพิ่มเติม 😊";
+      } else {
+        feedbackGrade.textContent = "ระดับผลการเรียนรู้: ต้องปรับปรุง ควรเปิดอ่านสรุปบทเรียนและสอบใหม่ 📖";
+      }
+
+      quizScreen.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // เริ่มทำข้อสอบใหม่อีกครั้ง
+    restartBtn.addEventListener("click", () => {
+      resultScreen.classList.add("hidden");
+      startScreen.classList.remove("hidden");
+      studentNameInput.value = studentName;
+      startQuizBtn.disabled = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ควบคุม Side Drawer
+    function toggleDrawer(open) {
+      if (open) {
+        lessonDrawer.classList.add("open");
+        backdrop.classList.add("active");
+      } else {
+        lessonDrawer.classList.remove("open");
+        backdrop.classList.remove("active");
+      }
+    }
+
+    toggleDrawerBtn.addEventListener("click", () => toggleDrawer(true));
+    closeDrawerBtn.addEventListener("click", () => toggleDrawer(false));
+    backdrop.addEventListener("click", () => toggleDrawer(false));
+  </script>
+</body>
+</html>
