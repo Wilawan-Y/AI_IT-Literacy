@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>การออกแบบ ม.2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --secondary: #ec4899;
+      --accent: #8b5cf6;
+      --bg-gradient: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 50%, #fdf2f8 100%);
+      --surface: #ffffff;
+      --text-main: #1f2937;
+      --text-sub: #4b5563;
+      --border-color: #c7d2fe;
+      --success: #10b981;
+      --error: #ef4444;
+      --warning: #f59e0b;
+      --radius: 1.25rem;
+      --shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.12), 0 8px 10px -6px rgba(79, 70, 229, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Sarabun', sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .app-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 3px solid var(--border-color);
+      width: 100%;
+      max-width: 820px;
+      padding: 2.25rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .title-gradient {
+      background: linear-gradient(to right, #4f46e5, #9333ea, #db2777);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.75rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, #4f46e5, #7c3aed, #db2777);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.4);
+    }
+
+    .btn-check {
+      background: linear-gradient(to right, #3b82f6, #2563eb);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-check:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-submit {
+      background: linear-gradient(to right, #059669, #10b981);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .icon-hero {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #4f46e5, #a855f7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 8px 16px rgba(79, 70, 229, 0.25);
+    }
+
+    .rules-card {
+      background: #eff6ff;
+      border: 2px dashed #93c5fd;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .rules-card ul {
+      list-style: none;
+      margin-top: 0.5rem;
+    }
+
+    .rules-card li {
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+      color: #1e40af;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #374151;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      border-radius: 0.85rem;
+      border: 2px solid var(--border-color);
+      font-size: 1.05rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-group input:focus {
+      border-color: var(--primary);
+    }
+
+    .quiz-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .user-tag {
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+      background: var(--primary);
+    }
+
+    .progress-wrap {
+      width: 100%;
+      background: #e2e8f0;
+      height: 10px;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 1rem 0 1.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, #4f46e5, #db2777);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .question-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1.5;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 1rem 1.25rem;
+      border-radius: 1rem;
+      border: 2px solid #e2e8f0;
+      background: #f8fafc;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      transition: all 0.2s ease;
+      color: #1f2937;
+    }
+
+    .option-btn:hover:not(.locked) {
+      background: #eef2ff;
+      border-color: #a5b4fc;
+      transform: translateX(4px);
+    }
+
+    .option-btn.selected {
+      border-color: var(--primary);
+      background: #e0e7ff;
+      color: #312e81;
+      font-weight: 600;
+    }
+
+    .option-btn.locked {
+      cursor: default;
+    }
+
+    .option-btn.correct-highlight {
+      border-color: var(--success);
+      background: #ecfdf5;
+      color: #065f46;
+      font-weight: 600;
+    }
+
+    .option-btn.incorrect-highlight {
+      border-color: var(--error);
+      background: #fef2f2;
+      color: #991b1b;
+      font-weight: 600;
+    }
+
+    .option-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      font-weight: 700;
+      color: #475569;
+      flex-shrink: 0;
+    }
+
+    .option-btn.selected .option-badge {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .hint-container {
+      margin-top: 1rem;
+      padding: 1rem 1.25rem;
+      background: #fffbeb;
+      border-left: 5px solid var(--warning);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .hint-container span.hint-icon {
+      font-size: 1.4rem;
+    }
+
+    .hint-text {
+      font-size: 0.95rem;
+      color: #92400e;
+      line-height: 1.5;
+    }
+
+    .success-alert {
+      margin-top: 1rem;
+      padding: 1rem 1.25rem;
+      background: #ecfdf5;
+      border-left: 5px solid var(--success);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      animation: fadeIn 0.3s ease;
+      color: #065f46;
+      font-weight: 600;
+    }
+
+    .action-panel {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+
+    .result-score-card {
+      border-radius: 1.5rem;
+      padding: 2.25rem;
+      color: #fff;
+      text-align: center;
+      margin: 1.5rem 0;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    }
+
+    .passed {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .failed {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    }
+
+    .score-big {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Side Drawer สำหรับอ่านบทเรียน */
+    .lesson-toggle-btn {
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 100;
+      background: #1e1b4b;
+      color: #fff;
+      padding: 0.85rem 1.25rem;
+      border-radius: 9999px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+      border: 2px solid #818cf8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .lesson-toggle-btn:hover {
+      transform: scale(1.05);
+      background: #312e81;
+    }
+
+    .sidebar-drawer {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background: #ffffff;
+      box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+      z-index: 150;
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-drawer.open {
+      right: 0;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem;
+      background: #4f46e5;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-body {
+      padding: 1.25rem;
+      overflow-y: auto;
+      flex: 1;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .sidebar-body h4 {
+      margin: 1.25rem 0 0.5rem;
+      color: #4f46e5;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .sidebar-body h4:first-child {
+      margin-top: 0;
+    }
+
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 120;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      .app-card {
+        padding: 1.5rem;
+      }
+      .question-title {
+        font-size: 1.15rem;
+      }
+      .score-big {
+        font-size: 2.75rem;
+      }
+      .sidebar-drawer {
+        max-width: 85%;
+      }
+      .action-panel {
+        flex-direction: column-reverse;
+      }
+      .action-panel button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ปุ่มเปิด Side Drawer สำหรับอ่านบทเรียน -->
+  <button class="lesson-toggle-btn" id="toggleLessonBtn" aria-label="เปิดบทเรียน">
+    📖 <span>ดูเนื้อหาบทเรียน</span>
+  </button>
+
+  <!-- Side Drawer เนื้อหาบทเรียน -->
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="sidebar-drawer" id="lessonDrawer">
+    <div class="sidebar-header">
+      <h3 style="font-size: 1.15rem; font-weight:700;">📚 สรุปเนื้อหาบทเรียน ม.2</h3>
+      <button id="closeDrawerBtn" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">&times;</button>
+    </div>
+    <div class="sidebar-body">
+      <h4>📦 1. การออกแบบด้วย Icograms</h4>
+      <p>Icograms เป็นเว็บแอปพลิเคชันสำหรับสร้างภาพกราฟิกแบบ <strong>Isometric 3D</strong> เหมาะกับการทำผังงาน (Diagram), แปลนห้อง, แผนที่จำลอง และแผนผังอาคาร จุดเด่นคือมีวัตถุ (Objects) 3 มิติมุมเอียงสำเร็จรูปให้ลากวางได้ทันที สามารถส่งออกไฟล์ภาพได้ เช่น PNG, JPG หรือ SVG</p>
+
+      <h4>🎨 2. สื่อดิจิทัลและ Canva</h4>
+      <p>Canva เน้นการสร้างสรรค์สื่อกราฟิก งานนำเสนอ และ Infographic จุดเด่นคือมี <strong>Template</strong> สำเร็จรูป การเลือกใช้คู่สีที่ตัดกันอย่างเหมาะสม (Contrast) การใช้ฟอนต์ที่อ่านง่าย สบายตา และมีสัดส่วนที่ชัดเจน</p>
+
+      <h4>🔍 3. การสืบค้นข้อมูลอย่างมีวิจารณญาณ</h4>
+      <p>ควรประเมินความน่าเชื่อถือโดยดูชื่อผู้เขียน วันที่เผยแพร่ และตรวจสอบข้อมูลเทียบเคียงจากหลายแหล่ง ระวัง <strong>Fake News</strong> และไม่กระทำการละเมิดลิขสิทธิ์หรือคัดลอกผลงานโดยไม่อ้างอิง (Plagiarism)</p>
+
+      <h4>🛡️ 4. ความปลอดภัยและจริยธรรมดิจิทัล</h4>
+      <p>เข้าใจสัญญาอนุญาต <strong>Creative Commons</strong>, ตระหนักถึงร่องรอยดิจิทัล (Digital Footprint), ไม่ส่งเสริมการกลั่นแกล้งบนโลกออนไลน์ (Cyberbullying) และรักษาความปลอดภัยของบัญชีด้วยการตั้งรหัสผ่านที่รัดกุม</p>
+    </div>
+  </aside>
+
+  <!-- กรอบการทำงานหลักของระบบ -->
+  <main class="app-card">
+    
+    <!-- 1. หน้าแรก: รับชื่อนักเรียน -->
+    <section id="startScreen">
+      <div class="icon-hero">💻</div>
+      <h1 class="title-gradient" style="font-size: 2rem; margin-bottom: 0.5rem;">แบบทดสอบ</h1>
+      <p style="text-align: center; color: var(--text-sub); margin-bottom: 1.5rem; font-weight: 600;">
+        ระดับชั้นมัธยมศึกษาปีที่ 2 
+      </p>
+
+      <div class="rules-card">
+        <strong style="color: #1e3a8a;">📋 กติกาและการทำข้อสอบ</strong>
+        <ul>
+          <li>✨ ข้อสอบทั้งหมด <strong>35 ข้อ</strong></li>
+          <li>🎯 เกณฑ์การผ่าน: <strong>80% ขึ้นไป (28 ข้อ)</strong></li>
+          <li>💡 หากตอบผิด ระบบจะมี Hint แนะแนวทางให้คิดใหม่อีกครั้ง</li>
+          <li>📖 สามารถคลิกปุ่ม <strong>"ดูเนื้อหาบทเรียน"</strong> ที่มุมขวาล่างเพื่อทบทวนได้ตลอดเวลา</li>
+        </ul>
+      </div>
+
+      <div class="input-group">
+        <label for="studentNameInput">👤 ชื่อ-นามสกุล ของนักเรียน <span style="color:var(--error)">*</span></label>
+        <input type="text" id="studentNameInput" placeholder="กรอกชื่อ-นามสกุล ที่นี่..." autocomplete="off">
+      </div>
+
+      <button class="btn btn-primary" id="startQuizBtn" style="width: 100%;" disabled>
+        เริ่มทำแบบทดสอบ 🚀
+      </button>
+    </section>
+
+    <!-- 2. หน้าทำข้อสอบ -->
+    <section id="quizScreen" class="hidden">
+      <div class="quiz-meta-bar">
+        <div class="user-tag" id="displayStudentName">👤 ผู้สอบ: -</div>
+        <div class="category-badge" id="categoryBadge">หมวดหมู่</div>
+        <span style="font-weight: 700; color: #4b5563;" id="questionCounter">ข้อ 1/20</span>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+
+      <div class="question-box">
+        <div style="display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 0.5rem;">
+          <span id="questionIcon" style="font-size: 1.8rem; line-height: 1;">📦</span>
+          <h2 class="question-title" id="questionText">กำลังโหลดคำถาม...</h2>
+        </div>
+
+        <div class="options-grid" id="optionsContainer">
+          <!-- ตัวเลือก A, B, C, D จะถูกสร้างขึ้นที่นี่ -->
+        </div>
+
+        <!-- กล่องแจ้งเตือนเมื่อถูกต้อง -->
+        <div id="correctAlert" class="success-alert hidden">
+          <span>🎉</span>
+          <span>ยอดเยี่ยมมาก! คำตอบของคุณถูกต้อง</span>
+        </div>
+
+        <!-- กล่อง Hint เมื่อตอบผิด -->
+        <div id="hintBox" class="hint-container hidden">
+          <span class="hint-icon">💡</span>
+          <div>
+            <strong style="color:#b45309; display:block; margin-bottom: 0.15rem;">คำแนะนำ (Hint):</strong>
+            <p class="hint-text" id="hintText">-</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- แผงปุ่มตรวจคำตอบและนำทาง -->
+      <div class="action-panel">
+        <button class="btn btn-check" id="checkAnswerBtn" disabled>
+          🔍 ตรวจคำตอบ
+        </button>
+        <button class="btn btn-primary hidden" id="nextBtn">
+          ข้อถัดไป ➡️
+        </button>
+        <button class="btn btn-submit hidden" id="submitBtn">
+          ส่งแบบทดสอบและดูผลลัพธ์ ✅
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. หน้าสรุปผลคะแนน -->
+    <section id="resultScreen" class="hidden">
+      <h2 class="title-gradient" style="font-size: 2.2rem; margin-bottom: 0.5rem;">สรุปผลการประเมิน</h2>
+      <p style="text-align: center; color: var(--text-sub); font-size: 1.1rem;">
+        แบบทดสอบวิชาเทคโนโลยี (วิทยาการคำนวณ) ม.2
+      </p>
+
+      <div style="background:#e0e7ff; border-radius:1rem; padding: 1rem; text-align: center; margin: 1.25rem 0;">
+        <span style="color:#3730a3; font-weight: 600;">ชื่อผู้เรียน: </span>
+        <strong id="resultStudentName" style="color:#1e1b4b; font-size: 1.25rem;">-</strong>
+      </div>
+
+      <div class="result-score-card" id="resultCardBg">
+        <div class="score-big" id="scoreValue">0/35</div>
+        <p style="font-size: 1.5rem; font-weight:700; margin-bottom: 0.25rem;" id="percentValue">0%</p>
+        <p style="font-size: 1.1rem; opacity: 0.95;" id="feedbackGrade">-</p>
+        <div style="margin-top: 1rem; display:inline-block; padding: 0.4rem 1.2rem; background: rgba(255,255,255,0.25); border-radius:9999px; font-weight: 700;" id="passStatusBadge">
+          -
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="restartBtn" style="width: 100%;">
+        🔄 เริ่มต้นทำแบบทดสอบใหม่ (สุ่มชุดข้อสอบใหม่)
+      </button>
+    </section>
+
+  </main>
+
+  <script>
+    // คลังข้อสอบทั้งหมด 50 ข้อ พร้อมตัวเลือกที่เกลี่ยให้สมดุลและมีความยาวใกล้เคียงกัน
+    const QUESTION_BANK = [
+      {
+        id: 1,
+        question: "โปรแกรม Icograms นิยมนำมาประยุกต์ใช้สร้างสรรค์ผลงานประเภทใดมากที่สุด",
+        options: ["เอกสารรายงานทางวิชาการ", "ภาพกราฟิกสามมิติแบบไอโซเมตริก", "แผ่นงานคำนวณตัวเลขและสถิติ", "ระบบจัดการฐานข้อมูลเชิงสัมพันธ์"],
+        correctAnswerText: "ภาพกราฟิกสามมิติแบบไอโซเมตริก",
+        category: "Icograms",
+        icon: "📦",
+        hint: "ให้พิจารณารูปแบบภาพที่มีมิติความกว้าง ความยาว และความสูงในแนวเฉียงพร้อมกัน"
+      },
+      {
+        id: 2,
+        question: "ข้อใดคือจุดเด่นสำคัญของโปรแกรม Icograms ที่ช่วยอำนวยความสะดวกให้ผู้ใช้งาน",
+        options: ["รองรับการเขียนสคริปต์ควบคุมที่ซับซ้อน", "สร้างโมเดลจำลองสามมิติสำเร็จรูปได้ง่าย", "แปลงตารางข้อมูลให้เป็นฐานข้อมูลขนาดใหญ่", "ตกแต่งแก้ไขไฟล์ภาพเวกเตอร์ขั้นสูง"],
+        correctAnswerText: "สร้างโมเดลจำลองสามมิติสำเร็จรูปได้ง่าย",
+        category: "Icograms",
+        icon: "🎯",
+        hint: "เน้นการลากวางโมเดลที่มีมุมมอง 3 มิติเตรียมไว้ให้แล้วโดยไม่ต้องขึ้นรูปเองตั้งแต่ศูนย์"
+      },
+      {
+        id: 3,
+        question: "งานออกแบบในข้อใดมีความเหมาะสมอย่างยิ่งกับการสร้างสรรค์ด้วย Icograms",
+        options: ["ผังห้อง แผนที่จำลอง และแปลนอาคาร", "บทคัดย่อโครงงานวิจัยวิทยาศาสตร์", "สมการพิสูจน์ค่าสถิติความน่าจะเป็น", "ซอร์สโค้ดควบคุมระบบไมโครคอนโทรลเลอร์"],
+        correctAnswerText: "ผังห้อง แผนที่จำลอง และแปลนอาคาร",
+        category: "Icograms",
+        icon: "🏗️",
+        hint: "นึกถึงแผนที่มุมมองด้านบนกึ่งเฉียงที่แสดงบล็อกอาคารและต้นไม้ชัดเจน"
+      },
+      {
+        id: 4,
+        question: "มุมมองภาพแบบ Isometric ในงานออกแบบกราฟิกมีความหมายตรงกับข้อใด",
+        options: ["การแสดงภาพวัตถุแบบระนาบสองมิติด้านหน้า", "การมองวัตถุสามมิติโดยมีมุมเอียงเท่ากัน", "การมองภาพมุมกว้างจากจุดศูนย์กลางเดียว", "การมองวัตถุในแนวระนาบดิ่งจากด้านบนตรง"],
+        correctAnswerText: "การมองวัตถุสามมิติโดยมีมุมเอียงเท่ากัน",
+        category: "Icograms",
+        icon: "👁️",
+        hint: "เป็นการมองภาพ 3 มิติที่ไม่มีจุดรวมสายตา (Perspective) ทำให้สัดส่วนวัตถุคงที่สม่ำเสมอ"
+      },
+      {
+        id: 5,
+        question: "องค์ประกอบหลักที่สำคัญในการจัดองค์ประกอบฉากสามมิติบน Icograms คือข้อใด",
+        options: ["การเขียนโค้ดและคำนวณหน่วยความจำ", "การจัดวางวัตถุ มุมมอง และการไล่ระดับแสง", "การวิเคราะห์โครงสร้างไวยากรณ์ภาษา", "การกำหนดชนิดข้อมูลและขนาดของฟิลด์"],
+        correctAnswerText: "การจัดวางวัตถุ มุมมอง และการไล่ระดับแสง",
+        category: "Icograms",
+        icon: "🧩",
+        hint: "เกี่ยวข้องกับการนำโมเดลวัตถุสำเร็จรูปมาประกอบลงบนตาราง Grid ให้สวยงาม"
+      },
+      {
+        id: 6,
+        question: "ขั้นตอนแรกที่ควรปฏิบัติก่อนลงมือจัดวางโมเดลบนโปรแกรม Icograms คือข้อใด",
+        options: ["เลือกโทนสีพื้นหลังให้สดใสที่สุด", "ร่างโครงร่างและวางแผนแนวคิดของผังงาน", "ดาวน์โหลดวัตถุทั้งหมดลงเครื่องคอมพิวเตอร์", "ส่งออกไฟล์จำลองทันทีก่อนเริ่มงาน"],
+        correctAnswerText: "ร่างโครงร่างและวางแผนแนวคิดของผังงาน",
+        category: "Icograms",
+        icon: "📝",
+        hint: "งานออกแบบที่ดีทุกประเภทต้องเริ่มต้นจากการจัดสรรพื้นที่และวางโครงร่างความคิดก่อนเสมอ"
+      },
+      {
+        id: 7,
+        question: "ไฟล์ภาพมาตรฐานที่โปรแกรม Icograms รองรับสำหรับการส่งออกชิ้นงานคือนามสกุลใด",
+        options: ["DOCX, XLSX, PPTX", "PNG, JPG, SVG", "MP3, WAV, MIDI", "EXE, APK, DMG"],
+        correctAnswerText: "PNG, JPG, SVG",
+        category: "Icograms",
+        icon: "💾",
+        hint: "ต้องเป็นกลุ่มนามสกุลไฟล์ภาพนิ่งหรือภาพกราฟิกเวกเตอร์"
+      },
+      {
+        id: 8,
+        question: "การนำ Icograms ไปใช้ประโยชน์ในสถานการณ์จริงสอดคล้องกับข้อใดมากที่สุด",
+        options: ["การออกแบบแผนที่นำเที่ยวหรือผังงานกิจกรรม", "การสร้างฐานข้อมูลทะเบียนประวัตินักเรียน", "การคำนวณผลการเรียนเฉลี่ยประจำภาคเรียน", "การเขียนโปรแกรมจัดการสต็อกสินค้าหน้าร้าน"],
+        correctAnswerText: "การออกแบบแผนที่นำเที่ยวหรือผังงานกิจกรรม",
+        category: "Icograms",
+        icon: "🏢",
+        hint: "เหมาะกับการสื่อสารข้อมูลเชิงพื้นที่ (Spatial Layout) ให้เข้าใจง่ายและดูมีมิติ"
+      },
+      {
+        id: 9,
+        question: "ในการจัดผังภาพ 3 มิติ ข้อใดเป็นหลักการจัดวางที่ทำให้ผลงานดูสบายตาและเข้าใจง่าย",
+        options: ["วางวัตถุเรียงอัดแน่นเต็มทุกตารางนิ้ว", "คำนึงถึงสัดส่วน ทิศทาง และวัตถุประสงค์งาน", "เลือกใช้สีคู่ตรงข้ามในทุกชิ้นส่วนของโมเดล", "ใช้ขนาดวัตถุที่ไม่เท่ากันอย่างไม่มีทิศทาง"],
+        correctAnswerText: "คำนึงถึงสัดส่วน ทิศทาง และวัตถุประสงค์งาน",
+        category: "Icograms",
+        icon: "⚖️",
+        hint: "ความสมดุลและความชัดเจนของสัดส่วนสำคัญกว่าการใส่วัตถุจนล้นฉาก"
+      },
+      {
+        id: 10,
+        question: "หลังจากจัดวางองค์ประกอบบน Icograms เรียบร้อยแล้ว ขั้นตอนถัดไปที่ควรทำคืออะไร",
+        options: ["ปิดหน้าต่างบราวเซอร์ทันทีโดยไม่บันทึก", "ตรวจสอบรายละเอียดและจัดเก็บไฟล์งานให้เรียบร้อย", "แปลงไฟล์ผลงานให้เป็นเอกสารข้อความล้วน", "ลบชิ้นงานต้นฉบับออกจากระบบเพื่อคืนพื้นที่"],
+        correctAnswerText: "ตรวจสอบรายละเอียดและจัดเก็บไฟล์งานให้เรียบร้อย",
+        category: "Icograms",
+        icon: "✅",
+        hint: "การตรวจทานผลงานและบันทึกข้อมูลช่วยป้องกันความเสียหายของงาน"
+      },
+      {
+        id: 11,
+        question: "โปรแกรม Canva ถูกจัดอยู่ในกลุ่มโปรแกรมหรือเครื่องมือประเภทใดในการทำงาน",
+        options: ["ระบบจัดการฐานข้อมูลขนาดใหญ่ระดับองค์กร", "แพลตฟอร์มออกแบบสื่อกราฟิกและสิ่งพิมพ์ดิจิทัล", "โปรแกรมคอมไพเลอร์สำหรับแปลภาษาโปรแกรม", "เครื่องมือคำนวณและสร้างกราฟทางสถิติ"],
+        correctAnswerText: "แพลตฟอร์มออกแบบสื่อกราฟิกและสิ่งพิมพ์ดิจิทัล",
+        category: "Canva",
+        icon: "🎨",
+        hint: "ใช้งานผ่านเว็บเบราว์เซอร์เพื่อสร้างโปสเตอร์ พรีเซนเทชัน และโพสต์โซเชียลมีเดีย"
+      },
+      {
+        id: 12,
+        question: "นิยามของคำว่า 'Infographic' มีความหมายตรงกับลักษณะของสื่อในข้อใด",
+        options: ["เอกสารข้อความบรรยายรายละเอียดเชิงลึก", "การสื่อสารข้อมูลผ่านภาพกราฟิกให้เข้าใจง่าย", "คลิปวิดีโอบันทึกเหตุการณ์สดความยาวสูง", "ชุดภาพถ่ายธรรมชาติที่ไม่ผ่านการตกแต่ง"],
+        correctAnswerText: "การสื่อสารข้อมูลผ่านภาพกราฟิกให้เข้าใจง่าย",
+        category: "Canva",
+        icon: "📊",
+        hint: "เป็นการผสานคำว่า Information + Graphic เข้าด้วยกัน"
+      },
+      {
+        id: 13,
+        question: "ข้อใดเป็นคุณลักษณะที่โดดเด่นของ Infographic ที่มีประสิทธิภาพในการสื่อสาร",
+        options: ["มีข้อความอธิบายอย่างละเอียดโดยไม่มีภาพประกอบ", "เนื้อหากระชับ ชัดเจน มีภาพและแผนภูมิประกอบ", "ใช้โทนสีมากกว่ายี่สิบสีในหนึ่งหน้ากระดาษ", "เน้นการใช้ตัวอักษรลายมือที่ประดิษฐ์ซับซ้อน"],
+        correctAnswerText: "เนื้อหากระชับ ชัดเจน มีภาพและแผนภูมิประกอบ",
+        category: "Canva",
+        icon: "🌟",
+        hint: "เน้นการย่อยข้อมูลที่ยากให้เข้าใจง่ายด้วยภาพ แผนภูมิ และข้อความสั้นกระชับ"
+      },
+      {
+        id: 14,
+        question: "ในการสร้างสื่อ Infographic ด้วย Canva สิ่งแรกที่ผู้ออกแบบควรเตรียมการคืออะไร",
+        options: ["คัดเลือกแม่แบบที่ตนเองชื่นชอบทันที", "กำหนดประเด็นและสรุปข้อมูลที่จะนำเสนอ", "เลือกซื้อแพ็กเกจเสริมของระบบโปรแกรม", "ตกแต่งภาพพื้นหลังด้วยเอฟเฟกต์เคลื่อนไหว"],
+        correctAnswerText: "กำหนดประเด็นและสรุปข้อมูลที่จะนำเสนอ",
+        category: "Canva",
+        icon: "🎯",
+        hint: "หากไม่มีข้อมูลและประเด็นที่แน่ชัด การจัดวางกราฟิกจะไม่ตรงเป้าหมาย"
+      },
+      {
+        id: 15,
+        question: "เหตุผลสำคัญที่ทำให้ผู้ใช้ส่วนใหญ่นิยมใช้ Canva ในการออกแบบสื่อนำเสนอคือข้อใด",
+        options: ["มีฟังก์ชันเขียนภาษาคอมพิวเตอร์ระดับสูง", "มีเทมเพลตและองค์ประกอบสำเร็จรูปให้เลือกใช้", "สามารถทำงานได้โดยไม่ต้องเชื่อมต่ออินเทอร์เน็ต", "รองรับการคำนวณสูตรคณิตศาสตร์แบบเรียลไทม์"],
+        correctAnswerText: "มีเทมเพลตและองค์ประกอบสำเร็จรูปให้เลือกใช้",
+        category: "Canva",
+        icon: "📐",
+        hint: "ช่วยประหยัดเวลาด้วยแม่แบบ (Template) สวยงามที่ปรับแต่งได้ทันที"
+      },
+      {
+        id: 16,
+        question: "เครื่องมือสร้างวิดีโอบน Canva รองรับการเพิ่มองค์ประกอบในข้อใดเข้าสู่ชิ้นงานได้",
+        options: ["ตัวอักษร ภาพนิ่ง เสียงดนตรี และแอนิเมชัน", "เฉพาะไฟล์เสียงบรรยายความยาวไม่เกิน 1 นาที", "เฉพาะข้อความตัวพิมพ์แบบไม่มีการเคลื่อนไหว", "เอกสารสเปรดชีตสำหรับการบันทึกบัญชี"],
+        correctAnswerText: "ตัวอักษร ภาพนิ่ง เสียงดนตรี และแอนิเมชัน",
+        category: "Canva",
+        icon: "🎬",
+        hint: "เครื่องมือตัดต่อสมัยใหม่รองรับมัลติมีเดียที่หลากหลาย ทั้งภาพ เสียง ข้อความ และลูกเล่น"
+      },
+      {
+        id: 17,
+        question: "การจัดทำวิดีโอนำเสนอผลงานให้ดึงดูดความสนใจ ควรมีลักษณะสำคัญตรงกับข้อใด",
+        options: ["มีความยาวต่อเนื่องหลายชั่วโมงโดยไม่ตัดต่อ", "กระชับ ตรงจุดประสงค์ และสื่อความหมายชัดเจน", "ใส่เอฟเฟกต์เปลี่ยนฉากทุกๆ สองวินาทีตลอดคลิป", "ใช้เสียงดนตรีประกอบที่ดังกว่าเสียงผู้บรรยาย"],
+        correctAnswerText: "กระชับ ตรงจุดประสงค์ และสื่อความหมายชัดเจน",
+        category: "Canva",
+        icon: "⏱️",
+        hint: "ผู้รับสารในยุคดิจิทัลมีสมาธิจำกัด เนื้อหาจึงต้องตรงประเด็นและไม่ยืดเยื้อ"
+      },
+      {
+        id: 18,
+        question: "หลักการเลือกชุดสี (Color Palette) ในการออกแบบสื่อนำเสนอข้อใดมีความเหมาะสมที่สุด",
+        options: ["เลือกใช้สีที่แตกต่างกันในทุกๆ บรรทัดข้อความ", "ใช้สีที่คุมโทน อ่านง่าย และมีความตัดกันชัดเจน", "ใช้เฉดสีนีออนสว่างเป็นพื้นหลังของทุกสไลด์", "ใช้เฉพาะสีเทาและสีขาวเท่านั้นเพื่อความเรียบง่าย"],
+        correctAnswerText: "ใช้สีที่คุมโทน อ่านง่าย และมีความตัดกันชัดเจน",
+        category: "Canva",
+        icon: "🎨",
+        hint: "ตัวหนังสือต้องตัดกับสีพื้นหลังอย่างชัดเจน (Contrast) เพื่อให้อ่านข้อความได้สะดวก"
+      },
+      {
+        id: 19,
+        question: "การคัดเลือกรูปแบบตัวอักษร (Typography) สำหรับสไลด์นำเสนอที่ดีควรเป็นอย่างไร",
+        options: ["ใช้ฟอนต์ลวดลายไทยประดิษฐ์ในทุกย่อหน้า", "อ่านง่าย ชัดเจน และมีขนาดเหมาะสมกับระยะสายตา", "ผสมผสานฟอนต์มากกว่าสิบแบบในหน้าเดียวกัน", "ใช้ตัวอักษรขนาดเล็กเพื่อบรรจุข้อความให้ได้มากสุด"],
+        correctAnswerText: "อ่านง่าย ชัดเจน และมีขนาดเหมาะสมกับระยะสายตา",
+        category: "Canva",
+        icon: "✍️",
+        hint: "หัวใจหลักของตัวอักษรในงานนำเสนอคือความสะดวกในการอ่าน (Readability)"
+      },
+      {
+        id: 20,
+        question: "ก่อนทำการดาวน์โหลดหรือส่งออกไฟล์นำเสนอจาก Canva ข้อใดเป็นสิ่งที่ควรปฏิบัติ",
+        options: ["เปลี่ยนชื่อผู้จัดทำเป็นบุคคลอื่นเสมอ", "ตรวจทานความถูกต้องของเนื้อหาและการสะกดคำ", "ลบองค์ประกอบภาพทั้งหมดเพื่อลดขนาดไฟล์", "บันทึกข้อมูลเฉพาะส่วนหัวข้อโดยตัดเนื้อหาทิ้ง"],
+        correctAnswerText: "ตรวจทานความถูกต้องของเนื้อหาและการสะกดคำ",
+        category: "Canva",
+        icon: "🔍",
+        hint: "ความถูกต้องของภาษาและความถูกต้องของข้อมูลคือหัวใจของความน่าเชื่อถือ"
+      },
+      {
+        id: 21,
+        question: "เมื่อส่งออกชิ้นงานวิดีโอจาก Canva เพื่อนำไปเปิดชมบนสมาร์ตโฟน นิยมใช้ไฟล์นามสกุลใด",
+        options: [".DOCX", ".MP4", ".XLSX", ".TXT"],
+        correctAnswerText: ".MP4",
+        category: "Canva",
+        icon: "📹",
+        hint: "เป็นรูปแบบมาตรฐานสากลของไฟล์ภาพเคลื่อนไหวพร้อมเสียง"
+      },
+      {
+        id: 22,
+        question: "การนำภาพถ่ายมาใช้ประกอบในงานออกแบบ Canva อย่างถูกต้องตามจริยธรรมคือข้อใด",
+        options: ["คัดลอกจากเสิร์ชเอนจินโดยไม่ต้องขออนุญาต", "เลือกใช้ภาพปลอดลิขสิทธิ์หรือภาพจากคลังของโปรแกรม", "นำภาพส่วนตัวของเพื่อนมาดัดแปลงเพื่อความตลก", "ดาวน์โหลดภาพที่มีลายน้ำติดอยู่มาใช้งานทันที"],
+        correctAnswerText: "เลือกใช้ภาพปลอดลิขสิทธิ์หรือภาพจากคลังของโปรแกรม",
+        category: "Canva",
+        icon: "🖼️",
+        hint: "ต้องเป็นภาพที่ได้รับอนุญาตให้ใช้ในเชิงสร้างสรรค์หรือภาพ Royalty-free"
+      },
+      {
+        id: 23,
+        question: "สิ่งที่เรียกว่า 'Template' ในโปรแกรม Canva มีความหมายตรงกับข้อใดมากที่สุด",
+        options: ["ชุดคำสั่งคอมพิวเตอร์สำหรับสร้างแอนิเมชัน", "แม่แบบโครงสร้างชิ้นงานสำเร็จรูปที่ปรับแต่งได้", "ระบบตรวจสอบไวรัสและมัลแวร์ในไฟล์งาน", "ไดรฟ์สำหรับสำรองข้อมูลส่วนบุคคลบนคลาวด์"],
+        correctAnswerText: "แม่แบบโครงสร้างชิ้นงานสำเร็จรูปที่ปรับแต่งได้",
+        category: "Canva",
+        icon: "📋",
+        hint: "เป็นโครงสร้างงานที่จัดวางตำแหน่งฟอนต์และรูปภาพไว้เบื้องต้นให้เรานำไปใส่เนื้อหาแทนที่ได้"
+      },
+      {
+        id: 24,
+        question: "หลักการออกแบบ CRAP ซึ่งเป็นมาตรฐานพื้นฐานของงานกราฟิก ประกอบด้วยอะไรบ้าง",
+        options: ["Color, Radius, Animation, Pixel", "Contrast, Repetition, Alignment, Proximity", "Code, Render, Access, Performance", "Copy, Resize, Adjust, Publish"],
+        correctAnswerText: "Contrast, Repetition, Alignment, Proximity",
+        category: "Canva",
+        icon: "📐",
+        hint: "หมายถึง ความแตกต่าง การทำซ้ำ การจัดแนวตรงกัน และการจัดกลุ่มความใกล้ชิดของข้อมูล"
+      },
+      {
+        id: 25,
+        question: "การกำหนดทิศทางของงานนำเสนอบน Canva ให้ประสบความสำเร็จควรคำนึงถึงสิ่งใดเป็นหลัก",
+        options: ["การใส่เพลงประกอบที่มีจังหวะเร็วที่สุด", "กลุ่มเป้าหมายผู้รับสารและวัตถุประสงค์ของงาน", "การใช้เอฟเฟกต์แสงเงาให้หนาแน่นที่สุด", "การใช้จำนวนหน้าสไลด์ให้เกินกว่าห้าสิบหน้า"],
+        correctAnswerText: "กลุ่มเป้าหมายผู้รับสารและวัตถุประสงค์ของงาน",
+        category: "Canva",
+        icon: "🎯",
+        hint: "การรู้ว่าสื่อสารให้ใครฟัง และต้องการให้เขาเข้าใจอะไร คือจุดเริ่มต้นที่สำคัญที่สุด"
+      },
+      {
+        id: 26,
+        question: "พฤติกรรมในข้อใดแสดงถึงการสืบค้นข้อมูลบนอินเทอร์เน็ตอย่างมีวิจารณญาณ",
+        options: ["ปักใจเชื่อเนื้อหาในเว็บไซต์แรกที่แสดงผลทันที", "เปรียบเทียบข้อมูลจากแหล่งอ้างอิงที่หลากหลาย", "เลือกเชื่อเฉพาะข้อความที่ส่งต่อกันในกลุ่มสนทนา", "คัดลอกข้อมูลโดยไม่อ่านเนื้อหาเพื่อความรวดเร็ว"],
+        correctAnswerText: "เปรียบเทียบข้อมูลจากแหล่งอ้างอิงที่หลากหลาย",
+        category: "การค้นหาข้อมูล",
+        icon: "🔍",
+        hint: "ไม่ควรเชื่อข้อมูลจากแหล่งเดียว ควรค้นหาและเทียบเคียงข้อมูลจากหลายสถาบัน"
+      },
+      {
+        id: 27,
+        question: "ลักษณะเด่นของแหล่งข้อมูลทางวิชาการที่มีความน่าเชื่อถือสูงคือข้อใด",
+        options: ["ไม่มีการระบุชื่อผู้เขียนและวันที่เผยแพร่", "มีผู้เชี่ยวชาญรับรอง มีการอ้างอิง และมาจากหน่วยงานที่ชัดเจน", "มีป้ายโฆษณาสินค้าและเกมออนไลน์แทรกอยู่จำนวนมาก", "ใช้พาดหัวข่าวด้วยถ้อยคำที่กระตุ้นอารมณ์ตกใจ"],
+        correctAnswerText: "มีผู้เชี่ยวชาญรับรอง มีการอ้างอิง และมาจากหน่วยงานที่ชัดเจน",
+        category: "การค้นหาข้อมูล",
+        icon: "✅",
+        hint: "มองหาเว็บไซต์องค์กร (.org), สถาบันการศึกษา (.ac.th, .edu) หรือหน่วยงานรัฐ (.go.th)"
+      },
+      {
+        id: 28,
+        question: "ก่อนนำสารสนเทศจากโลกออนไลน์ไปใช้อ้างอิงในรายงาน ข้อใดเป็นสิ่งที่จำเป็นต้องทำ",
+        options: ["นำไปเผยแพร่ต่อทันทีก่อนที่จะล้าสมัย", "ตรวจสอบความถูกต้องและความทันสมัยของข้อมูล", "ดัดแปลงตัวเลขในสถิติเพื่อให้สอดคล้องกับความเห็นตน", "ลบวันที่เผยแพร่เดิมออกเพื่อไม่ให้ผู้อื่นสืบค้นได้"],
+        correctAnswerText: "ตรวจสอบความถูกต้องและความทันสมัยของข้อมูล",
+        category: "การค้นหาข้อมูล",
+        icon: "🔎",
+        hint: "ข้อมูลทางวิทยาศาสตร์และเทคโนโลยีเปลี่ยนแปลงตลอดเวลา ต้องเช็กวันที่และข้อเท็จจริง"
+      },
+      {
+        id: 29,
+        question: "การระบุแหล่งที่มา (Citation) ในรายงานเชิงวิชาการมีจุดประสงค์หลักเพื่ออะไร",
+        options: ["เพื่อเพิ่มจำนวนหน้าของรายงานให้ดูหนาขึ้น", "เพื่อแสดงความซื่อสัตย์ทางวิชาการและให้เกียรติเจ้าของผลงาน", "เพื่อป้องกันไม่ให้ผู้อื่นสามารถนำข้อมูลไปใช้ต่อได้", "เพื่อหลีกเลี่ยงการถูกตรวจจับไวรัสในเอกสาร"],
+        correctAnswerText: "เพื่อแสดงความซื่อสัตย์ทางวิชาการและให้เกียรติเจ้าของผลงาน",
+        category: "การค้นหาข้อมูล",
+        icon: "📚",
+        hint: "เป็นมารยาทและจริยธรรมที่สำคัญในการเคารพสิทธิทางปัญญาของผู้อื่น"
+      },
+      {
+        id: 30,
+        question: "เนื้อหาในข้อใดต่อไปนี้จัดว่ามีความเสี่ยงสูงที่จะเป็นข้อมูลที่ไม่น่าเชื่อถือ",
+        options: ["รายงานสรุปสถิติประจำปีของกระทรวงสาธารณสุข", "ข้อความส่งต่อลูกโซ่ที่ไม่ปรากฏแหล่งที่มาแน่ชัด", "บทความวิจัยที่ตีพิมพ์ในวารสารของมหาวิทยาลัย", "สารานุกรมออนไลน์ที่มีการตรวจทานโดยผู้ทรงคุณวุฒิ"],
+        correctAnswerText: "ข้อความส่งต่อลูกโซ่ที่ไม่ปรากฏแหล่งที่มาแน่ชัด",
+        category: "การค้นหาข้อมูล",
+        icon: "⚠️",
+        hint: "ข้อความประเภท 'แชร์ด่วน!' หรือไม่มีลิงก์อ้างอิงจากต้นทางมักเป็นข่าวลือ"
+      },
+      {
+        id: 31,
+        question: "คำว่า 'Fake News' มีความหมายตรงกับพฤติกรรมของข้อมูลในข้อใดมากที่สุด",
+        options: ["ข่าวประชาสัมพันธ์ของสถาบันการศึกษา", "ข่าวปลอมหรือข้อมูลที่ถูกบิดเบือนเพื่อหวังผลบางอย่าง", "ข่าวสารบันเทิงที่มีภาพประกอบสีสันสดใส", "บทสัมภาษณ์บุคคลสำคัญในเหตุการณ์ประวัติศาสตร์"],
+        correctAnswerText: "ข่าวปลอมหรือข้อมูลที่ถูกบิดเบือนเพื่อหวังผลบางอย่าง",
+        category: "การค้นหาข้อมูล",
+        icon: "❌",
+        hint: "หมายถึงข้อมูลเท็จที่ถูกสร้างขึ้นมาเพื่อหลอกลวง ยุยง หรือแสวงหาประโยชน์"
+      },
+      {
+        id: 32,
+        question: "เมื่อพบข่าวสารที่น่าสงสัยบนโซเชียลมีเดีย ขั้นตอนแรกในการตรวจสอบคือข้อใด",
+        options: ["กดแชร์ต่อให้เพื่อนเพื่อช่วยกันแสดงความคิดเห็น", "ค้นหาข้อมูลเพิ่มเติมจากสำนักข่าวที่น่าเชื่อถือเพื่อยืนยัน", "แสดงความโกรธผ่านกล่องแสดงความคิดเห็นทันที", "ส่งข้อความไปต่อว่าผู้ที่โพสต์ข่าวนั้นเป็นคนแรก"],
+        correctAnswerText: "ค้นหาข้อมูลเพิ่มเติมจากสำนักข่าวที่น่าเชื่อถือเพื่อยืนยัน",
+        category: "การค้นหาข้อมูล",
+        icon: "🔬",
+        hint: "หลักการคือ 'เชัวร์ก่อนแชร์' นำคีย์เวิร์ดของข่าวไปสืบค้นเปรียบเทียบใน Google ทันที"
+      },
+      {
+        id: 33,
+        question: "การคัดลอกข้อความของผู้อื่นมาใส่ในรายงานของตนเองโดยไม่อ้างอิง เรียกว่าอะไร",
+        options: ["การประยุกต์ใช้นวัตกรรมดิจิทัลอย่างคุ้มค่า", "การโจรกรรมทางวรรณกรรม (Plagiarism)", "การแลกเปลี่ยนเรียนรู้ในชุมชนวิชาการ", "การประมวลผลข้อมูลสารสนเทศแบบอัตโนมัติ"],
+        correctAnswerText: "การโจรกรรมทางวรรณกรรม (Plagiarism)",
+        category: "การค้นหาข้อมูล",
+        icon: "🚫",
+        hint: "เป็นการละเมิดจริยธรรมอย่างร้ายแรง หรือเรียกง่ายๆ ว่าการขโมยผลงานทางความคิด"
+      },
+      {
+        id: 34,
+        question: "สิทธิแต่เพียงผู้เดียวที่กฎหมายมอบให้แก่ผู้สร้างสรรค์ผลงานทางปัญญาเรียกว่าอะไร",
+        options: ["เครื่องหมายความปลอดภัย", "ลิขสิทธิ์ (Copyright)", "สัญญาซื้อขายล่วงหน้า", "ใบรับรองมาตรฐานอุตสาหกรรม"],
+        correctAnswerText: "ลิขสิทธิ์ (Copyright)",
+        category: "การใช้เทคโนโลยีอย่างรับผิดชอบ",
+        icon: "©️",
+        hint: "คุ้มครองงานเขียน งานศิลปะ ดนตรี และซอฟต์แวร์ทันทีที่มีการสร้างสรรค์ขึ้น"
+      },
+      {
+        id: 35,
+        question: "การดาวน์โหลดภาพถ่ายที่มีลิขสิทธิ์มาตัดต่อเป็นโลโก้การค้าของตนเอง ถือว่าเป็นการกระทำใด",
+        options: ["การกระทำที่ถูกต้องหากไม่มีใครทักท้วง", "การละเมิดสิทธิและผิดกฎหมายทรัพย์สินทางปัญญา", "การพัฒนาต่อยอดผลงานสร้างสรรค์เพื่อสาธารณะ", "การแลกเปลี่ยนทรัพย์สินทางวัฒนธรรมสากล"],
+        correctAnswerText: "การละเมิดสิทธิและผิดกฎหมายทรัพย์สินทางปัญญา",
+        category: "การใช้เทคโนโลยีอย่างรับผิดชอบ",
+        icon: "🚫",
+        hint: "การนำผลงานผู้อื่นไปใช้ในเชิงพาณิชย์โดยไม่ได้รับอนุญาตมีบทลงโทษตามกฎหมาย"
+      },
+      {
+        id: 36,
+        question: "สัญญาอนุญาตประเภท Creative Commons (CC) ถูกสร้างขึ้นมาเพื่อวัตถุประสงค์ใด",
+        options: ["เพื่อให้ผู้สร้างสรรค์ระบุเงื่อนไขการนำผลงานไปใช้งาน", "เพื่อบังคับให้ผลงานทุกชิ้นบนโลกกลายเป็นของฟรี", "เพื่อคิดค่าธรรมเนียมการดาวน์โหลดภาพจากผู้ใช้งาน", "เพื่อป้องกันการเข้าชมเว็บไซต์จากผู้ใช้ต่างประเทศ"],
+        correctAnswerText: "เพื่อให้ผู้สร้างสรรค์ระบุเงื่อนไขการนำผลงานไปใช้งาน",
+        category: "การใช้เทคโนโลยีอย่างรับผิดชอบ",
+        icon: "🔓",
+        hint: "ช่วยให้เจ้าของผลงานบอกผู้อื่นได้ชัดเจนว่าอนุญาตให้แชร์หรือดัดแปลงภายใต้เงื่อนไขใด เช่น ต้องระบุที่มา"
+      },
+      {
+        id: 37,
+        question: "การเป็นพลเมืองดิจิทัลที่มีความรับผิดชอบ (Digital Citizenship) ควรมีพฤติกรรมอย่างไร",
+        options: ["ใช้งานอินเทอร์เน็ตตลอดเวลาโดยไม่พักผ่อน", "เคารพสิทธิผู้อื่น ไม่ละเมิดข้อมูล และมีมารยาทออนไลน์", "ดาวน์โหลดโปรแกรมละเมิดลิขสิทธิ์มาแจกจ่ายเพื่อน", "โพสต์วิจารณ์ผู้อื่นด้วยข้อความหยาบคายแบบไม่ระบุตัวตน"],
+        correctAnswerText: "เคารพสิทธิผู้อื่น ไม่ละเมิดข้อมูล และมีมารยาทออนไลน์",
+        category: "การใช้เทคโนโลยีอย่างรับผิดชอบ",
+        icon: "🤝",
+        hint: "นำเทคโนโลยีมาใช้ในทางที่สร้างสรรค์ ปลอดภัย และไม่สร้างความเดือดร้อนให้สังคม"
+      },
+      {
+        id: 38,
+        question: "พฤติกรรมในข้อใดต่อไปนี้จัดว่าเป็นการกระทำที่ไม่เหมาะสมอย่างยิ่งในโลกออนไลน์",
+        options: ["การใช้อินเทอร์เน็ตเพื่อค้นคว้างานวิจัย", "การแชร์ข้อมูลส่วนบุคคลของผู้อื่นโดยไม่ได้รับอนุญาต", "การตั้งรหัสผ่านด้วยตัวอักษรผสมตัวเลขที่รัดกุม", "การส่งอีเมลสอบถามข้อสงสัยในบทเรียนกับคุณครู"],
+        correctAnswerText: "การแชร์ข้อมูลส่วนบุคคลของผู้อื่นโดยไม่ได้รับอนุญาต",
+        category: "การใช้เทคโนโลยีอย่างรับผิดชอบ",
+        icon: "⚠️",
+        hint: "การละเมิดความเป็นส่วนตัว (Privacy) ผิดทั้งหลักจริยธรรมและ พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA)"
+      },
+      {
+        id: 39,
+        question: "ร่องรอยหรือประวัติการใช้งานบนโลกอินเทอร์เน็ตที่ผู้ใช้สร้างทิ้งไว้ เรียกว่าอะไร",
+        options: ["Digital Footprint", "Cloud Database", "Cache Memory", "Network Protocol"],
+        correctAnswerText: "Digital Footprint",
+        category: "การใช้เทคโนโลยีอย่างรับผิดชอบ",
+        icon: "👣",
+        hint: "เปรียบเหมือนรอยเท้าที่เหยียบไว้บนทราย ข้อมูลการโพสต์ การกดไลก์ หรือการค้นหาจะคงอยู่ตลอดไป"
+      },
+      {
+        id: 40,
+        question: "การระราน กลั่นแกล้ง หรือคุกคามผู้อื่นผ่านสื่อสังคมออนไลน์ ตรงกับคำศัพท์ในข้อใด",
+        options: ["E-Commerce", "Cyberbullying", "Online Streaming", "Data Mining"],
+        correctAnswerText: "Cyberbullying",
+        category: "การใช้เทคโนโลยีอย่างรับผิดชอบ",
+        icon: "😢",
+        hint: "การพิมพ์ล้อเลียน ประจาน หรือข่มขู่เพื่อนบนเฟซบุ๊กหรือไลน์ ส่งผลกระทบต่อจิตใจผู้ถูกกระทำ"
+      },
+      {
+        id: 41,
+        question: "วิธีปฏิบัติที่ดีในการปกป้องความปลอดภัยของบัญชีผู้ใช้งานส่วนบุคคลคือข้อใด",
+        options: ["จดรหัสผ่านไว้บนโต๊ะคอมพิวเตอร์ในห้องเรียน", "ตั้งรหัสผ่านที่คาดเดายากและไม่เปิดเผยให้ผู้อื่นทราบ", "ใช้ชื่อและปีเกิดตนเองเป็นรหัสผ่านทุกบริการ", "บันทึกรหัสผ่านไว้ในเครื่องคอมพิวเตอร์สาธารณะเสมอ"],
+        correctAnswerText: "ตั้งรหัสผ่านที่คาดเดายากและไม่เปิดเผยให้ผู้อื่นทราบ",
+        category: "การใช้เทคโนโลยีอย่างรับผิดชอบ",
+        icon: "🛡️",
+        hint: "รหัสผ่านควรมีความยาวไม่ต่ำกว่า 8 ตัวอักษร ผสมตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และสัญลักษณ์"
+      },
+	  // ข้อสอบเพิ่มเติม: การสร้างงานนำเสนอบน Canva (Animation, วิดีโอ, เสียง, การจัดการ Layer, Font)
+    {
+      id: 42,
+      question: "การกำหนดลำดับการซ้อนทับของวัตถุ (Layer Management) ใน Canva มีประโยชน์อย่างไร",
+      options: [
+        "ช่วยเพิ่มความคมชัดและความละเอียดของภาพถ่าย",
+        "ช่วยจัดวางวัตถุให้อยู่ด้านหน้าหรือด้านหลังตามต้องการ",
+        "ช่วยลดขนาดไฟล์งานนำเสนอให้บันทึกได้เร็วขึ้น",
+        "ช่วยแปลงข้อความตัวอักษรให้กลายเป็นภาพกราฟิก"
+      ],
+      correctAnswerText: "ช่วยจัดวางวัตถุให้อยู่ด้านหน้าหรือด้านหลังตามต้องการ",
+      category: "Canva",
+      icon: "📑",
+      hint: "ให้นึกถึงการซ้อนแผ่นใส โดยวัตถุที่อยู่เลเยอร์บนสุดจะบดบังวัตถุที่อยู่เลเยอร์ล่าง"
+    },
+    {
+      id: 43,
+      question: "หากต้องการนำข้อความที่ถูกภาพพื้นหลังบังอยู่ขึ้นมาแสดงด้านบนสุด ต้องใช้คำสั่งใดใน Canva",
+      options: [
+        "คำสั่ง Bring to Front หรือ เลื่อนมาไว้หน้าสุด",
+        "คำสั่ง Send to Back หรือ เลื่อนไปไว้หลังสุด",
+        "คำสั่ง Lock Object หรือ ล็อกตำแหน่งของวัตถุ",
+        "คำสั่ง Group Elements หรือ จัดกลุ่มวัตถุทั้งหมด"
+      ],
+      correctAnswerText: "คำสั่ง Bring to Front หรือ เลื่อนมาไว้หน้าสุด",
+      category: "Canva",
+      icon: "⬆️",
+      hint: "ต้องเลือกคำสั่งที่ย้ายลำดับชั้นของวัตถุนั้นขึ้นมาอยู่เหนือชั้นอื่นทั้งหมดในสไลด์"
+    },
+    {
+      id: 44,
+      question: "การใส่แอนิเมชัน (Animation) ให้แก่องค์ประกอบในสไลด์อย่างเหมาะสมควรมีลักษณะใด",
+      options: [
+        "กำหนดความเร็วระดับสูงสุดและเลือกเอฟเฟกต์ที่สลับซับซ้อน",
+        "ใส่ลูกเล่นการเคลื่อนไหวที่ดึงดูดสายตาอย่างมีความพอดี",
+        "ใส่แอนิเมชันที่แตกต่างกันทุกบรรทัดข้อความในหนึ่งหน้า",
+        "หลีกเลี่ยงการกำหนดทิศทางการเคลื่อนที่ของวัตถุในชิ้นงาน"
+      ],
+      correctAnswerText: "ใส่ลูกเล่นการเคลื่อนไหวที่ดึงดูดสายตาอย่างมีความพอดี",
+      category: "Canva",
+      icon: "✨",
+      hint: "การเคลื่อนไหวควรช่วยเสริมการเล่าเรื่อง ไม่ควรรบกวนสายตาหรือแย่งความสนใจจากเนื้อหาหลัก"
+    },
+    {
+      id: 45,
+      question: "ความแตกต่างระหว่าง 'Page Animation' และ 'Element Animation' ใน Canva คือข้อใด",
+      options: [
+        "Page เคลื่อนไหวทั้งสไลด์ ส่วน Element เคลื่อนไหวเฉพาะชิ้นวัตถุ",
+        "Page ใช้สำหรับไฟล์วิดีโอ ส่วน Element ใช้เฉพาะข้อความเท่านั้น",
+        "Page ปรับความเร็วไม่ได้ ส่วน Element ปรับโทนสีของวัตถุได้",
+        "Page มีเสียงประกอบในตัว ส่วน Element ไม่มีเสียงประกอบ"
+      ],
+      correctAnswerText: "Page เคลื่อนไหวทั้งสไลด์ ส่วน Element เคลื่อนไหวเฉพาะชิ้นวัตถุ",
+      category: "Canva",
+      icon: "🎬",
+      hint: "Page หมายถึงผืนสไลด์ทั้งหมด ส่วน Element หมายถึงชิ้นส่วนรายตัว เช่น กล่องข้อความ หรือไอคอน"
+    },
+    {
+      id: 46,
+      question: "เมื่อทำการแทรกไฟล์วิดีโอลงในงานนำเสนอ Canva ข้อใดเป็นข้อปฏิบัติที่เหมาะสม",
+      options: [
+        "ตั้งค่าให้วิดีโอเล่นพร้อมกันมากกว่าสามคลิปในหน้าสไลด์เดียว",
+        "ตัดต่อความยาวให้กระชับและปรับระดับเสียงให้เข้ากับเนื้อหา",
+        "ขยายขนาดวิดีโอจนล้นขอบจอเพื่อไม่ให้เห็นกรอบของงาน",
+        "เลือกใช้วิดีโอที่ไม่มีความเกี่ยวข้องกับหัวข้อเพื่อสร้างความตื่นเต้น"
+      ],
+      correctAnswerText: "ตัดต่อความยาวให้กระชับและปรับระดับเสียงให้เข้ากับเนื้อหา",
+      category: "Canva",
+      icon: "🎞️",
+      hint: "การตัดเฉพาะท่อนที่สำคัญ (Trim) ช่วยให้เวลาในการนำเสนอไม่ยืดเยื้อและตรงจุดประสงค์"
+    },
+    {
+      id: 47,
+      question: "การใส่เสียงดนตรีประกอบ (Background Music) ใน Canva ควรตั้งค่าอย่างไรจึงจะเหมาะสม",
+      options: [
+        "เร่งระดับความดังของเสียงดนตรีให้ดังกว่าเสียงของผู้บรรยาย",
+        "ปรับระดับเสียงให้เบาพอเหมาะเพื่อคลอเบาๆ ไม่รบกวนการฟัง",
+        "เปลี่ยนแนวเพลงใหม่ทุกครั้งที่มีการเปลี่ยนหน้าสไลด์นำเสนอ",
+        "เลือกใช้เสียงสัญญาณเตือนภัยที่มีจังหวะกระตุ้นความตื่นตระหนก"
+      ],
+      correctAnswerText: "ปรับระดับเสียงให้เบาพอเหมาะเพื่อคลอเบาๆ ไม่รบกวนการฟัง",
+      category: "Canva",
+      icon: "🎵",
+      hint: "หน้าที่ของเสียงดนตรีพื้นหลังคือการสร้างบรรยากาศ จึงต้องไม่กลบเสียงพูดหลักของผู้บรรยาย"
+    },
+    {
+      id: 48,
+      question: "หลักการจับคู่ฟอนต์ (Font Pairing) ในงานนำเสนอ Canva เพื่อความเป็นมืออาชีพคือข้อใด",
+      options: [
+        "เลือกใช้ฟอนต์ที่มีลวดลายประดิษฐ์มากกว่าห้าแบบในหน้าเดียว",
+        "ใช้ฟอนต์หัวข้อที่โดดเด่นคู่กับฟอนต์เนื้อหาที่อ่านง่ายสบายตา",
+        "ใช้ฟอนต์ลายมือขนาดเล็กเท่ากันทั้งหมดตลอดทั้งงานนำเสนอ",
+        "เลือกใช้ฟอนต์ภาษาอังกฤษมาพิมพ์กับข้อความภาษาไทยเสมอ"
+      ],
+      correctAnswerText: "ใช้ฟอนต์หัวข้อที่โดดเด่นคู่กับฟอนต์เนื้อหาที่อ่านง่ายสบายตา",
+      category: "Canva",
+      icon: "🔤",
+      hint: "ส่วนหัวเรื่องต้องการความสะดุดตา ส่วนเนื้อหาตัวความต้องการความชัดเจน อ่านได้ราบรื่น"
+    },
+    {
+      id: 49,
+      question: "การจัดลำดับชั้นของข้อความ (Visual Hierarchy) ด้วยขนาดฟอนต์ มีประโยชน์อย่างไร",
+      options: [
+        "ช่วยให้ผู้ฟังแยกแยะหัวข้อหลัก หัวข้อย่อย และเนื้อหาได้ทันที",
+        "ช่วยลดทอนการใช้สีและทำให้พื้นหลังของสไลด์สว่างขึ้น",
+        "ช่วยให้สไลด์มีจำนวนบรรทัดข้อความหนาแน่นมากที่สุด",
+        "ช่วยแปลงไฟล์เอกสารให้อ่านออกเสียงได้โดยอัตโนมัติ"
+      ],
+      correctAnswerText: "ช่วยให้ผู้ฟังแยกแยะหัวข้อหลัก หัวข้อย่อย และเนื้อหาได้ทันที",
+      category: "Canva",
+      icon: "📊",
+      hint: "ขนาดที่ต่างกันอย่างชัดเจนของตัวอักษรจะช่วยนำสายตาผู้ดูว่าควรอ่านส่วนไหนก่อนและหลัง"
+    },
+    {
+      id: 50,
+      question: "ฟังก์ชันการล็อกเลเยอร์ (Lock Element) ใน Canva ถูกสร้างขึ้นเพื่อจุดประสงค์ใด",
+      options: [
+        "ป้องกันไม่ให้ผู้อื่นสามารถบันทึกหรือส่งออกไฟล์นำเสนอได้",
+        "ป้องกันการเผลอคลิกเคลื่อนย้ายหรือแก้ไขวัตถุที่จัดวางเสร็จแล้ว",
+        "บังคับให้วัตถุชิ้นนั้นเล่นแอนิเมชันซ้ำตลอดเวลาแบบวนลูป",
+        "แปลงวัตถุประเภทข้อความให้กลายเป็นแม่แบบสำหรับแจกฟรี"
+      ],
+      correctAnswerText: "ป้องกันการเผลอคลิกเคลื่อนย้ายหรือแก้ไขวัตถุที่จัดวางเสร็จแล้ว",
+      category: "Canva",
+      icon: "🔒",
+      hint: "เมื่อเราจัดวางตำแหน่งภาพพื้นหลังหรือกรอบข้อความจนพอดีแล้ว การตรึงตำแหน่งไว้จะช่วยให้ทำงานกับชิ้นส่วนอื่นได้สะดวก"
+    }
+    ];
+
+    // ตัวแปร State
+    let studentName = "";
+    let activeQuizList = [];
+    let currentIndex = 0;
+    let selectedOptionIndex = null; // ตัวเลือกที่กำลังเลือกอยู่
+    let isCheckedCurrent = false;   // สถานะว่ากดปุ่มตรวจคำตอบของข้อนี้แล้วหรือยัง
+    let scoreCount = 0;             // คะแนนที่ตอบถูกในครั้งแรกที่ตรวจ
+
+    // DOM Elements
+    const startScreen = document.getElementById("startScreen");
+    const quizScreen = document.getElementById("quizScreen");
+    const resultScreen = document.getElementById("resultScreen");
+
+    const studentNameInput = document.getElementById("studentNameInput");
+    const startQuizBtn = document.getElementById("startQuizBtn");
+
+    const displayStudentName = document.getElementById("displayStudentName");
+    const categoryBadge = document.getElementById("categoryBadge");
+    const questionCounter = document.getElementById("questionCounter");
+    const progressBar = document.getElementById("progressBar");
+    const questionIcon = document.getElementById("questionIcon");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const hintBox = document.getElementById("hintBox");
+    const hintText = document.getElementById("hintText");
+    const correctAlert = document.getElementById("correctAlert");
+
+    const checkAnswerBtn = document.getElementById("checkAnswerBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const submitBtn = document.getElementById("submitBtn");
+
+    const resultStudentName = document.getElementById("resultStudentName");
+    const scoreValue = document.getElementById("scoreValue");
+    const percentValue = document.getElementById("percentValue");
+    const feedbackGrade = document.getElementById("feedbackGrade");
+    const passStatusBadge = document.getElementById("passStatusBadge");
+    const resultCardBg = document.getElementById("resultCardBg");
+    const restartBtn = document.getElementById("restartBtn");
+
+    // Drawer Elements
+    const toggleLessonBtn = document.getElementById("toggleLessonBtn");
+    const closeDrawerBtn = document.getElementById("closeDrawerBtn");
+    const lessonDrawer = document.getElementById("lessonDrawer");
+    const backdrop = document.getElementById("backdrop");
+
+    // สุ่มตำแหน่งใน Array (Fisher-Yates)
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // จัดเตรียมข้อสอบ 20 ข้อแบบสุ่มทั้งข้อและชอยส์
+    function prepareQuizSet() {
+      const shuffledQuestions = shuffleArray(QUESTION_BANK).slice(0, 35);
+      return shuffledQuestions.map(q => {
+        const shuffledOptions = shuffleArray(q.options);
+        return {
+          ...q,
+          options: shuffledOptions,
+          correctIndex: shuffledOptions.indexOf(q.correctAnswerText)
+        };
+      });
+    }
+
+    // ปลดล็อกปุ่มเริ่มทำแบบทดสอบเมื่อกรอกชื่อ
+    studentNameInput.addEventListener("input", (e) => {
+      startQuizBtn.disabled = e.target.value.trim().length === 0;
+    });
+
+    // เริ่มทำข้อสอบ
+    startQuizBtn.addEventListener("click", () => {
+      studentName = studentNameInput.value.trim();
+      activeQuizList = prepareQuizSet();
+      currentIndex = 0;
+      scoreCount = 0;
+
+      displayStudentName.textContent = `👤 ผู้สอบ: ${studentName}`;
+      startScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      quizScreen.classList.remove("hidden");
+
+      loadQuestion();
+    });
+
+    // โหลดคำถามและตั้งค่าเริ่มต้นของแต่ละข้อ
+    function loadQuestion() {
+      selectedOptionIndex = null;
+      isCheckedCurrent = false;
+
+      const q = activeQuizList[currentIndex];
+      const total = activeQuizList.length;
+
+      // ปิดกล่องข้อความเตือนและ Hint
+      hintBox.classList.add("hidden");
+      correctAlert.classList.add("hidden");
+
+      // ปุ่มควบคุม
+      checkAnswerBtn.classList.remove("hidden");
+      checkAnswerBtn.disabled = true; // รอให้เลือกตัวเลือกก่อน
+      nextBtn.classList.add("hidden");
+      submitBtn.classList.add("hidden");
+
+      // อัปเดตข้อมูลหัวข้อ
+      questionCounter.textContent = `ข้อ ${currentIndex + 1}/${total}`;
+      categoryBadge.textContent = `หมวด: ${q.category}`;
+      questionIcon.textContent = q.icon;
+      questionText.textContent = `${currentIndex + 1}. ${q.question}`;
+
+      // แถบความคืบหน้า
+      const progressPercent = ((currentIndex + 1) / total) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      // แสดงตัวเลือก A, B, C, D
+      optionsContainer.innerHTML = "";
+      const letters = ["A", "B", "C", "D"];
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerHTML = `
+          <div class="option-badge">${letters[idx]}</div>
+          <span>${opt}</span>
+        `;
+
+        btn.addEventListener("click", () => {
+          if (isCheckedCurrent) return; // หากตรวจแล้วห้ามเปลี่ยนตัวเลือก
+
+          selectedOptionIndex = idx;
+          // ปรับ class selected ให้เฉพาะปุ่มที่เลือก
+          const allOptions = optionsContainer.querySelectorAll(".option-btn");
+          allOptions.forEach((b, i) => {
+            b.classList.toggle("selected", i === idx);
+          });
+
+          // ปลดล็อกปุ่ม "ตรวจคำตอบ"
+          checkAnswerBtn.disabled = false;
+        });
+
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    // เมื่อกดปุ่ม "ตรวจคำตอบ"
+    checkAnswerBtn.addEventListener("click", () => {
+      if (selectedOptionIndex === null || isCheckedCurrent) return;
+
+      isCheckedCurrent = true;
+      const q = activeQuizList[currentIndex];
+      const isCorrect = (selectedOptionIndex === q.correctIndex);
+      const isLast = (currentIndex === activeQuizList.length - 1);
+
+      // ล็อกตัวเลือกทั้งหมดไม่ให้คลิกเปลี่ยนได้อีก
+      const allOptionBtns = optionsContainer.querySelectorAll(".option-btn");
+      allOptionBtns.forEach(btn => btn.classList.add("locked"));
+
+      // ไฮไลต์ผลการตรวจบนตัวเลือกที่เลือก
+      if (isCorrect) {
+        allOptionBtns[selectedOptionIndex].classList.add("correct-highlight");
+        correctAlert.classList.remove("hidden");
+        scoreCount++; // เพิ่มคะแนน
+      } else {
+        allOptionBtns[selectedOptionIndex].classList.add("incorrect-highlight");
+        // แสดง Hint คำแนะนำแต่ไม่เฉลยคำตอบ
+        hintText.textContent = q.hint;
+        hintBox.classList.remove("hidden");
+      }
+
+      // ซ่อนปุ่มตรวจคำตอบ และเปิดปุ่มถัดไป/ส่งข้อสอบ
+      checkAnswerBtn.classList.add("hidden");
+
+      if (isLast) {
+        submitBtn.classList.remove("hidden");
+      } else {
+        nextBtn.classList.remove("hidden");
+      }
+    });
+
+    // เมื่อกดปุ่ม "ข้อถัดไป"
+    nextBtn.addEventListener("click", () => {
+      if (currentIndex < activeQuizList.length - 1) {
+        currentIndex++;
+        loadQuestion();
+      }
+    });
+
+    // เมื่อกดปุ่ม "ส่งแบบทดสอบ"
+    submitBtn.addEventListener("click", () => {
+      const total = activeQuizList.length;
+      const percentage = (scoreCount / total) * 100;
+      const isPassed = percentage >= 80;
+
+      // อัปเดตหน้าผลลัพธ์
+      resultStudentName.textContent = studentName;
+      scoreValue.textContent = `${scoreCount}/${total}`;
+      percentValue.textContent = `คิดเป็นความถูกต้อง ${percentage.toFixed(1)}%`;
+
+      if (isPassed) {
+        resultCardBg.className = "result-score-card passed";
+        passStatusBadge.textContent = "🎉 ยินดีด้วย! คุณผ่านเกณฑ์การประเมิน";
+      } else {
+        resultCardBg.className = "result-score-card failed";
+        passStatusBadge.textContent = "📚 ยังไม่ผ่านเกณฑ์ (เกณฑ์การผ่าน 80%)";
+      }
+
+      if (percentage >= 90) {
+        feedbackGrade.textContent = "ระดับผลการเรียนรู้: ดีเยี่ยมมาก 🌟";
+      } else if (percentage >= 80) {
+        feedbackGrade.textContent = "ระดับผลการเรียนรู้: ดี ผ่านตามเกณฑ์ 👍";
+      } else if (percentage >= 60) {
+        feedbackGrade.textContent = "ระดับผลการเรียนรู้: ปานกลาง ทบทวนเนื้อหาเพิ่มเติมได้นะ 😊";
+      } else {
+        feedbackGrade.textContent = "ระดับผลการเรียนรู้: ควรกลับไปศึกษาบทเรียนเพิ่มเติม 📖";
+      }
+
+      quizScreen.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ปุ่มทำแบบทดสอบใหม่อีกครั้ง
+    restartBtn.addEventListener("click", () => {
+      resultScreen.classList.add("hidden");
+      startScreen.classList.remove("hidden");
+      studentNameInput.value = studentName; // ดึงชื่อเดิมมาใส่ไว้ให้อัตโนมัติ
+      startQuizBtn.disabled = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ควบคุม Side Drawer สรุปบทเรียน
+    function toggleDrawer(open) {
+      if (open) {
+        lessonDrawer.classList.add("open");
+        backdrop.classList.add("active");
+      } else {
+        lessonDrawer.classList.remove("open");
+        backdrop.classList.remove("active");
+      }
+    }
+
+    toggleLessonBtn.addEventListener("click", () => toggleDrawer(true));
+    closeDrawerBtn.addEventListener("click", () => toggleDrawer(false));
+    backdrop.addEventListener("click", () => toggleDrawer(false));
+  </script>
+</body>
+</html>
