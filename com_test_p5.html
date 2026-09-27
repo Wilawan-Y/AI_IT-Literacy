@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>computer ป.5</title>
+  <title>คอมพิวเตอร์ ป.5</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -86,10 +86,9 @@
       max-width: 900px;
       margin: 0 auto;
       width: 100%;
-      transition: margin-right 0.3s ease;
     }
 
-    /* Side Sheet for Reference Lessons */
+    /* แถบเนื้อหาด้านขวามือ (Side Sheet) */
     .sidebar {
       position: fixed;
       top: 65px;
@@ -99,7 +98,7 @@
       height: calc(100vh - 65px);
       background: var(--surface);
       border-left: 1px solid var(--border);
-      box-shadow: -10px 0 25px rgba(0,0,0,0.05);
+      box-shadow: -10px 0 25px rgba(0,0,0,0.08);
       transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 50;
       display: flex;
@@ -129,15 +128,16 @@
 
     .sidebar-content h4 {
       color: var(--primary);
-      margin: 1rem 0 0.5rem 0;
+      margin: 1.2rem 0 0.4rem 0;
+      font-size: 1rem;
     }
 
-    .sidebar-content ul {
-      margin-left: 1.25rem;
-      margin-bottom: 1rem;
+    .sidebar-content p {
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
     }
 
-    /* Screen Wrappers */
+    /* การจัดการหน้าต่าง */
     .card {
       background: var(--surface);
       border-radius: var(--radius);
@@ -159,7 +159,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Input & Buttons */
     .form-group {
       margin-top: 1.5rem;
       margin-bottom: 1.5rem;
@@ -179,6 +178,7 @@
       border-color: var(--primary);
     }
 
+    /* ปุ่มกด */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -202,6 +202,15 @@
       transform: translateY(-1px);
     }
 
+    .btn-check {
+      background: #0D9488;
+      color: white;
+    }
+    .btn-check:hover {
+      background: #0F766E;
+      transform: translateY(-1px);
+    }
+
     .btn-outline {
       background: transparent;
       border: 2px solid var(--border);
@@ -211,7 +220,7 @@
       background: #F1F5F9;
     }
 
-    /* Quiz Header & Tracker */
+    /* ส่วนหัวแบบทดสอบ */
     .quiz-meta {
       display: flex;
       justify-content: space-between;
@@ -255,7 +264,7 @@
       line-height: 1.5;
     }
 
-    /* Options */
+    /* รายการตัวเลือก */
     .options-grid {
       display: grid;
       gap: 1rem;
@@ -279,12 +288,19 @@
       background: #F0FDFA;
     }
 
-    .option-card.selected {
+    /* สถานะเมื่อคลิกเลือกไว้ชั่วคราว */
+    .option-card.chosen {
       border-color: var(--primary);
       background: #EEF2FF;
     }
 
-    .option-card.selected-wrong {
+    /* สถานะหลังกดยืนยันตรวจคำตอบ */
+    .option-card.result-correct {
+      border-color: var(--success);
+      background: #ECFDF5;
+    }
+
+    .option-card.result-wrong {
       border-color: var(--danger);
       background: #FEF2F2;
     }
@@ -300,21 +316,28 @@
       font-weight: 600;
       font-size: 0.85rem;
       flex-shrink: 0;
+      transition: all 0.2s;
     }
 
-    .option-card.selected .option-indicator {
+    .option-card.chosen .option-indicator {
       background: var(--primary);
       color: white;
       border-color: var(--primary);
     }
 
-    .option-card.selected-wrong .option-indicator {
+    .option-card.result-correct .option-indicator {
+      background: var(--success);
+      color: white;
+      border-color: var(--success);
+    }
+
+    .option-card.result-wrong .option-indicator {
       background: var(--danger);
       color: white;
       border-color: var(--danger);
     }
 
-    /* Hint Box */
+    /* กล่องข้อความ Hint และข้อความตอบถูก */
     .hint-box {
       display: none;
       background: #FFFBEB;
@@ -324,6 +347,7 @@
       margin-bottom: 1.5rem;
       color: #92400E;
       font-size: 0.95rem;
+      line-height: 1.5;
     }
 
     .hint-box.show {
@@ -331,7 +355,23 @@
       animation: fadeIn 0.3s ease;
     }
 
-    /* Result Screen */
+    .correct-box {
+      display: none;
+      background: #ECFDF5;
+      border-left: 4px solid var(--success);
+      padding: 1rem 1.25rem;
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 1.5rem;
+      color: #065F46;
+      font-size: 0.95rem;
+    }
+
+    .correct-box.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* หน้าสรุปผลคะแนน */
     .result-score-circle {
       width: 150px;
       height: 150px;
@@ -373,13 +413,13 @@
 
   <header>
     <div class="brand">
-      <span>💻</span> คอมพิวตอร์เพิ่มเติม ป.5
+      <span>💻</span> คอมพิวเตอร์เพิ่มเติม ป.5
     </div>
     <div style="display: flex; gap: 0.75rem; align-items: center;">
       <div id="timerContainer" class="timer-badge" style="display: none;">
         <span>⏳</span> <span id="timerDisplay">40:00</span>
       </div>
-      <button id="toggleLessonBtn" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+      <button id="toggleLessonBtn" class="btn btn-outline" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">
         📖 ดูเนื้อหา
       </button>
     </div>
@@ -394,23 +434,24 @@
           🎯 ยินดีต้อนรับสู่แบบทดสอบวัดผลสัมฤทธิ์
         </h2>
         <p style="color: var(--text-muted);">
-          แบบทดสอบนี้จัดทำขึ้นสำหรับระดับชั้นประถมศึกษาปีที่ 5 เพื่อประเมินทักษะการเรียนรู้ด้านเทคโนโลยีและวิทยาการคำนวณ
+          แบบทดสอบกลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี (คอมพิวเตอร์) ระดับชั้นประถมศึกษาปีที่ 5
         </p>
 
         <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin: 1.5rem 0;">
           <h4 style="margin-bottom: 0.5rem;">📋 กติกาและข้อกำหนด:</h4>
           <ul style="margin-left: 1.25rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
-            <li>ข้อสอบทั้งหมด<strong> 35 ข้อ</strong></li>
-            <li>มีเวลาจำกัดทั้งหมด <strong>40 นาที</strong></li>
-            <li>สามารถคลิกดูสรุปเนื้อหาประกอบได้ที่มุมบนขวา</li>
+            <li>ข้อสอบทั้งหมด <strong>35 ข้อ</strong></li>
+            <li>มีเวลาในการทำแบบทดสอบทั้งหมด <strong>40 นาที</strong></li>
+            <li>สามารถคลิกเลือกและเปลี่ยนตัวเลือกได้ เมื่อมั่นใจแล้วให้กดปุ่ม <strong>"🔍 ตรวจคำตอบ"</strong></li>
+            <li>สามารถเปิดอ่านสรุปบทเรียนได้จากปุ่ม <strong>"📖 ดูเนื้อหา"</strong> ที่มุมบนขวา</li>
           </ul>
         </div>
 
         <div class="form-group">
           <label for="studentName" style="font-weight: 500; display: block; margin-bottom: 0.5rem;">
-            👤 ชื่อ-นามสกุล:
+            👤 ชื่อ-นามสกุล ของนักเรียน:
           </label>
-          <input type="text" id="studentName" placeholder="เช่น ด.ช.สมชาย สายลุย เลขที่ 12" autocomplete="off">
+          <input type="text" id="studentName" placeholder="เช่น ด.ช.สมบัติ ขยันเรียน " autocomplete="off">
         </div>
 
         <button class="btn btn-primary" id="startBtn" style="width: 100%;">
@@ -434,16 +475,26 @@
         </div>
 
         <div id="categoryBadge" class="question-category">หมวดหมู่</div>
-        <div id="questionText" class="question-text">ข้อความคำถามจะปรากฏที่นี่</div>
+        <div id="questionText" class="question-text">ข้อความคำถาม</div>
 
+        <!-- รายการตัวเลือกคำตอบ -->
         <div id="optionsContainer" class="options-grid"></div>
 
-        <!-- กล่อง Hint -->
+        <!-- กล่องผลลัพธ์ตอบถูก -->
+        <div id="correctBox" class="correct-box">
+          🎉 <strong>ยอดเยี่ยมมาก!</strong> คุณเลือกคำตอบได้ถูกต้อง
+        </div>
+
+        <!-- กล่อง Hint เมื่อตอบผิด -->
         <div id="hintBox" class="hint-box">
           <strong>💡 คำแนะนำ (Hint):</strong> <span id="hintText"></span>
         </div>
 
-        <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+        <!-- ปุ่มควบคุม: ตรวจคำตอบ / ข้อถัดไป -->
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+          <button id="checkBtn" class="btn btn-check">
+            🔍 ตรวจคำตอบ
+          </button>
           <button id="nextBtn" class="btn btn-primary" style="display: none;">
             ข้อถัดไป ➔
           </button>
@@ -454,7 +505,7 @@
       <div id="resultScreen" class="screen card" style="text-align: center;">
         <span style="font-size: 3rem;">🏆</span>
         <h2 style="color: var(--primary); margin-top: 0.5rem;">รายงานผลการทดสอบ</h2>
-        <p style="color: var(--text-muted);">ยินดีด้วย! คุณทำแบบทดสอบเสร็จสิ้นแล้ว</p>
+        <p style="color: var(--text-muted);">ยินดีด้วย! คุณทำแบบทดสอบครบทั้ง 35 ข้อแล้ว</p>
         
         <p style="font-size: 1.2rem; font-weight: 600; margin-top: 1rem;">
           นักเรียน: <span id="resultStudentName" style="color: var(--primary);"></span>
@@ -472,14 +523,14 @@
               <td style="text-align: right; font-weight: 600;" id="timeUsed">0 นาที</td>
             </tr>
             <tr>
-              <td>สถานะการประเมิน</td>
+              <td>ระดับผลการประเมิน</td>
               <td style="text-align: right; font-weight: 600;" id="evaluationStatus">-</td>
             </tr>
           </table>
         </div>
 
-        <button id="restartBtn" class="btn btn-primary" style="margin-top: 1rem;">
-          🔄 ทำแบบทดสอบใหม่อีกครั้ง
+        <button id="restartBtn" class="btn btn-primary" style="margin-top: 1.5rem;">
+          🔄 ทำแบบทดสอบใหม่อีกครั้ง (สุ่ม 35 ข้อใหม่)
         </button>
       </div>
 
@@ -514,7 +565,7 @@
 
   <script>
     // ==========================================
-    // คลังข้อสอบ 50 ข้อ 
+    // คลังข้อสอบ 
     // ==========================================
     const questionBank = [
       // --- หมวด 1: Google Maps (5 ข้อ) ---
@@ -854,7 +905,6 @@
         hint: "บล็อกภาพช่วยให้เด็กๆ โฟกัสกับกระบวนการคิดและตรรกะได้โดยตรง"
       }
     ];
-
     // ==========================================
     // ตัวแปรควบคุมระบบ
     // ==========================================
@@ -862,9 +912,10 @@
     let quizSet = [];
     let currentIndex = 0;
     let score = 0;
-    let timerSeconds = 40 * 60; // 40 นาที
+    let timerSeconds = 40 * 60; // 40 นาทีเต็ม
     let timerInterval = null;
-    let isAnswerSubmitted = false;
+    let selectedOptionIndex = null; // ตัวเลือกที่เลือกไว้ชั่วคราว
+    let isChecked = false;          // บันทึกสถานะว่ากดตรวจคำตอบแล้วหรือยัง
 
     // อ้างอิง DOM Elements
     const welcomeScreen = document.getElementById("welcomeScreen");
@@ -875,6 +926,7 @@
     const closeLessonBtn = document.getElementById("closeLessonBtn");
     
     const startBtn = document.getElementById("startBtn");
+    const checkBtn = document.getElementById("checkBtn");
     const nextBtn = document.getElementById("nextBtn");
     const restartBtn = document.getElementById("restartBtn");
     
@@ -889,8 +941,10 @@
     const categoryBadge = document.getElementById("categoryBadge");
     const questionText = document.getElementById("questionText");
     const optionsContainer = document.getElementById("optionsContainer");
+    
     const hintBox = document.getElementById("hintBox");
     const hintText = document.getElementById("hintText");
+    const correctBox = document.getElementById("correctBox");
 
     // ฟังก์ชันสลับตำแหน่ง Array (Fisher-Yates Shuffle)
     function shuffleArray(arr) {
@@ -914,7 +968,7 @@
     startBtn.addEventListener("click", () => {
       const name = studentNameInput.value.trim();
       if (!name) {
-        alert("กรุณากรอกชื่อ-นามสกุลก่อนเริ่มทำแบบทดสอบครับ");
+        alert("กรุณากรอกชื่อ-นามสกุล หรือเลขที่ก่อนเริ่มทำแบบทดสอบครับ");
         studentNameInput.focus();
         return;
       }
@@ -926,10 +980,10 @@
     });
 
     function initQuiz() {
-      // สุ่มคำถาม 35 ข้อจาก 50 ข้อ
+      // สุ่มคำถาม 35 ข้อจากคลัง 50 ข้อ
       const shuffledQuestions = shuffleArray(questionBank);
       quizSet = shuffledQuestions.slice(0, 35).map(q => {
-        // สร้างอาเรย์ตัวเลือกที่ถูกสุ่มพร้อมเก็บดัชนีคำตอบที่ถูกต้องใหม่
+        // สลับตัวเลือก ก-ข-ค-ง พร้อมคำนวณตำแหน่งคำตอบที่ถูกต้องใหม่
         const originalOptions = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.answer }));
         const shuffledOptions = shuffleArray(originalOptions);
         const newCorrectIndex = shuffledOptions.findIndex(o => o.isCorrect);
@@ -945,8 +999,7 @@
 
       currentIndex = 0;
       score = 0;
-      timerSeconds = 40 * 60;
-      isAnswerSubmitted = false;
+      timerSeconds = 40 * 60; // 40 นาที
 
       welcomeScreen.classList.remove("active");
       resultScreen.classList.remove("active");
@@ -966,7 +1019,7 @@
         updateTimerDisplay();
         if (timerSeconds <= 0) {
           clearInterval(timerInterval);
-          alert("หมดเวลาทำแบบทดสอบแล้วครับ ระบบจะทำการสรุปผลคะแนนทันที");
+          alert("หมดเวลาทำแบบทดสอบแล้วครับ ระบบจะทำการประมวลผลคะแนนทันที");
           finishQuiz();
         }
       }, 1000);
@@ -985,7 +1038,8 @@
 
     // แสดงคำถามและตัวเลือก
     function renderQuestion() {
-      isAnswerSubmitted = false;
+      selectedOptionIndex = null;
+      isChecked = false;
       const q = quizSet[currentIndex];
 
       questionTracker.innerText = `คำถามข้อที่ ${currentIndex + 1} / ${quizSet.length}`;
@@ -993,7 +1047,10 @@
       categoryBadge.innerText = q.category;
       questionText.innerText = q.question;
 
+      // รีเซ็ตการแจ้งเตือนและปุ่ม
       hintBox.classList.remove("show");
+      correctBox.classList.remove("show");
+      checkBtn.style.display = "inline-flex";
       nextBtn.style.display = "none";
       optionsContainer.innerHTML = "";
 
@@ -1007,36 +1064,56 @@
           <div style="flex: 1; font-size: 1rem;">${optText}</div>
         `;
 
-        optionCard.addEventListener("click", () => handleSelectOption(idx, optionCard));
+        // เมื่อคลิกเลือกตัวเลือก (ยังไม่ตรวจคำตอบ เปลี่ยนใจเลือกข้ออื่นได้)
+        optionCard.addEventListener("click", () => {
+          if (isChecked) return; // หากตรวจไปแล้ว จะไม่ให้เปลี่ยน
+
+          selectedOptionIndex = idx;
+          const allCards = optionsContainer.querySelectorAll(".option-card");
+          allCards.forEach(card => card.classList.remove("chosen"));
+          optionCard.classList.add("chosen");
+        });
+
         optionsContainer.appendChild(optionCard);
       });
     }
 
-    // ตรวจสอบเมื่อคลิกเลือกตัวเลือก
-    function handleSelectOption(selectedIndex, cardElement) {
-      if (isAnswerSubmitted) return; // ล็อกไม่ให้เปลี่ยนคำตอบ
-      isAnswerSubmitted = true;
+    // กดปุ่ม "ตรวจคำตอบ"
+    checkBtn.addEventListener("click", () => {
+      if (selectedOptionIndex === null) {
+        alert("กรุณาคลิกเลือกตัวเลือกคำตอบที่ต้องการก่อนกดตรวจคำตอบครับ");
+        return;
+      }
 
+      isChecked = true;
       const q = quizSet[currentIndex];
       const allCards = optionsContainer.querySelectorAll(".option-card");
+      
+      // ล็อกตัวเลือกทั้งหมดไม่ให้เปลี่ยนได้อีก
       allCards.forEach(card => card.classList.add("locked"));
 
-      if (selectedIndex === q.answer) {
-        // ตอบถูก
-        cardElement.classList.add("selected");
+      const chosenCard = allCards[selectedOptionIndex];
+
+      if (selectedOptionIndex === q.answer) {
+        // ตอบถูกต้อง
+        chosenCard.classList.remove("chosen");
+        chosenCard.classList.add("result-correct");
+        correctBox.classList.add("show");
         score++;
       } else {
-        // ตอบผิด -> แจ้ง Hint เท่านั้น ห้ามเฉลยคำตอบที่ถูก
-        cardElement.classList.add("selected-wrong");
+        // ตอบผิด -> แสดงเฉพาะ Hint ไม่เฉลยว่าข้อใดถูก
+        chosenCard.classList.remove("chosen");
+        chosenCard.classList.add("result-wrong");
         hintText.innerText = q.hint;
         hintBox.classList.add("show");
       }
 
-      // แสดงปุ่มเพื่อไปข้อถัดไป
+      // สลับปุ่มตรวจคำตอบเป็นปุ่มข้อถัดไป
+      checkBtn.style.display = "none";
       nextBtn.style.display = "inline-flex";
-    }
+    });
 
-    // ไปข้อถัดไป
+    // กดปุ่ม "ข้อถัดไป"
     nextBtn.addEventListener("click", () => {
       currentIndex++;
       if (currentIndex < quizSet.length) {
@@ -1046,7 +1123,7 @@
       }
     });
 
-    // สิ้นสุดการทำข้อสอบและแสดงผลคะแนน
+    // สรุปผลการทดสอบ
     function finishQuiz() {
       clearInterval(timerInterval);
       quizScreen.classList.remove("active");
@@ -1060,13 +1137,13 @@
       document.getElementById("scorePercent").innerText = `${percentage}%`;
       document.getElementById("scoreFraction").innerText = `${score} / ${totalQuestions} ข้อ`;
 
-      // คำนวณเวลาที่ใช้
+      // คำนวณเวลาที่ใช้ไปจริง
       const timeSpentSeconds = (40 * 60) - timerSeconds;
       const spentMin = Math.floor(timeSpentSeconds / 60);
       const spentSec = timeSpentSeconds % 60;
       document.getElementById("timeUsed").innerText = `${spentMin} นาที ${spentSec} วินาที`;
 
-      // ประเมินผล
+      // ประเมินผลระดับผลการเรียน
       let evalText = "";
       if (percentage >= 80) evalText = "🌟 ดีเยี่ยม (ผ่านเกณฑ์ระดับยอดเยี่ยม)";
       else if (percentage >= 60) evalText = "👍 ผ่านเกณฑ์ (อยู่ในระดับดี)";
@@ -1076,7 +1153,7 @@
       document.getElementById("evaluationStatus").innerText = evalText;
     }
 
-    // เริ่มต้นใหม่
+    // เริ่มต้นใหม่ (กดปุ่มทำใหม่อีกครั้ง)
     restartBtn.addEventListener("click", () => {
       studentNameInput.value = "";
       resultScreen.classList.remove("active");
